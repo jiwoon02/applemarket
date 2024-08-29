@@ -15,6 +15,7 @@ import com.apple.user.service.UserService;
 
 @Controller
 public class UserController {
+	
 	@Autowired
 	private UserService userService;
 	

@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -129,6 +132,7 @@ public class UserServiceImpl implements UserService {
         message.setText("임시 비밀번호는: " + tempPwd + " 입니다. 로그인 후 비밀번호를 변경해 주세요.");
         mailSender.send(message);
     }
+
     
 }
 

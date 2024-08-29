@@ -15,6 +15,10 @@
 	            		<hr/>
 	            	</div>
 	            	
+	            	<div th:if="${errorMessage != null}">
+                    	<p style="color:red;" th:text="${errorMessage}"></p>
+                	</div>
+	            	
 	            	<form id="login-form" th:object="${user}" th:action="@{login}" method="post">
 	            		<div class="form-group">
 	            			<input type="text" th:field="*{userID}" maxlength="12" required>
