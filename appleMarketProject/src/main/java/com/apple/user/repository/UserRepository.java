@@ -30,6 +30,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
     Optional<User> findByUserNameAndUserIDAndUserEmail(String userName, String userID, String userEmail);
 
     //아아디 기준 찾기
-	Optional<User> findByUserID(String usernID);
+	Optional<User> findByUserID(String userID);
 
 }

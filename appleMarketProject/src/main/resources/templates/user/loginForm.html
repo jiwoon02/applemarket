@@ -15,12 +15,12 @@
 	            		<hr/>
 	            	</div>
 	            	
-	            	<form id="login-form" method="post">	<!-- 추후 action 속성 추가 , required 속성 js로 대체-->
+	            	<form id="login-form" th:object="${user}" th:action="@{login}" method="post">
 	            		<div class="form-group">
-	            			<input type="text" id="userId" name="userId" placeholder="아이디" required>
+	            			<input type="text" th:field="*{userID}" maxlength="12" required>
 	            		</div>
 	            		<div class="form-group">
-			                <input type="password" id="password" name="password" placeholder="비밀번호" required>
+			                <input type="password" th:field="*{userPwd}" maxlength="20" required>
 			            </div>
 			            <a href="findOption">아이디/비밀번호 찾기</a>
 			            <a href="joinForm">회원가입</a>

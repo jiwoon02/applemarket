@@ -24,6 +24,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JavaMailSender mailSender;
   
+    @Override
+    //로그인 아이디 찾아서 user객체 반환 없으면 null
+    public Optional<User> findByUserID(String userID) {
+    	return userRepository.findByUserID(userID);
+    }
+    
+    @Override
+    //사용자 인증 처리
+    public boolean authenticate(String userID, String password) {
+        Optional<User> userOptional = findByUserID(userID);
+        
+        //아이디가 존재하면 user에 객체저장후 입력한 password가 일치하는지 확인
+        //일치한다면 true반환 -> 인증성공
+        //불일치 falser반환 -> 인증실패
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            //입력된 비밀번호와 해싱된 비밀번호 비교
+            return passwordEncoder.matches(password, user.getUserPwd());
+        }
+        
+        return false;
+    }
     
     //회원가입
     @Override
@@ -72,6 +94,7 @@ public class UserServiceImpl implements UserService {
         }
 	}
 	
+	//비밀번호 찾기
 	@Override
 	public String findPwd(User user) {
 		//데이터베이스에 사용자를 조회하는 로직 구현
