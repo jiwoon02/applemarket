@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>아이디/비밀번호 찾기</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/findOption.css"> <!-- 필요에 따라 CSS 파일 경로 수정 -->
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center find-options-container">
+                <div class="page-info">
+                    <h2>아이디/비밀번호 찾기</h2>
+                    <hr/>
+                </div>
+
+                <div class="button-container">
+                    <a href="/user/findIdForm" class="find-button">아이디 찾기</a>
+                    <a href="/user/findPwdForm" class="find-button">비밀번호 찾기</a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/layout}">
+	<head>
+	    <title>로그인 페이지</title>
+	    <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+	</head>
+	
+	<body>
+	    <th:block layout:fragment="content">
+	        <div class="container">
+	            <div class="text-center login-container">
+	            	<div class="page-info">
+	            		<h2>로그인</h2>
+	            		<hr/>
+	            	</div>
+	            	
+	            	<form id="login-form" method="post">	<!-- 추후 action 속성 추가 , required 속성 js로 대체-->
+	            		<div class="form-group">
+	            			<input type="text" id="userId" name="userId" placeholder="아이디" required>
+	            		</div>
+	            		<div class="form-group">
+			                <input type="password" id="password" name="password" placeholder="비밀번호" required>
+			            </div>
+			            <a href="findOption">아이디/비밀번호 찾기</a>
+			            <a href="joinForm">회원가입</a>
+			            <input type="submit" value="로그인">
+	            	</form>
+	            	
+	            </div>
+	        </div>
+	    </th:block>
+	
+	    <th:block layout:fragment="script">
+	        <!-- 필요한 스크립트 추가 -->
+	    </th:block>
+	</body>
+
+</html>

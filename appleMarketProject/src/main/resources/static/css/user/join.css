@@ -1,0 +1,131 @@
+.join-container {
+    border: 1px solid gray;
+    margin: 50px;
+    padding: 10px;
+    width: 600px;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.page-info {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: gray;
+}
+
+.join-form {
+    display: block;
+    margin: 5px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#join-form label {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 8px;
+    display: block;
+    text-align: left;
+    padding-left: 10px;
+}
+
+#join-form input:focus {
+    outline-color: #ed5123;
+}
+
+#join-form input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    border: none;
+}
+
+.page-info > h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#join-form input[type="submit"] {
+    width: 50%;
+    color: #fff;
+    font-size: 16px;
+    background-color: #6A24FE;
+    margin: 0 auto;
+    display: block;
+    border: none;
+}
+
+.phone-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 이메일 아이디와 도메인 사이의 간격 조정 */
+}
+
+.phone-container input[type="text"] {
+    width: calc(50% - 10px); /* 각 입력 필드의 너비를 조정 */
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    border: none;
+}
+
+.phone-container span {
+    font-size: 16px;
+    color: gray;
+}
+
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 이메일 아이디와 도메인 사이의 간격 조정 */
+}
+
+.email-container input[type="text"] {
+    width: calc(50% - 10px); /* 각 입력 필드의 너비를 조정 */
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    border: none;
+}
+
+.email-container span {
+    font-size: 16px;
+    color: gray;
+}
+
+.address-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼과 우편번호 입력 칸 사이의 간격 조정 */
+}
+
+#address-container input[type="button"] {
+    color: white;
+    font-size: 16px;
+    background-color: #6A24FE;
+
+    border: none;
+}
+
+
+label small{
+	margin-left: 20px;
+}
+
+.login-link {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}

@@ -1,0 +1,7 @@
+main 브랜치에 merge&push 날짜, 작성자, 이름 작성하기. 
+
+2024.08.28 오후 2:50 김희수 
+application.propertes 파일의 com.apple.upload.path=upload 부분 수정.
+-> 확인한 사람 이름 : 
+
+

@@ -1,0 +1,128 @@
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- 공통정보 -->
+<th:block th:fragment="config">
+        <link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+	<link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="/css/common.css" />
+
+	<!-- 
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cover/">
+ -->
+</th:block>
+
+<!-- 상단 header -->
+<th:block th:fragment="header">
+    <div class="header-container">
+	<div class="header">
+        <!--헤더 위-->
+        <div class="header-top">
+            <div class="header-top-right">
+                <a href="/user/loginForm" class="header-link">로그인/회원가입</a>
+                <a href="#" class="header-link">마이페이지</a>
+            </div>
+        </div>
+         <!--헤더 중간-->
+        <div class="header-middle">
+            <div class="header-middle-left">
+                <a href="/product/productList" class="logo">
+                    <img src="logo.png" alt="사과로고">
+                </a>
+            </div>
+            <div class="header-middle-search">
+                <input type="text" placeholder="상품명, 지역명, @상점명 입력" class="search-input">
+                <button class="search-button">검색</button>
+            </div>
+            <div class="header-middle-right">
+                <a href="/product/insertForm" class="header-right-link">🍎판매하기</a>
+                <span class="header-middle-link-line"> | </span>
+                <a href="#" class="header-right-link">🏚내상점</a>
+                <span class="header-middle-link-line"> | </span>
+                <a href="#" class="header-right-link">🗨채팅</a>
+                <span class="header-middle-link-line"> | </span>
+                <a href="#" class="header-right-link">❤찜</a>
+            </div>
+        </div>
+       <!--헤더 밑-->
+        <div class="header-bottom">
+            <div class="header-bottom-left">
+            <ul>
+            
+            <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="categroy_menu" href="#" data-bs-toggle="dropdown" aria-expanded="false" >카테고리</a>
+			            <ul class="dropdown-menu">
+			              <li><a class="dropdown-item" href="#">의류</a></li>
+			               <li><a class="dropdown-item" href="#">악세서리</a></li>
+			              <li><hr class="dropdown-divider" /></li>
+			               <li><a class="dropdown-item" href="#">전자기기</a></li>
+			               <li><a class="dropdown-item" href="#">스포츠/레저</a></li>
+			               <li><a class="dropdown-item" href="#">키덜트</a></li>
+			               <li><a class="dropdown-item" href="#">예술/음반/악기</a></li>
+			               <li><a class="dropdown-item" href="#">도서/티켓/문구</a></li>
+			               <li><a class="dropdown-item" href="#">가구/인테리어</a></li>
+			               <li><a class="dropdown-item" href="#">생활/주방용품</a></li>
+			               <li><a class="dropdown-item" href="#">기타</a></li>
+			            </ul>
+		          	</li>
+		          	</ul>	 
+            </div>
+            <div class="header-bottom-center">
+                <a href="#" class="header-link">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동)</a>
+            </div>
+            <div class="header-bottom-right">
+                <button type="button" class="locationFormBtn" id="locationFormBtn">동네 설정하기</button>
+            </div>
+    </div>
+</div>
+</div>
+</th:block>
+
+
+<!-- fotter -->
+<th:block th:fragment="footer">
+    <div class="footer-container">
+	<!-- th:fragment 옵션으로 아래 코드의 Fragment의 이름을 선언해주고 공통 레이아웃에서 해당 Fragment명을 호출하여 해당 코드를 불러올수 있다. -->
+	<div class="footer">
+        <div  class="footer_1">
+    
+          <div class="footer_1_div">
+                <p class="footer_txt_1">사업자 정보</p>
+              <hr/>
+              <p class="footer_txt_2">
+                    상호명 및 호스팅 서비스 제공 : 사과마켓(주) <br />
+                    주소: 서울특별시 강남구 역삼대로 사과마켓<br />
+                    대표자: 사과마켓_2조<br />
+                    사업자 등록 번호: 000-00-000000 <br />
+                    통신판매업 신고번호: 2024-서울강남-0000<br />
+                    </p>
+                <a class="footer_txt_2" href="https://www.aesop.com/kr/r/sustainability/">더 알아보기</a>
+              </div>
+    
+        
+          <div class="footer_1_div">
+              <p class="footer_txt_1">고객센터 전화번호 운영시간 주소</p>
+            <hr/>
+                <p class="footer_txt_3">1577-0000(유료)</p>
+                <p class="footer_txt_2">
+                    서울시 강남구 역삼대로<br />
+                    이메일: appleMarket@google.com<br/>
+                </p>
+          </div>
+    
+          <div class="footer_1_div">
+              <p class="footer_txt_1">고객의 소리</p>
+            <hr/>
+            <p class="footer_txt_3">
+                <a href="#">자주 묻는 질문 게시판 이동</a>
+            </p>
+        </div>
+    
+        <hr/>
+      </div>
+      <div class="footer_2">
+        <p class="footer_txt_2">© AppleMarket</p>
+      </div>
+      </div>
+    </div>
+</th:block>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>회원가입 페이지</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/join.css"> <!-- 필요한 경우 CSS 파일 생성 -->
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+       <div class="container">
+            <div class="text-center join-container">
+                <div class="page-info">
+                    <h2>회원가입</h2>
+                    <hr>
+                </div>
+
+                <form id="join-form" th:object="${user}" th:action="@{join}" method="post"> 
+                    <div class="form-group">
+                        <label for="userId">아이디 <small id="userIDError" style="color:red;"></small></label>
+                        <input type="text" th:field="*{userID}" maxlength="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">비밀번호 <small id="userPwdError" style="color:red;"></small></label>
+                        <input type="password" th:field="*{userPwd}" maxlength="20" required>
+                    	<div class="form-group">
+							<label for="confirmPassword">비밀번호 확인<small id="confirmPwdError" style="color:red;"></small></label>
+							<input type="password" id="confirmPwd" maxlength="20" required>
+						</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name">이름<small id="userNameError" style="color:red;"></small></label>
+                        <input type="text" th:field="*{userName}" maxlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">전화번호<small id="phoneError" style="color:red;"></small></label>
+                        <div class="phone-container">
+                        	<input type="text" id="phone1" name="phone1" maxlength="3" required>
+                        	<span>-</span>
+                        	<input type="text" id="phone2" name="phone2" maxlength="4" required>
+                        	<span>-</span>
+                        	<input type="text" id="phone3" name="phone3" maxlength="4" required>
+                        	<input type="hidden" th:field="*{userPhone}">
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">이메일<small id="emailError" style="color:red;"></small></label>
+                        <div class="email-container">
+					        <input type="text" id="emailId" name="emailId" required>
+					        <span>@</span>
+					        <input type="text" id="emailDomain" name="emailDomain" required>
+					        <input type="hidden" th:field="*{userEmail}">
+					    </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="birthdate">생년월일</label>
+                        <input type="date" th:field="*{userBirth}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">닉네임<small id="nicknameError" style="color:red;"></small></label>
+                        <input type="text" th:field="*{userNickname}" maxlength="10" required>
+                        
+                    </div>
+                    
+                    <div class="form-group">
+						<label for="postcode">주소</label>
+					    <div class="address-container">
+					        <input type="button" onclick="DaumPostcode()" value="주소 찾기"><br>
+					        <input type="text" th:field="*{userZonecode}" placeholder="우편번호" readonly required>
+					    </div>
+						
+						<input type="text" id="userAddress" name="userAddress" th:field="*{userAddress}" placeholder="도로명주소" readonly required>
+						<input type="text" id="userAddressDetail" th:field="*{userAddressDetail}" name="userAddressDetail" placeholder="상세주소" required>
+                    </div>
+                    
+                    <input type="submit" value="회원가입">
+                </form>
+
+            </div>
+        </div>
+    </th:block>
+
+    <th:block layout:fragment="script">
+    	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    	<script src="/js/user/join.js"></script>
+		<script>
+		    // 도로명 주소와 우편번호만 설정
+		    function DaumPostcode() {
+		        new daum.Postcode({
+		            oncomplete: function(data) {
+		                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+		                var roadAddr = data.roadAddress; // 도로명 주소 변수
+		                
+		                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+		                document.getElementById('userZonecode').value = data.zonecode;
+		                document.getElementById("userAddress").value = roadAddr;
+		            }
+		        }).open();
+		    }
+		   
+		</script>
+    </th:block>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet" href="/css/product/productDetail.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+	<div th:object="${detail}" class="deatilContainer">
+
+		<div id="productDetailpageContainer mt-5">
+			<div class="row productDetailContainer">
+				<form id="dataForm" name="dataForm">
+					<input type="hidden" name="productID" th:field="*{productID}" />
+				</form>
+
+				<div class="detail-right">
+				 <!--
+				<div class="detail-right" th:if="${dtail.user.userNo == #authentication.principal.userNo}">				
+				 -->
+					<ul>
+						<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" id="detail-option" href="#"
+							data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" id="productUpdateFormBtn">수정</a></li>
+								<li><a class="dropdown-item" id="productDeleteBtn">삭제</a></li>
+							</ul></li>
+					</ul>
+				</div>
+
+
+				<!-- 상품 사진, 이름, 가격,  -->
+				<div class="col-md-6">
+					<div class="product-image">
+						<img th:if="${not #lists.isEmpty(detail.productImages)}"
+							th:src="@{'/product/view/' + ${detail.productImages[0].filename}}"
+							class="img-fluid productListImage" />
+
+					</div>
+				</div>
+			
+			
+			<div class="col-md-6">
+				<div class="product-info">
+					<h1 class="product-name" th:text="*{productName}"></h1>
+					<p class="product-price" th:text="'₩' + *{productPrice}"></p>
+					<span class="sub-info">찜하기 수</span> <span class="sub-info"
+						th:text="'조회수' + *{productVisitCount}"></span>
+					<!-- 가격 단위 표시 추가 -->
+					<div class="product-subinfo">
+						<label>배송비</label>
+						<p class="postPrice" th:text="'₩' + *{postPrice}"></p>
+						<!-- 배송비 단위 표시 추가 -->
+					</div>
+					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
+					<div class="actions">
+						<button class="btn btn-dark">Like</button>
+						<button class="btn btn-dark">Chat</button>
+						<button class="btn btn-dark">Buy</button>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+		<!-- 판매자 정보  -->
+		<div class="seller-container">
+			<div class="seller-info mt-5 d-flex align-items-center">
+				<img src="https://via.placeholder.com/50" alt="Seller Image"
+					class="rounded-circle">
+				<div class="ms-3">
+					<p class="seller-name mb-0">
+						<a href="#" th:text="*{user.userNickname}">판매자 이름</a>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="product-script-container">
+			<div th:if="${#lists.size(detail.productImages)==2}">
+				<img
+					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
+					class="img-fluid productListImage" />
+			</div>
+			<div th:if="${#lists.size(detail.productImages)==3}">
+				<img
+					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
+					class="img-fluid productListImage" /> <img
+					th:src="@{'/product/view/' + ${detail.productImages[2].filename}}"
+					class="img-fluid productListImage" />
+			</div>
+			<div class="product-script" th:text="*{productDescription}">상품
+				설명이 들어가는 영역</div>
+
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="/js/product/productDetail.js"></script>
+</th:block>
+</html>

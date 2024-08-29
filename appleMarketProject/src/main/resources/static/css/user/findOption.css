@@ -1,0 +1,47 @@
+.find-options-container {
+    border: 1px solid gray;
+    margin: 50px;
+    padding: 20px;
+    width: 600px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.page-info {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: gray;
+}
+
+.page-info > h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 버튼 간의 간격 조정 */
+}
+
+.find-button {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    line-height: 50px; /* 수직 정렬을 위해 */
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    background-color: #6A24FE;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid #6A24FE;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.find-button:hover {
+    background-color: #4b1cc6;
+    border-color: #4b1cc6;
+}

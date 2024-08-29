@@ -1,0 +1,152 @@
+body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    width: 100%; /* 전체 너비를 사용하도록 설정 */
+}
+
+#wrapper{
+    position: relative;
+    height: auto;
+    max-width: 1024px;
+    margin: 0 auto; /* 가운데 정렬을 위해 margin auto 추가 */
+    padding: 0;
+}
+
+#content-wrapper {
+    position: relative;
+    height: auto;
+    min-height: calc(100% - 340px);
+}
+
+.header-container{
+    width: 100%;
+}
+
+.footer-container {
+    position: relative;
+    box-sizing: border-box;
+    height: 340px;
+    width: 100%;
+}
+
+.header, .footer {
+    background-color: white;
+    border-bottom: 1px solid #e5e5e5;
+    max-width: 1024px; /* 헤더와 푸터의 최대 너비를 설정 */
+    margin: 0 auto; /* 가운데 정렬을 위한 auto margin 추가 */
+    justify-content: space-between;
+    align-items: center;
+    /*position: relative; 페이지 흐름에 따르게 설정 */
+}
+
+.footer {
+    padding-top: 20px; /* 푸터에 상단 여백 추가 */
+}
+
+.header-top, .header-middle, .header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.header-middle-search {
+    flex-grow: 1;
+    margin: 0 20px;
+    display: flex;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid red;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-button {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #e5e5e5;
+    border-left: none;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    width: 70px;
+}
+
+.header-link, .header-right-link {
+    margin-left: 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
+#categroy_menu {
+    margin-left: 0;
+}
+
+/* 푸터 스타일 */
+.footer_1, .footer_2 {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.footer-container{
+	border-top: 1px solid #e5e5e5;
+	margin-top: 60px;
+	margin-bottom:0;
+}
+
+.footer_1_div {
+    flex: 1; /* 모든 .footer_1_div 요소가 동일한 너비를 가짐 */
+    padding: 0 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.footer_1_div:not(:last-child) {
+    border-right: 1px solid #e5e5e5; /* 각 div 사이에 구분선을 추가 */
+}
+
+.footer_txt_1 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer_txt_2 {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer_2 {
+    justify-content: center; /* AppleMarket 텍스트를 중앙에 배치 */
+}
+
+.footer_txt_2 {
+    font-size: 12px;
+    color: #666;
+}
+
+.footer_txt_3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.footer_txt_3 > a {
+    text-decoration: none;
+    color: black;
+}
+
+/* 본문 */
+.container {
+    display: flex;
+    flex-direction: column; /* 수직 배치를 위해 flex-direction 추가 */
+    align-items: center; /* 가운데 정렬 */
+    max-width: 1024px;
+    justify-content: space-between;
+    height: auto;
+}

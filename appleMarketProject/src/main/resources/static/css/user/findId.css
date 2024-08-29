@@ -1,0 +1,107 @@
+.find-container {
+    border: 1px solid gray;
+    margin: 50px auto;
+    padding: 20px;
+    width: 500px;
+    box-sizing: border-box;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.page-info {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: gray;
+}
+
+.page-info > h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    text-align: left;
+}
+
+#find-id-form {
+    display: block;
+    margin: 5px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#find-id-form label {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 8px;
+    display: block;
+    margin-left: 10px;
+}
+
+#find-id-form input:focus {
+    outline-color: #ed5123;
+}
+
+#find-id-form input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    border: none;
+}
+
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 이메일 아이디와 도메인 사이의 간격 조정 */
+}
+
+.email-container input[type="text"] {
+    width: calc(50% - 10px); /* 각 입력 필드의 너비를 조정 */
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    border: none;
+}
+
+.email-container span {
+    font-size: 16px;
+    color: gray;
+}
+
+#find-id-form input[type="submit"] {
+    width: 100%;
+    color: #fff;
+    font-size: 16px;
+    background-color: #6A24FE;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#find-id-form input[type="submit"]:hover {
+    background-color: #5821d9;
+}
+
+.link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.link a {
+    font-size: 14px;
+    color: #6A24FE;
+    text-decoration: none;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+<th:block layout:fragment="css">
+	<link rel="stylesheet" href="/css/location/location.css" />
+</th:block>
+<th:block layout:fragment="content">
+	<div id="map"></div>
+	<div class="locationInfo">
+		<p>이 동네가 맞나요?😀</p>
+	</div>
+	<div class="locationInfo">
+		<span id="locationName"></span>
+		<button type="button" id="locationConfirmBtn" class="btn btn-primary">확인</button>
+	</div>
+	<p>일치하지 않으시면 검색해주세요.</p>
+	<div class="d-flex locationSearch ">
+		<input type="text" class="form-control md-3" id="sample5_address" placeholder="동 이름 입력 예)역삼동 " /> 
+		<input type="button" class="ml-3" onclick="searchByDongName()" value="주소 검색" />
+		<div id="pocket"></div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4570eb39c301bafd74fdfcb2e3d0818a&libraries=services"></script>
+	<script>
+		var mapContainer = document.getElementById('map'),
+		mapOption = {
+			center: new kakao.maps.LatLng(33.450701, 126.570667),
+			level: 3
+		};
+
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+		var marker = new kakao.maps.Marker({
+			map: map,
+			position: mapOption.center
+		});
+
+		var locationNameConfirm = document.getElementById("locationName");
+		var infowindow = new kakao.maps.InfoWindow({zIndex: 1});
+		var geocoder = new kakao.maps.services.Geocoder();
+		var locationID = null;
+
+		// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var lat = position.coords.latitude,
+					lon = position.coords.longitude;
+
+				var locPosition = new kakao.maps.LatLng(lat, lon),
+					message = '<div style="padding:5px;">여기에 계신가요?!</div>';
+
+				displayMarker(locPosition, message);
+			});
+		} else {
+			var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+				message = '위치 정보가 확인되지 않아 검색해주세요.';
+			displayMarker(locPosition, message);
+		}
+
+		function displayMarker(locPosition, message) {
+			marker.setPosition(locPosition);
+			map.setCenter(locPosition);
+
+			var iwContent = message;
+			infowindow.setContent(iwContent);
+			infowindow.open(map, marker);
+
+			searchAddrFromCoords(locPosition, function(result, status) {
+				if (status === kakao.maps.services.Status.OK) {
+					var detailAddr = '';
+					locationID = result[0].code;  // 여기서 code를 가져옵니다.
+
+					console.log('Location ID (행정동 코드):', locationID);
+
+					for (var i = 0; i < result.length; i++) {
+						if (result[i].region_type === 'H') {
+							detailAddr = result[i].address_name;
+							break;
+						}
+					}
+					locationNameConfirm.textContent = detailAddr;
+				}
+			});
+		}
+
+		function searchByDongName() {
+			var dongName = document.getElementById('sample5_address').value;
+			if (dongName.trim() === "") {
+				alert("동 이름을 입력해주세요.");
+				return;
+			}
+			
+			// 동 이름을 기반으로 주소 검색
+			geocoder.addressSearch(dongName, function(results, status) {
+				if (status === kakao.maps.services.Status.OK) {
+					var result = results[0]; // 검색된 결과의 첫 번째 항목 사용
+					var coords = new kakao.maps.LatLng(result.y, result.x);
+
+					// 지도 중심을 검색된 위치로 이동
+					map.setCenter(coords);
+					marker.setPosition(coords);
+
+					// 행정동 코드 가져오기
+					searchAddrFromCoords(coords, function(regionResult, regionStatus) {
+						if (regionStatus === kakao.maps.services.Status.OK) {
+							locationID = regionResult[0].code;  // 행정동 코드 업데이트
+							console.log('Location ID (행정동 코드):', locationID);
+
+							var detailAddr = '';
+							for (var i = 0; i < regionResult.length; i++) {
+								if (regionResult[i].region_type === 'H') {
+									detailAddr = regionResult[i].address_name;
+									break;
+								}
+							}
+							var content = '<div class="bAddr">' +
+								'<span class="title">동 이름 : </span>' + detailAddr + '</div>';
+							infowindow.setContent(content);
+							infowindow.open(map, marker);
+							locationNameConfirm.textContent = detailAddr;
+						}
+					});
+				} else {
+					alert("검색 결과가 없습니다. 다시 시도해주세요.");
+				}
+			});
+		}
+
+		document.getElementById("locationConfirmBtn").addEventListener("click", function() {
+			if (locationID !== null) {
+				$.ajax({
+					url: '/user/updateLocation',
+					method: 'post',
+					data: JSON.stringify({
+						locationID: locationID
+					}),
+					contentType: "application/json",
+					success: function(response) {
+						console.log("서버 응답 : ", response);
+					},
+					error: function(error) {
+						console.log("에러 발생 : ", error);
+					}
+				});
+			} else {
+				alert("위치를 선택하세요.");
+			}
+		});
+
+		function searchAddrFromCoords(coords, callback) {
+			geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+		}
+
+		function searchDetailAddrFromCoords(coords, callback) {
+			geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+		}
+	</script>
+</th:block>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>비밀번호 찾기 성공</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/join.css">
+    <link rel="stylesheet" type="text/css" href="/css/user/findPwd.css">
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center join-container">
+                <div class="page-info">
+                    <h2>비밀번호 찾기 결과</h2>
+                    <hr>
+                </div>
+                <div class="success-message">
+			        <p>임시 비밀번호가 등록된 이메일로 발송되었습니다.</p>
+			        <p>로그인 후 반드시 비밀번호를 변경해 주세요.</p>
+			        <div class="link">
+				        <a href="/user/loginForm">로그인 페이지로 돌아가기</a>
+			        </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    
+    <th:block layout:fragment="script">
+    </th:block>
+</body>
+</html>

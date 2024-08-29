@@ -1,0 +1,19 @@
+/*open API 스타일*/
+/*open api 적용 스타일*/
+#map{
+	height : 500px;
+	width:100%;
+	margin-top: 50px;
+	margin-bottom : 50px;
+	}
+.locationInfo{
+	width: 350px;
+	height: 80px;
+	text-align: center;
+}
+
+#locationName{
+	font-size: 20px;
+	margin-right: 15px;
+	text-align: center;
+}

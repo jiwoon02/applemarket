@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/findId.css"> <!-- 필요한 경우 CSS 파일 생성 -->
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center find-container">
+                <div class="page-info">
+                    <h2>아이디 찾기</h2>
+                    <hr/>
+                </div>
+				
+				<div th:if="${errorMessage != null}">
+                    <p style="color:red;" th:text="${errorMessage}"></p>
+                </div>
+                
+                <form id="find-id-form" th:object="${user}" th:action="@{findId}" method="post"> 
+                    <div class="form-group">
+                        <label for="name">이름</label>
+                        <input type="text" th:field="*{userName}" maxlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <div class="email-container">
+					        <input type="text" id="emailId" name="emailId" required>
+					        <span>@</span>
+					        <input type="text" id="emailDomain" name="emailDomain" required>
+					        <input type="hidden" th:field="*{userEmail}">
+					    </div>
+                    </div>
+
+                    <input type="submit" value="아이디 찾기">
+                </form>
+
+                <div class="link">
+                    <a href="/user/loginForm">로그인 페이지로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    
+	<th:block layout:fragment="script">
+    	<script src="/js/user/findId.js"></script>
+    </th:block>
+</body>
+</html>

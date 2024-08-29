@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="content">
+	<div id="map"></div>
+
+	<div>
+		<span id="locationName"></span>
+		<button type="button" id="locationConfirmBtn" class="btn btn-primary">확인</button>
+	</div>
+</th:block>
+
+
+
+<th:block layout:fragment="script">
+	<script
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4570eb39c301bafd74fdfcb2e3d0818a&libraries=services"></script>
+	<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨 
+    }; 
+
+	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	var locationNameConfirm = document.getElementById("locationName");
+	//주소-좌표 변환 객체를 생성합니다
+	var geocoder = new kakao.maps.services.Geocoder();
+
+	// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+	if (navigator.geolocation) {
+    
+    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+    navigator.geolocation.getCurrentPosition(function(position) {
+        
+        var lat = position.coords.latitude, // 위도
+            lon = position.coords.longitude; // 경도
+        
+        var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+            message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+        
+        // 마커와 인포윈도우를 표시합니다
+        displayMarker(locPosition, message);
+            
+      });
+    
+	} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+    
+    	var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+        message = 'geolocation을 사용할수 없어요..'
+        
+    	displayMarker(locPosition, message);
+	}
+
+	// 지도에 마커와 인포윈도우를 표시하는 함수입니다
+	function displayMarker(locPosition, message) {
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({  
+        map: map, 
+        position: locPosition
+    }); 
+    
+    var iwContent = message, // 인포윈도우에 표시할 내용
+        iwRemoveable = true;
+
+    // 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+        content : iwContent,
+        removable : iwRemoveable
+    });
+    
+    // 인포윈도우를 마커위에 표시합니다 
+    infowindow.open(map, marker);
+    
+    // 지도 중심좌표를 접속위치로 변경합니다
+    map.setCenter(locPosition);      
+    
+    searchAddrFromCoords(locPosition, function(result, status) {
+    	if (status === kakao.maps.services.Status.OK) {
+			var detailAddr = '';
+			
+			//locationId 가져오기
+			 var locationID = result[0].code;
+	            console.log('Location ID (행정동 코드):', locationID);
+	            
+        	for(var i = 0; i < result.length; i++) {
+        	    // 행정동의 region_type 값은 'H' 이므로
+        	    if (result[i].region_type === 'H') {
+        	    	detailAddr = result[i].address_name;
+        	        break;
+        	    }
+            
+        	}
+            var content = '<div class="bAddr">' +
+                            '<span class="title">동 이름 : </span>' + 
+                            detailAddr + 
+                        '</div>';
+
+            // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+                locationNameConfirm.textContent = detailAddr;
+        }    
+    });
+   };
+   
+	//확인버튼 클릭시
+	document.getElementById("locationConfirmBtn").addEventListener("click", function(){
+		$.ajax({
+			/********************************/
+			//여기에 update user set locationID = locationID 로 연결되는 url 을 넣어야함.
+			url : '//',
+			method : 'post',
+			data: JSON.stringify({
+				locationID: locationID
+		}),
+			contentType:"application/json",
+			success:function(response){
+				console.log("서버 응답 : ", response);
+		},
+			error:function(error){
+				console.log("에러 발생 : ", error)
+		}
+	});
+});
+
+
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+};
+
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+};
+
+    </script>
+</th:block>
+</html>

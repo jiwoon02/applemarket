@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>회원가입 성공</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/join.css"> <!-- 기존 CSS 파일 재사용 -->
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center join-container">
+                <div class="page-info">
+                    <h2>회원가입 완료</h2>
+                    <hr>
+                </div>
+                <div class="success-message">
+                    <p>회원가입이 완료되었습니다. 로그인 후 이용해주세요.</p>
+                    <a href="/user/loginForm" class="login-link">로그인 페이지로 이동</a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    
+    <th:block layout:fragment="script">
+    </th:block>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/findPwd.css">
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center find-password-container">
+                <div class="page-info">
+                    <h2>비밀번호 찾기</h2>
+                    <hr/>
+                </div>
+					
+				<div th:if="${errorMessage != null}">
+                    <p style="color:red;" th:text="${errorMessage}"></p>
+                </div>
+                
+                <form id="find-password-form" th:object="${user}" th:action="@{findPwd}" method="post">
+                	<div class="form-group">
+                        <label for="name">이름</label>
+                        <input type="text" th:field="*{userName}" maxlength="6" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userId">아이디</label>
+                        <input type="text" th:field="*{userID}" maxlength="12" required>
+                    </div>
+                    
+                   <div class="form-group">
+                        <label for="email">이메일</label>
+                        <div class="email-container">
+					        <input type="text" id="emailId" name="emailId" required>
+					        <span>@</span>
+					        <input type="text" id="emailDomain" name="emailDomain" required>
+					        <input type="hidden" th:field="*{userEmail}">
+					    </div>
+                    </div>
+                    <input type="submit" value="비밀번호 찾기">
+                </form>
+                
+                <div class="link">
+                    <a href="/user/loginForm">로그인 페이지로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
+	<th:block layout:fragment="script">
+    	<script src="/js/user/findPwd.js"></script>
+    </th:block>
+</body>
+</html>

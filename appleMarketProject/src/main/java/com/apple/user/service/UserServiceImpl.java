@@ -1,0 +1,127 @@
+package com.apple.user.service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.apple.user.domain.User;
+import com.apple.user.repository.UserRepository;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private JavaMailSender mailSender;
+  
+    
+    //회원가입
+    @Override
+    public void createUser(User user) {
+    	user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
+    	userRepository.save(user);
+    }
+    
+ // 주어진 ID가 사용 가능한지 확인하는 메서드
+ // 이미 존재하면 true, 존재하지않으면 false반환
+    @Override
+    public boolean isUserIDAvailable(String userID) {
+        return userRepository.existsByUserIDIgnoreCase(userID);
+    }
+    
+    // 주어진 전화번호가 사용 가능한지 확인하는 메서드
+    @Override
+    public boolean isUserPhoneAvailable(String userPhone) {
+        return userRepository.existsByUserPhone(userPhone);
+    }
+
+    
+    // 주어진 이메일이 사용 가능한지 확인하는 메서드
+    @Override
+    public boolean isUserEmailAvailable(String userEmail) { 
+        return userRepository.existsByUserEmailIgnoreCase(userEmail);
+    }
+
+    // 주어진 닉네임이 사용 가능한지 확인하는 메서드
+    @Override
+    public boolean isUserNicknameAvailable(String userNickname) {
+        return userRepository.existsByUserNicknameIgnoreCase(userNickname);
+    }
+
+	@Override
+	public String findId(User user) {
+        // 데이터베이스에서 사용자를 조회하는 로직 구현
+        Optional<User> findUser = userRepository.findByUserNameAndUserEmail(user.getUserName(), user.getUserEmail());
+        
+        //찾은 결과가 존재한다면
+        if(findUser.isPresent()) {
+        	return findUser.get().getUserID();	//찾은 유저 반환
+        }
+        else {
+        	return "해당 정보로 등록된 사용자가 없습니다.";
+        }
+	}
+	
+	@Override
+	public String findPwd(User user) {
+		//데이터베이스에 사용자를 조회하는 로직 구현
+		Optional<User> findUser = userRepository.findByUserNameAndUserIDAndUserEmail(user.getUserName(), user.getUserID(), user.getUserEmail());
+		
+		//찾은 결과가 존재한다면
+		if(findUser.isPresent()) {
+			User foundUser = findUser.get();
+			String tempPwd = generateTempPassword();	//임시비밀번호 생성
+			foundUser.setUserPwd(passwordEncoder.encode(tempPwd)); // 비밀번호 암호화
+			userRepository.save(foundUser);
+			
+			sendEmail(user.getUserEmail(), tempPwd);
+			
+			return "임시 비밀번호가 이메일로 발송되었습니다.";
+		} else {
+			return "해당 정보로 등록된 사용자가 없습니다.";
+		}
+	}
+	
+	//임시 비밀번호 생성
+	private String generateTempPassword() {
+        // 임시 비밀번호 생성 로직 (예: 8자리 랜덤 문자열)
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+	
+	//메일 전송
+	private void sendEmail(String to, String tempPwd) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("사과마켓 임시 비밀번호 발급 안내");
+        message.setText("임시 비밀번호는: " + tempPwd + " 입니다. 로그인 후 비밀번호를 변경해 주세요.");
+        mailSender.send(message);
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

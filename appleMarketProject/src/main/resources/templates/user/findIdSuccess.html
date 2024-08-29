@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{template/client/layout/layout}">
+<head>
+    <title>아이디 찾기 성공</title>
+    <link rel="stylesheet" type="text/css" href="/css/user/join.css"> <!-- 기존 CSS 파일 재사용 -->
+    <link rel="stylesheet" type="text/css" href="/css/user/findId.css">
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <div class="container">
+            <div class="text-center join-container">
+                <div class="page-info">
+                    <h2>아이디 찾기 결과</h2>
+                    <hr>
+                </div>
+                <div class="success-message">
+			        <p>당신의 아이디는 <strong th:text="${userId}"></strong>입니다.</p>
+			        <div class="link">
+				        <a href="/user/findPwdForm">비밀번호 찾기</a><br/>
+				        <a href="/user/loginForm">로그인 페이지로 돌아가기</a>
+			        </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    
+    <th:block layout:fragment="script">
+    </th:block>
+</body>
+</html>

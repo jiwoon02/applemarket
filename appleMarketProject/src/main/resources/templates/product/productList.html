@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+	
+<th:block layout:fragment="css">
+<link rel="stylesheet" href="/css/product/productList.css"/>
+</th:block>
+
+<th:block layout:fragment="content">
+<div class="productPageTitle">
+<div class="text-start subtitle">최신 상품</div>
+</div>
+
+	<div id="productSearch" class="my-2">
+		<form id="searchForm">
+			<input type="hidden" name="page" id="page" th:value="${productList.pageRequestDTO.page}"/>
+			<input type="hidden" name="size" id="size" th:value="${productList.pageRequestDTO.size}"/>
+			
+		</form>
+	</div>
+
+    <div id="productListpageContainer">
+    
+    <div th:if="${#lists.isEmpty(productList.dtoList)}">
+    	<p> 조회된 결과가 없습니다. </p>
+	</div>
+		
+	<th:block th:if="${not #lists.isEmpty(productList.dtoList)}">
+		<div class="row productListContainer">
+			<div class="col-md-4 productItem" th:each="product : ${productList.dtoList}" th:object="${product}" th:data-no="*{productID}">
+				 <!-- 첫 번째 이미지를 썸네일로 표시 -->
+                    <img th:if="${not #lists.isEmpty(product.productImages)}"
+                         th:src="@{'/product/view/' + ${product.productImages[0].filename}}" 
+                         class="img-fluid productListImage"/>
+                     	
+                <span class="productListName" th:text="*{productName}"></span> 
+                <span class="productListPrice" th:text="*{productPrice}"></span>
+			</div>
+		</div>
+	</th:block>
+	</div>
+	
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+		<li class="page-item" th:if="${productList.prev}">
+			<a th:data-number="{productList.prevPage}" class="page-link">Previous</a>
+		</li>
+				
+		<li th:each="number : ${productList.pageNumList}" th:classappend="'page-item ' + ${(productList.current == number) ? 'active':''}">
+			<a class="page-link" th:text="${number}" th:data-number="${number}"></a>
+		</li>
+		
+		<li class="page-item" th:if="${productList.next}">
+			<a th:data-number="${productList.nextPage}" class="page-link">Next</a>
+		</li>
+		
+		</ul>
+	</nav>
+</th:block>
+
+
+
+<th:block layout:fragment="script">
+	<script src="/js/product/productList.js"></script>
+</th:block>
