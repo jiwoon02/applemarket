@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 //import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import com.apple.common.vo.PageRequestDTO;
 import com.apple.common.vo.PageResponseDTO;
 import com.apple.product.domain.Product;
 import com.apple.product.domain.ProductImages;
+import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.service.ProductService;
 import com.apple.common.util.CustomeFileUtil;
 
@@ -33,6 +35,7 @@ public class ProductController {
 	
 	private final ProductService productService;
 	private final CustomeFileUtil fileUtil;
+	private final ProductImagesRepository productImagesRepository;
 	
 	//페이징처리한 리스트 한페이지당 12개
 	@GetMapping("/productList")
@@ -73,18 +76,21 @@ public class ProductController {
 	
 	@PostMapping("/updateForm")
 	public String updateForm(Product product, Model model) {
-		Product updateData = productService.getProduct(product.getProductID());
-		model.addAttribute("updateData", updateData);
-		
-		return "product/updateForm";
+	    Product updateData = productService.getProduct(product.getProductID());
+	    model.addAttribute("updateData", updateData);
+	    return "product/updateForm";
 	}
 	
 
 	@PostMapping("/productUpdate")
 	public String productUpdate(Product product) {
-		productService.productUpdate(product);
-		return "redirect:/product/" + product.getProductID();
+	    // 서비스 호출하여 업데이트 진행
+	    productService.productUpdate(product);
+	    
+	    // 수정된 상품 상세 페이지로 리다이렉트
+	    return "redirect:/product/" + product.getProductID();
 	}
+
 
 	
 	

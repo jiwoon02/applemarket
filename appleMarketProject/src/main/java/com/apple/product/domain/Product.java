@@ -76,7 +76,8 @@ public class Product {
 	private LocalDateTime productRegDate;		//등록일
 	
 	@UpdateTimestamp
-	@Column(name = "product_update_date")
+	@Column(name = "product_update_date", nullable = false)
+	@ColumnDefault(value="sysdate")
 	private LocalDateTime productUpdateDate;  	//수정일
 
 	@Column(name = "product_visit_count", nullable = false)
@@ -90,5 +91,7 @@ public class Product {
 	@Transient
 	private List<MultipartFile> files; //여러개 파일 업로드
 	
+    @Transient
+    private List<String> deletedImageFilenames; // 삭제할 파일 이름 리스트
 	
 }

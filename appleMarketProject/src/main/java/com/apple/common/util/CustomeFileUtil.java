@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -32,11 +32,11 @@ public class CustomeFileUtil {
     @PostConstruct
     public void init() {
         File tempFolder = new File(uploadPath);
-        
+
         if (!tempFolder.exists()) {
             tempFolder.mkdir();
         }
-        
+
         uploadPath = tempFolder.getAbsolutePath();
         log.info("--------------------------------");
         log.info(uploadPath);
@@ -90,22 +90,38 @@ public class CustomeFileUtil {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-        
+
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
     // 파일 삭제 메서드
     public void deleteFile(String fileName) {
-        if (fileName == null) {
+        if (fileName == null || fileName.isEmpty()) {
             return;
         }
 
         Path filePath = Paths.get(uploadPath, fileName);
 
         try {
-            Files.deleteIfExists(filePath);
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+            } else {
+                log.warn("파일이 존재하지 않습니다: " + fileName);
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            log.error("파일 삭제 중 오류 발생: " + e.getMessage());
+            throw new RuntimeException("파일 삭제 실패: " + e.getMessage());
         }
+    }
+
+    // 파일 업데이트 메서드 (기존 파일 삭제 후 새로운 파일 저장)
+    public void updateFiles(List<String> oldFileNames, List<MultipartFile> newFiles) {
+        // 기존 파일 삭제
+        for (String oldFileName : oldFileNames) {
+            deleteFile(oldFileName);
+        }
+
+        // 새로운 파일 저장
+        saveFiles(newFiles);
     }
 }

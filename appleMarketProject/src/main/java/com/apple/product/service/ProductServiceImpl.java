@@ -20,120 +20,125 @@ import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-	private final ProductRepository productRepository;
-	private final ProductImagesRepository productImagesRepository;
-	private final CustomeFileUtil fileUtil;
+    private final ProductRepository productRepository;
+    private final ProductImagesRepository productImagesRepository;
+    private final CustomeFileUtil fileUtil;
 
-	@Override
-	public List<Product> productList(Product product) {
-		return productRepository.findAll();
-	}
+    @Override
+    public List<Product> productList(Product product) {
+        return productRepository.findAll();
+    }
 
-	// 페이징 처리
-	@Override
-	public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
-		Pageable pageable = PageRequest.of(
-				pageRequestDTO.getPage() - 1,
-				pageRequestDTO.getSize(), 
-				Sort.by("productRegDate").descending()
-		);
-		
-		Page<Product> result = productRepository.findAll(pageable);
-		List<Product> productList = result.getContent();
-		long totalCount = result.getTotalElements();
-		
-		return PageResponseDTO.<Product>withAll()
-				.dtoList(productList)
-				.pageRequestDTO(pageRequestDTO)
-				.totalCount(totalCount)
-				.build();
-	}
-	
-	// 조회수 증가
-	@Override
-	public void productVisitCntUpdate(Product product) {
-		Product dataProduct = getProduct(product.getProductID());
-		dataProduct.setProductVisitCount(dataProduct.getProductVisitCount() + 1);
-		productRepository.save(dataProduct);
-	}
+    // 페이징 처리
+    @Override
+    public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = PageRequest.of(
+            pageRequestDTO.getPage() - 1,
+            pageRequestDTO.getSize(),
+            Sort.by("productRegDate").descending()
+        );
 
-	// 상품 상세 정보
-	@Override
-	public Product productDetail(Product product) {
-		productVisitCntUpdate(product);
-		Optional<Product> productOptional = productRepository.findById(product.getProductID());
-		return productOptional.orElseThrow();
-	}
-	
-	@Override
-	public void productInsert(Product product) {
-	    // 이미지 파일 처리
-	    List<MultipartFile> files = product.getFiles();
-	    if (files != null && !files.isEmpty()) {
-	        List<ProductImages> productImagesList = saveProductImages(product,files);
-	        product.setProductImages(productImagesList);
-	    }
-	    
-	    productRepository.save(product);
-	}
+        Page<Product> result = productRepository.findAll(pageable);
+        List<Product> productList = result.getContent();
+        long totalCount = result.getTotalElements();
 
-	
-	// 상품 업데이트
-	@Override
-	public void productUpdate(Product product) {
-		Product updateProduct = getProduct(product.getProductID());
+        return PageResponseDTO.<Product>withAll()
+            .dtoList(productList)
+            .pageRequestDTO(pageRequestDTO)
+            .totalCount(totalCount)
+            .build();
+    }
 
-		// 기존 필드 업데이트
-		updateProduct.setProductName(product.getProductName());
-		updateProduct.setProductPrice(product.getProductPrice());
-		updateProduct.setPostPrice(product.getPostPrice());
-		updateProduct.setCategory(product.getCategory());
-		updateProduct.setProductDescription(product.getProductDescription());
-		
-		// 기존 이미지 삭제 및 새로운 이미지 추가
-		updateProductImages(updateProduct, product.getFiles());
-		
-		productRepository.save(updateProduct);
-	}
-	
-	@Override
-	public void updateProductImages(Product product, List<MultipartFile> files) {
-		if (files != null && !files.isEmpty()) {
-			productImagesRepository.deleteByProduct(product); // 기존 이미지 삭제
-			List<ProductImages> productImagesList = saveProductImages(product, files);
-			product.setProductImages(productImagesList);
-		}
-	}
-	
-	@Override
-	public List<ProductImages> saveProductImages(Product product, List<MultipartFile> files) {
-		List<ProductImages> productImagesList = new ArrayList<>();
-		List<String> savedFileNames = fileUtil.saveFiles(files);
-		for (String fileName : savedFileNames) {
-			ProductImages productImage = new ProductImages();
-			productImage.setFilename(fileName);
-			productImage.setProduct(product);
-			productImagesList.add(productImage);
-		}
-		return productImagesList;
-	}
+    // 조회수 증가
+    @Override
+    public void productVisitCntUpdate(Product product) {
+        Product dataProduct = getProduct(product.getProductID());
+        dataProduct.setProductVisitCount(dataProduct.getProductVisitCount() + 1);
+        productRepository.save(dataProduct);
+    }
 
-	
-	@Override
-	public Product getProduct(Long productID) {
-		Optional<Product> productOptional = productRepository.findById(productID);
-		Product updateData = productOptional.orElseThrow();
-		
-		return updateData;
-	}
+    // 상품 상세 정보
+    @Override
+    public Product productDetail(Product product) {
+        productVisitCntUpdate(product);
+        Optional<Product> productOptional = productRepository.findById(product.getProductID());
+        return productOptional.orElseThrow();
+    }
 
-	@Override
-	public Product updateForm(Product product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void productInsert(Product product) {
+        // 이미지 파일 처리
+        List<MultipartFile> files = product.getFiles();
+        if (files != null && !files.isEmpty()) {
+            List<ProductImages> productImagesList = saveProductImages(product, files);
+            product.setProductImages(productImagesList);
+        }
+
+        productRepository.save(product);
+    }
+
+    @Override
+    public List<ProductImages> saveProductImages(Product product, List<MultipartFile> files) {
+        List<ProductImages> productImagesList = new ArrayList<>();
+        List<String> savedFileNames = fileUtil.saveFiles(files);
+        for (String fileName : savedFileNames) {
+            ProductImages productImage = new ProductImages();
+            productImage.setFilename(fileName);
+            productImage.setProduct(product);
+            productImagesList.add(productImage);
+        }
+        return productImagesList;
+    }
+
+    // 상품 업데이트
+    @Override
+    public void productUpdate(Product product) {
+        Product updateProduct = getProduct(product.getProductID());
+
+        // 삭제할 이미지 처리
+        List<String> existingFilenames = updateProduct.getProductImages()
+                                                      .stream()
+                                                      .map(ProductImages::getFilename)
+                                                      .toList();
+
+        for (String filename : existingFilenames) {
+            if (!product.getFiles().stream()
+                        .map(MultipartFile::getOriginalFilename)
+                        .toList().contains(filename)) {
+                ProductImages image = productImagesRepository.findByFilenameAndProduct(filename, updateProduct);
+                if (image != null) {
+                    fileUtil.deleteFile(image.getFilename());
+                    productImagesRepository.delete(image);
+                    updateProduct.getProductImages().remove(image);
+                }
+            }
+        }
+
+        // 새로운 이미지 추가
+        List<MultipartFile> files = product.getFiles();
+        if (files != null && !files.isEmpty()) {
+            List<ProductImages> newImages = saveProductImages(updateProduct, files);
+            updateProduct.getProductImages().addAll(newImages);
+        }
+
+        // 나머지 필드 업데이트
+        updateProduct.setProductName(product.getProductName());
+        updateProduct.setProductPrice(product.getProductPrice());
+        updateProduct.setPostPrice(product.getPostPrice());
+        updateProduct.setCategory(product.getCategory());
+        updateProduct.setProductDescription(product.getProductDescription());
+
+        productRepository.save(updateProduct);
+    }
+
+    @Override
+    public Product getProduct(Long productID) {
+        Optional<Product> productOptional = productRepository.findById(productID);
+        return productOptional.orElseThrow();
+    }
 }
