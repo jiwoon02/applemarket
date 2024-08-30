@@ -83,6 +83,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("create token success");
     	System.out.println("login success");
     	
+    	// 메인화면으로 리디렉션
+//        try {
+//            response.sendRedirect("/"); // "/"는 메인화면의 경로
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 	//로그인 실패시 실행하는 메소드
