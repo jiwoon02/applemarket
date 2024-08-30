@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.security.LoginFilter;
 
 @Configuration
@@ -19,9 +20,11 @@ import com.apple.security.LoginFilter;
 public class SecurityConfig{
 	
 	private final AuthenticationConfiguration authenticationConfiguration;
+	private final JwtUtil jwtUtil;
 	
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
+		this.jwtUtil = jwtUtil;
 	}
 	
 	//비밀번호 암호화
@@ -40,7 +43,7 @@ public class SecurityConfig{
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		//LoginFilter 인스턴스 생성 및 커스텀 로그인 URL 설정
-		LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration));
+		LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
 		loginFilter.setFilterProcessesUrl("/user/login");
 		
 		http
