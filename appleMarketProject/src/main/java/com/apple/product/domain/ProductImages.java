@@ -21,9 +21,9 @@ public class ProductImages {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productImage_generator")
     @Column(name = "product_image_id")
     private Long productImageID;
-
+    
     @Column(nullable = false)
-    private String filename; // 실제 서버에 저장할 파일명
+    private String filename; // 원본 파일명
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)

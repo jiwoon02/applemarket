@@ -36,7 +36,7 @@
 				<div class="col-md-6">
 					<div class="product-image">
 						<img th:if="${not #lists.isEmpty(detail.productImages)}"
-							th:src="@{'/product/view/' + ${detail.productImages[0].filename}}"
+							th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
 							class="img-fluid productListImage" />
 
 					</div>
@@ -78,19 +78,19 @@
         </div>
     </div>
 </div>
-
+                         
 
 		<div class="product-script-container">
 			<div th:if="${#lists.size(detail.productImages)==2}">
 				<img
-					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
 					class="img-fluid productListImage" />
 			</div>
 			<div th:if="${#lists.size(detail.productImages)==3}">
 				<img
-					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
 					class="img-fluid productListImage" /> <img
-					th:src="@{'/product/view/' + ${detail.productImages[2].filename}}"
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[2].filename}}"
 					class="img-fluid productListImage" />
 			</div>
 			<div class="product-script" th:text="*{productDescription}">상품

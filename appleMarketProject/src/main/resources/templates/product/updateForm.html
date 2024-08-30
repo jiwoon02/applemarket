@@ -4,30 +4,30 @@
 	layout:decorate="~{template/client/layout/layout}">
 
 <th:block layout:fragment="css">
-	<link rel="stylesheet" href="/css/product/updateForm.css" />
+    <link rel="stylesheet" href="/css/product/updateForm.css" />
 </th:block>
 
 <th:block layout:fragment="content">
- <div class="update-container" th:object="${updateData}">
- 
-	<form id="updateForm" name="updateForm">
-		<input type="hidden" name="productID" id="productID" th:value="*{productID}"/>
-		
+    <div class="update-container" th:object="${updateData}">
+        <form id="updateForm" name="updateForm">
+            <input type="hidden" name="productID" id="productID" th:value="*{productID}" />
+            
             <div class="img-form-group">
                 <div class="image-upload">
-                        <input type="file" id="fileInput" class="images" name="files" onchange="addFile(this);" multiple="multiple" />
-                        <label for="fileInput" class="image-label">+</label>
+                    <input type="file" id="fileInput" class="images" name="files" onchange="addFile(this);" multiple="multiple" />
+                    <label for="fileInput" class="image-label">+</label>
                 </div>
-                
-                <div class="image-group">
-                <div class="imagePreview">
-                	 <div class="img-wrapper" th:each="image : ${updateData.productImages}" th:id="'file-' + ${image.filename}">
-                            <img th:src="@{'/product/view/' + ${image.filename}}" class="img-thumbnail"/>
-                            <a href="javascript:void(0);" class="deleteBtn" th:data-filename="${image.filename}" style="color:red;">삭제</a>
-                        </div>
-                 
-                </div>
-			</div>
+<div class="image-group">
+    <div class="imagePreview">
+        <div class="img-wrapper" th:each="image : ${updateData.productImages}">
+    <img th:src="@{'/product/view/' + ${updateData.productID} + '/' + ${image.filename}}" class="img-thumbnail"/>
+    <a href="javascript:void(0);" class="deleteBtn" th:data-filename="${image.filename}" onclick="deleteFile(this);" style="color:red;">삭제</a>
+    <input type="hidden" class="existingFileName" name="existingFileNames" th:value="${image.filename}"/>
+</div>
+
+    </div>
+</div>     
+           
             </div>
             
             <div class="form-group">
@@ -64,13 +64,16 @@
             </div>
         </form>
     </div>
-		<div class="text-end">
-			<input type="button" value="저장" id="productUpdateBtn"class="btn btn-primary btn-sm" /> 
-			<input type="button" value="취소" id="productCancelBtn" class="btn btn-primary btn-sm" /> 
-			<input type="button" value="목록" id="productListBtn" class="btn btn-primary btn-sm" />
-		</div>
+
+    <div class="text-end">
+        <input type="button" value="저장" id="productUpdateBtn" class="btn btn-primary btn-sm" /> 
+        <input type="button" value="취소" id="productCancelBtn" class="btn btn-primary btn-sm" /> 
+        <input type="button" value="목록" id="productListBtn" class="btn btn-primary btn-sm" />
+    </div>
 </th:block>
 
 <th:block layout:fragment="script">
-	<script src="/js/product/updateForm.js"></script>
+    <script src="/js/product/updateForm.js"></script>
 </th:block>
+
+</html>
