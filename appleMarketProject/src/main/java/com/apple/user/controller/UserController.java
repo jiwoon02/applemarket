@@ -21,24 +21,23 @@ public class UserController {
 	
 	//로그인 폼
 	@GetMapping("/user/loginForm")
-	public String loginForm(Model model) {
-		model.addAttribute("user", new User());
+	public String loginForm() {
 		return "user/loginForm";
 	}
 	
 	//로그인 처리
-	@PostMapping("/user/login")
-	public String login(@ModelAttribute User user, Model model) {
-		//user 객체에서 userID와 userPwd를 가져와서 인증
-		if(userService.authenticate(user.getUserID(), user.getUserPwd())) {
-			return "/user/joinSuccess";
-		} else {
-			//로그인 실패시 에러메시지와 다시 로그인페이지로
-			model.addAttribute("error", "잘못된 아이디 패스워드 입니다.");
-			//추후 리턴값 메인페이지로 변경
-			return "/user/login";
-		}
-	}
+//	@PostMapping("/user/login")
+//	public String login(@ModelAttribute User user, Model model) {
+//		//user 객체에서 userID와 userPwd를 가져와서 인증
+//		if(userService.authenticate(user.getUserID(), user.getUserPwd())) {
+//			return "/user/joinSuccess";
+//		} else {
+//			//로그인 실패시 에러메시지와 다시 로그인페이지로
+//			model.addAttribute("error", "잘못된 아이디 패스워드 입니다.");
+//			//추후 리턴값 메인페이지로 변경
+//			return "/user/login";
+//		}
+//	}
 	
 	//회원가입 폼
 	@GetMapping("/user/joinForm")
