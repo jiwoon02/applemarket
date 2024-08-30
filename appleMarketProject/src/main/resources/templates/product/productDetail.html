@@ -14,6 +14,9 @@
 			<div class="row productDetailContainer">
 				<form id="dataForm" name="dataForm">
 					<input type="hidden" name="productID" th:field="*{productID}" />
+					<input type="hidden" th:field="*{productName}" th:value="${productName}"/>
+					<input type="hidden" th:field="*{productPrice}" th:value="${productPrice}"/>
+					<input type="hidden" th:field="*{postPrice}" th:value="${postPrice}"/>
 				</form>
 
 				<div class="detail-right">
@@ -59,7 +62,7 @@
 					<div class="actions">
 						<button class="btn btn-dark">Like</button>
 						<button class="btn btn-dark">Chat</button>
-						<button class="btn btn-dark">Buy</button>
+						<button class="btn btn-dark buyBtn">Buy</button>
 					</div>
 				</div>
 			</div>

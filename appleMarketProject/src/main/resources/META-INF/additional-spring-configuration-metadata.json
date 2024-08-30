@@ -3,5 +3,25 @@
     "name": "com.apple.upload.path",
     "type": "java.lang.String",
     "description": "A description for 'com.apple.upload.path'"
+  },
+  {
+    "name": "portone.api.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'portone.api.secret'"
+  },
+  {
+    "name": "sendbird.appId",
+    "type": "java.lang.String",
+    "description": "A description for 'sendbird.appId'"
+  },
+  {
+    "name": "sendbird.apiToken",
+    "type": "java.lang.String",
+    "description": "A description for 'sendbird.apiToken'"
+  },
+  {
+    "name": "sendbird.apiKey",
+    "type": "java.lang.String",
+    "description": "A description for 'sendbird.apiKey'"
   }
 ]}
