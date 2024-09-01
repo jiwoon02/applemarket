@@ -23,7 +23,7 @@ public interface ProductService {
 
     public void saveProductImages(List<MultipartFile> files, Product product) throws IOException;
 
-    void productUpdate(Product product);
+    void productUpdate(Product product, List<MultipartFile> files);
 
     Product getProduct(Long productID);
     

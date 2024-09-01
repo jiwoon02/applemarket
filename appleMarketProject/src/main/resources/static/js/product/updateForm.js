@@ -1,5 +1,6 @@
 // 모든 hidden input 요소를 가져와 filesArr 배열에 저장
 var filesArr = Array.from(document.getElementsByName('existingFileNames')).map(input => input.value);
+var updateFileArr = [];
 
 // 삭제된 이미지의 이름을 filesArr에서 제거
 function deleteFile(obj) {
@@ -12,6 +13,7 @@ function deleteFile(obj) {
 
 function addFile(obj) {
     for (const file of obj.files) {
+        updateFileArr.push(file);
         filesArr.push(file.name);
 		console.log(file.name);
         const reader = new FileReader();
@@ -30,15 +32,15 @@ function addFile(obj) {
 $("#productUpdateBtn").on("click", function() {
     var formData = new FormData($('#updateForm')[0]);
 
-    // 기존 이미지 전송
+    //이미지 전송
     filesArr.forEach(function(filename) {
         formData.append('existingFileNames', filename);
     });
 
-    // 새로 추가된 파일 전송
-    for (var i = 0; i < $('#fileInput')[0].files.length; i++) {
-        formData.append('files', $('#fileInput')[0].files[i]);
-    }
+    updateFileArr.forEach(function(file) {
+        formData.append('files', file);
+    });
+
 
     $.ajax({
         url: '/product/productUpdate',

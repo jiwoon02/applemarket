@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -76,12 +78,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product productInsert(Product product, List<MultipartFile> files) {
+        log.info("file cnt :" + files.size());
+        for(MultipartFile file : files) {
+            log.info("file name :" + file.getOriginalFilename());
+            log.info("file content :" + file.getContentType());
+            log.info("file getName" + file.getName());
+        }
         // 상품 저장
         Product savedProduct = productRepository.save(product);
         
         if (files != null && !files.isEmpty()) {
             try {
-                saveProductImages(files, savedProduct);
+                saveProductImages(files, savedProduct); //insert
             } catch (java.io.IOException e) {
                 throw new RuntimeException("이미지 저장 중 오류 발생: " + e.getMessage());
             }
@@ -109,39 +117,42 @@ public class ProductServiceImpl implements ProductService {
     // 상품 업데이트
 
     @Override
-    public void productUpdate(Product product) {
+    public void productUpdate(Product product, List<MultipartFile> files) {
         Product updateProduct = getProduct(product.getProductID());
         Long productId = updateProduct.getProductID();
 
-        // 삭제할 이미지 처리
-        List<String> existingFilenames = updateProduct.getProductImages()
-                                                      .stream()
-                                                      .map(ProductImages::getFilename)
-                                                      .toList();
+        log.info("file cnt :" + files.size());
+        for(MultipartFile file : files) {
+            log.info("file name :" + file.getOriginalFilename());
+            log.info("file content :" + file.getContentType());
+            log.info("file getName" + file.getName());
+        }
+        List<ProductImages> selectedImages = productImagesRepository.findByFilenameAndProduct(product);
+        log.info("selectedImages =>" + selectedImages.size());
 
-        for (String filename : existingFilenames) {
-            if (!product.getFiles().stream()
-                        .map(MultipartFile::getOriginalFilename)
-                        .toList().contains(filename)) {
-                ProductImages image = productImagesRepository.findByFilenameAndProduct(filename, updateProduct);
-                if (image != null) {
-                    fileUtil.deleteFile(filename, productId); // 상품별 폴더에서 파일 삭제
-                    productImagesRepository.delete(image);
-                    updateProduct.getProductImages().remove(image);
-                }
+        List<String> existingFilenames = product.getExistingFileNames();
+        log.info("existingFilenames =>" + existingFilenames.toString());
+
+        for (ProductImages image : selectedImages) {
+            log.info("existingFilenames =>" + existingFilenames.toString());
+            log.info("image.getFilename() =>" + image.getFilename().toString());
+
+            if (!existingFilenames.contains(image.getFilename())) {
+                log.info("point delete" + image.getFilename());
+                fileUtil.deleteFile(image.getFilename(), productId); // 상품별 폴더에서 파일 삭제
+                productImagesRepository.delete(image);
+                updateProduct.getProductImages().remove(image);
             }
+
         }
 
-        // 새로운 이미지 추가
-        List<MultipartFile> files = product.getFiles();
         if (files != null && !files.isEmpty()) {
-        	try {
-        		// 매개변수 순서 수정: files가 첫 번째, product가 두 번째로 전달되어야 함
-        		saveProductImages(files, updateProduct); 
-				
-			} catch (IOException e) {
-				throw new RuntimeException("이미지 저장 중 오류 발생: " + e.getMessage(), e);
-			}
+            try {
+                log.info("saveFiles");
+                saveProductImages(files, product); //insert
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("이미지 저장 중 오류 발생: " + e.getMessage());
+            }
         }
 
         // 나머지 필드 업데이트

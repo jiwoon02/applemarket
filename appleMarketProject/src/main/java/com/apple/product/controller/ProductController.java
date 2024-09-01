@@ -69,17 +69,12 @@ public class ProductController {
     }
 
     @PostMapping("/productInsert")
-    public String productInsert(Product product, List<MultipartFile> files) {
-        // 상품을 먼저 저장
-        productService.productInsert(product, files);
+    public String productInsert(Product product, List<MultipartFile> files) throws IOException {
+
         
         // 이미지 저장 시 발생할 수 있는 IOException을 처리하기 위해 try-catch 사용
-        try {
-            productService.saveProductImages(files, product);
-        } catch (IOException e) {
-            // 예외 발생 시 에러 메시지와 함께 적절한 처리를 합니다.
-            throw new RuntimeException("이미지 저장 중 오류 발생: " + e.getMessage(), e);
-        }
+        // 상품을 먼저 저장
+        productService.productInsert(product, files);
         return "redirect:/product/productList";
     }
 
@@ -91,9 +86,9 @@ public class ProductController {
     }
 
     @PostMapping("/productUpdate")
-    public String productUpdate(Product product) {
+    public String productUpdate(Product product, List<MultipartFile> files) {
         // 서비스 호출하여 업데이트 진행
-        productService.productUpdate(product);
+        productService.productUpdate(product,files);
 
         // 수정된 상품 상세 페이지로 리다이렉트
         return "redirect:/product/" + product.getProductID();

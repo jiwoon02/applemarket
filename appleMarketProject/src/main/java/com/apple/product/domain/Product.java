@@ -83,6 +83,9 @@ public class Product {
     private List<ProductImages> productImages = new ArrayList<>();
 
     @Transient
+    private List<String> existingFileNames;
+
+    @Transient
     private List<MultipartFile> files; // 파일 업로드용
 
     @Transient
