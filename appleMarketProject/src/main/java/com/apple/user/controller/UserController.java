@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.apple.user.domain.User;
 import com.apple.user.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @Controller
 public class UserController {
@@ -25,19 +29,25 @@ public class UserController {
 		return "user/loginForm";
 	}
 	
-	//로그인 처리
-//	@PostMapping("/user/login")
-//	public String login(@ModelAttribute User user, Model model) {
-//		//user 객체에서 userID와 userPwd를 가져와서 인증
-//		if(userService.authenticate(user.getUserID(), user.getUserPwd())) {
-//			return "/user/joinSuccess";
-//		} else {
-//			//로그인 실패시 에러메시지와 다시 로그인페이지로
-//			model.addAttribute("error", "잘못된 아이디 패스워드 입니다.");
-//			//추후 리턴값 메인페이지로 변경
-//			return "/user/login";
-//		}
-//	}
+	@PostMapping("/user/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // JWT 쿠키를 삭제하는 로직
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("JWT".equals(cookie.getName())) {
+                    // 쿠키를 삭제하려면 동일한 이름과 경로로 만료 시간을 0으로 설정하여 덮어씀
+                    cookie.setValue(null);
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+        return "client/main";
+    }
 	
 	//회원가입 폼
 	@GetMapping("/user/joinForm")
