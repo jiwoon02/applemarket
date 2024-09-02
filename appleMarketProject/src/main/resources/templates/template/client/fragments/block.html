@@ -31,8 +31,8 @@
                 </a>
             </div>
             <div class="header-middle-search">
-                <input type="text" placeholder="상품명, 지역명, @상점명 입력" class="search-input">
-                <button class="search-button">검색</button>
+                <input type="text" id="searchInput" placeholder="상품명, @닉네임 입력" class="searchInput">
+                <button id="searchBtn" class="searchBtn" onclick="performSearch()">검색</button>
             </div>
             <div class="header-middle-right">
                 <a href="/product/insertForm" class="header-right-link">🍎판매하기</a>
@@ -68,7 +68,12 @@
 		          	</ul>	 
             </div>
             <div class="header-bottom-center">
-                <a href="#" class="header-link">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동)</a>
+                <!--로그인 완료시 표시
+                <th:block th:if="${login.user != null}">
+                    <p th:if="${login.user.location != null}" th:text="${detail.user.location.locationName}" class="header-link">판매자 주소</p>
+                    <p th:if="${login.user.location == null}" class="header-link">동네를 설정해주세요.</p>
+                </th:block>-->
+                <p class="header-link">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동)</p>
             </div>
             <div class="header-bottom-right">
                 <button type="button" class="locationFormBtn" id="locationFormBtn">동네 설정하기</button>
@@ -110,15 +115,8 @@
                 </p>
           </div>
     
-          <div class="footer_1_div">
-              <p class="footer_txt_1">고객의 소리</p>
-            <hr/>
-            <p class="footer_txt_3">
-                <a href="#">자주 묻는 질문 게시판 이동</a>
-            </p>
-        </div>
-    
-        <hr/>
+
+
       </div>
       <div class="footer_2">
         <p class="footer_txt_2">© AppleMarket</p>

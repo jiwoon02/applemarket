@@ -34,31 +34,48 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductImagesRepository productImagesRepository;
     private final CustomeFileUtil fileUtil;
-
+/*
     @Override
     public List<Product> productList(Product product) {
         return productRepository.findAll();
     }
+*/
+@Override
+public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
+    PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
-    // 페이징 처리
-    @Override
-    public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
-        Pageable pageable = PageRequest.of(
-            pageRequestDTO.getPage() - 1,
-            pageRequestDTO.getSize(),
-            Sort.by("productRegDate").descending()
+    String keyword = pageRequestDTO.getKeyword();
+    String search = pageRequestDTO.getSearch();
+
+    log.info("Received keyword: {}", keyword);
+
+    if (keyword == null || keyword.isEmpty()) {
+        log.info("키워드 없이 기본값. 최신날짜순 정렬");
+        Page<Product> result = productRepository.findAllByOrderByProductRegDateDesc(pageRequest);
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
+    } else {
+        if (keyword.startsWith("@")) {
+            search = "user_nickname";
+            keyword = keyword.substring(1);  // '@' 제거
+        } else {
+            search = "product_name";  // 기본 검색 필드로 설정
+        }
+
+        log.info("Searching with field: {} and keyword: {}", search, keyword);
+
+        Page<Product> result = productRepository.searchProducts(
+                search,
+                "%" + keyword + "%",  // 와일드카드 추가
+                pageRequestDTO.getStartDate(),
+                pageRequestDTO.getEndDate(),
+                pageRequest
         );
 
-        Page<Product> result = productRepository.findAll(pageable);
-        List<Product> productList = result.getContent();
-        long totalCount = result.getTotalElements();
-
-        return PageResponseDTO.<Product>withAll()
-            .dtoList(productList)
-            .pageRequestDTO(pageRequestDTO)
-            .totalCount(totalCount)
-            .build();
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
     }
+}
+
+
 
     // 조회수 증가
     @Override

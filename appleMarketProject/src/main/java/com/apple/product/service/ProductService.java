@@ -11,7 +11,7 @@ import com.apple.product.domain.ProductImages;
 
 public interface ProductService {
 
-	List<Product> productList(Product product);
+	//List<Product> productList(Product product);
 
     PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO);
 

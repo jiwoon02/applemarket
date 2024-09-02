@@ -34,7 +34,7 @@ public class ProductController {
 
     // 페이징처리한 리스트 한페이지당 12개
     @GetMapping("/productList")
-    public String productList(Product product, PageRequestDTO pageRequestDTO, Model model) {
+    public String productList(PageRequestDTO pageRequestDTO, Model model) {
         PageResponseDTO<Product> productList = productService.list(pageRequestDTO);
         model.addAttribute("productList", productList);
         return "product/productList";
