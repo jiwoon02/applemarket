@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+	<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+		<head>
+			<meta charset="UTF-8">
+			<title>관리자 로그인</title>
+			
+      	 <link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+		<!--
+		<link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+		-->
+		<link type="text/css" rel="stylesheet" href="/css/common.css" />
+		</head>
+		<body>
+		<!--관리자 ID와 PW를 대조하기 위한 div-->
+			<div th:each= "admin : ${adminList}" th:object="${admin}">
+				<input  type="hidden" th:value="*{adminName}" class="adminName" />
+				<input  type="hidden" th:value="*{adminPasswd}" class="adminPasswd"/>
+			</div>
+		<!-- 관리자 UI -->
+			 <div class="container">
+	            <div>
+	                <a href="#" class="logo">
+	                    <img src="logo.png" alt="사과로고">
+	                </a>
+	            </div>
+			</div>
+			<form name="login" id="login">
+			<div class="container">
+				<a>관리자 ID</a>
+				<input class="DocSearch-input" placeholder="관리자 로그인" id="adminName"/>
+				<a>관리자 PW</a>
+				<input class="DocSearch-input" placeholder="관리자 비밀번호" id="adminPasswd"/>
+			</div>
+			</form>
+		<hr/>
+			<div class="container">
+				<input type="button" value="확인" id="LoginBtn" class="btn btn-primary btn-sm"/>
+			</div>
+	
+		<!--
+	<script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
+		-->	
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="/js/admin/common.js"></script>
+	<script src="/js/admin/login.js"></script>		
+		</body>
+	</html>

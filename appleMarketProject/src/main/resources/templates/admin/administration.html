@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/adminlayout}">
+
+<head>
+    <title>사용자 관리</title>
+   <!-- 
+    -->
+    <link type="text/css" rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" >
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+    
+    	
+    	
+        <div class="container">
+            <div class="text-center">
+                <h3>사용자 관리</h3>                
+            </div>
+          	<div>
+          		<table class="table table-bordered">
+            		<thead>
+            			<tr class= "text-center">
+            				<th>사용자 ID</th>
+          					<th>이름</th>
+          					<th>전화번호</th>
+          					<th>주소</th>
+          					<th>이메일</th>
+          					<th>생년월일</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr class = "text-center" th:each = "user : ${userList}"  th:object= "${user}">
+            				<td th:text="*{userID}"></td>
+            				<td >
+            		<form id="updateForm" >
+            					<input type="hidden" name="userNo" th:value= "*{userNo}"/>
+            					<input type="text" id="userName" name="userName" th:value= "*{userName}" readonly="readonly" ></input>
+            					<div id="updateDiv">
+            					<button type="button" id="updateFormBtn" value="3">변경</button>
+            					</div>	
+            		</form>
+            				</td>
+            				<td th:text="*{userPhone}"></td>
+            				<td th:text="*{userAddressDetail} + | *{userAddress}"></td>
+            				<td th:text="*{userEmail}"></td>
+            			 	<td th:text="*{userBirth}"></td>
+      
+            			</tr>
+            		</tbody>
+            	</table>
+          	</div>
+        </div>
+    </th:block>
+
+    <th:block layout:fragment="script">
+        	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="/js/admin/common.js"></script>
+	<script src="/js/admin/administration.js"></script>	
+    </th:block>
+</body>
+
+</html>

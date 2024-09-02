@@ -78,6 +78,40 @@
 </div>
 </th:block>
 
+<!-- 상단 adminheader -->
+<th:block th:fragment="adminheader">
+    <div class="header-container">
+	<div class="header">
+        <!--헤더 위-->
+	        <div class="header-top">
+	            <div class="header-top-right">
+	                <a href="#" class="header-link">admin</a>
+	            </div>
+	            <div>
+	                <a href="/admin/Login" class="header-link">로그아웃</a>
+	            </div>
+	        </div>
+	         <!--헤더 중간-->
+	        <div class="header-middle">
+	            <div class="header-middle-left">
+	                <a href="#" class="logo">
+	                    <img src="logo.png" alt="사과로고">
+	                </a>
+	            </div>
+	            <div class="header-middle-right">
+	                <a href="/admin/success/administration" class="header-right-link">사용자 관리</a>
+	                <span class="header-middle-link-line"> | </span>
+	                <a href="/admin/success/community" class="header-right-link">커뮤니티 관리</a>
+	                <span class="header-middle-link-line"> | </span>
+	                <a href="/admin/success/product" class="header-right-link">상품 관리</a>
+	                <span class="header-middle-link-line"> | </span>
+	                <a href="/admin/success/category" class="header-right-link">카테고리 관리</a>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</th:block>
+
 
 <!-- fotter -->
 <th:block th:fragment="footer">
