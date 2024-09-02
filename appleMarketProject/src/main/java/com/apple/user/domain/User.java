@@ -86,10 +86,14 @@ public class User{
     @JoinColumn(name = "location_id", nullable = true)
     private Location location; // Location 엔티티와의 관계, 외래키
     
+    @Column(name = "user_role", nullable = false)
+    private String userRole; // 사용자 권한 (예: ROLE_USER)
+    
     @PrePersist
     protected void onCreate() {
         this.userRegDate = new Date();  // 가입일을 현재 시간으로 설정
         this.userEditDate = new Date(); // 수정일도 현재 시간으로 설정
+        this.userRole = "USER";
     }
     
     @PreUpdate

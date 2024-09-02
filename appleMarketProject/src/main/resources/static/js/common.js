@@ -113,8 +113,3 @@ function performSearch(){
 }
 
 
-
-
-
-
-''

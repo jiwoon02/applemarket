@@ -74,7 +74,7 @@ public class ProductController {
     @PostMapping("/productInsert")
     public String productInsert(Product product, List<MultipartFile> files) throws IOException {
 
-        
+
         // 이미지 저장 시 발생할 수 있는 IOException을 처리하기 위해 try-catch 사용
         // 상품을 먼저 저장
         productService.productInsert(product, files);
