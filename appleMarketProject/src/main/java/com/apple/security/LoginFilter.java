@@ -17,9 +17,12 @@ import com.apple.jwt.JwtUtil;
 import com.apple.user.dto.CustomUserDetails;
 
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	
     private final AuthenticationManager authenticationManager;
@@ -76,19 +79,31 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         
         String token = jwtUtil.createJwt(userID, role, 3600000L);
         
+        //헤더방식
         //HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 함
         //예시 Authorization: Bearer 인증토큰string
-        response.addHeader("Authorization", "Bearer " + token);
+//        response.addHeader("Authorization", "Bearer " + token);
+//        
+//        System.out.println("create token success");
+//    	System.out.println("login success");
+    	
+        Cookie jwtCookie = jwtUtil.createCookie(token);
+        response.addCookie(jwtCookie);
         
         System.out.println("create token success");
-    	System.out.println("login success");
-    	
+        System.out.println("login success");
+        
     	//메인화면으로 리디렉션
-//        try {
-//            response.sendRedirect("/"); // "/"는 메인화면의 경로
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+        	if (response.isCommitted()) {
+        	    log.warn("Response already committed before redirect.");
+        	} else {
+        	    response.sendRedirect("/");
+        	}
+        } catch (IOException e) {
+        	log.info("메인페이지 이동 실패");
+            e.printStackTrace();
+        }
     }
 
 	//로그인 실패시 실행하는 메소드

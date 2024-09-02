@@ -65,13 +65,13 @@ public class SecurityConfig{
         			.anyRequest().permitAll());
 		//JWTFilter 등록
 		http
-			.addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+			.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 		
 		//Login필터 등록
 		http
-			.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+			.addFilterAt(loginFilter,  UsernamePasswordAuthenticationFilter.class);
 		
-		//세션 설정
+		//세션 설정 사용하지않음
 		http
        		.sessionManagement((session) -> session
        				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
