@@ -94,12 +94,22 @@ function chkFile(item) {
 	}
 }
 
+$("#locationFormBtn").on("click", function(){
+	location.href="/locationForm";
+})
 
+//검색버튼클릭
+function performSearch(){
+	const searchInput = $('#searchInput').val();
+	let searchField = 'product_name'; //기본값 상품명
 
+	//닉네임일때
+	if(searchInput.startsWith('@')){
+		searchField = 'user_nickname';
+	}
 
-
-
-
-
+	console.log('searchInput==>' + searchInput);
+	location.href=`/product/productList?keyword=${encodeURIComponent(searchInput)}&search=p${searchField}`;
+}
 
 

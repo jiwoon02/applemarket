@@ -2,10 +2,13 @@ package com.apple.common.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -28,66 +31,62 @@ public class CustomeFileUtil {
 
     @Value("${com.apple.upload.path}")
     private String uploadPath;
+    
+    public String getUploadPath() {
+        return uploadPath;
+    }
+    
+    // 상품별 폴더 생성
+    public String createProductFolder(Long productId) {
+        String productFolderPath = Paths.get(uploadPath, "product_" + productId).toString();
+        File productFolder = new File(productFolderPath);
 
-    @PostConstruct
-    public void init() {
-        File tempFolder = new File(uploadPath);
-        
-        if (!tempFolder.exists()) {
-            tempFolder.mkdir();
+        if (!productFolder.exists()) {
+            productFolder.mkdirs(); // 폴더가 존재하지 않으면 생성
         }
-        
-        uploadPath = tempFolder.getAbsolutePath();
-        log.info("--------------------------------");
-        log.info(uploadPath);
+
+        return productFolderPath;
     }
 
-    // 다중 파일 처리 메서드
-    public List<String> saveFiles(List<MultipartFile> files) {
+
+    public List<String> saveFiles(List<MultipartFile> files, Long productId) throws IOException {
         List<String> savedFileNames = new ArrayList<>();
 
-        if (files != null && !files.isEmpty()) {
-            for (MultipartFile file : files) {
-                String saveName = saveFile(file); // 모든 파일을 그대로 저장
-                if (saveName != null) {
-                    savedFileNames.add(saveName);
+        // 상품ID로 폴더 생성
+        String productFolderPath = createProductFolder(productId);
+        
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                String originalFilename = file.getOriginalFilename();
+                String savePath = Paths.get(productFolderPath, originalFilename).toString();
+                File dest = new File(savePath);
+
+                try (InputStream in = file.getInputStream()) {
+                    Files.copy(in, dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage());
                 }
+
+                savedFileNames.add(originalFilename);
             }
         }
-
         return savedFileNames;
     }
 
-    // 단일 파일 처리 메서드
-    private String saveFile(MultipartFile file) throws RuntimeException {
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-
-        String saveName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path savePath = Paths.get(uploadPath, saveName);
-
-        try {
-            Files.copy(file.getInputStream(), savePath);
-        } catch (IOException e) {
-            throw new RuntimeException("파일 저장 실패: " + e.getMessage());
-        }
-
-        return saveName;
-    }
-
-    // 파일 가져오기 메서드
-    public ResponseEntity<Resource> getFile(String fileName) {
-        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
-
+    // 파일 불러오기 메서드
+    public ResponseEntity<Resource> getFile(Long productId, String fileName) {
+        String productFolderPath = createProductFolder(productId);
+        Path filePath = Paths.get(productFolderPath, fileName);
+        Resource resource = new FileSystemResource(filePath);
+        
         if (!resource.exists()) {
-            resource = new FileSystemResource(uploadPath + File.separator + "default.jpg");
+            return ResponseEntity.notFound().build();
         }
-
+        
         HttpHeaders headers = new HttpHeaders();
         try {
-            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
-        } catch (Exception e) {
+            headers.add("Content-Type", Files.probeContentType(filePath));
+        } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }
         
@@ -95,17 +94,37 @@ public class CustomeFileUtil {
     }
 
     // 파일 삭제 메서드
-    public void deleteFile(String fileName) {
-        if (fileName == null) {
-            return;
-        }
-
-        Path filePath = Paths.get(uploadPath, fileName);
+    public void deleteFile(String fileName, Long productId) {
+        String productFolderPath = createProductFolder(productId);
+        Path filePath = Paths.get(productFolderPath, fileName);
 
         try {
-            Files.deleteIfExists(filePath);
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+            } else {
+                log.warn("파일이 존재하지 않습니다: " + fileName);
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            log.error("파일 삭제 중 오류 발생: " + e.getMessage());
+            throw new RuntimeException("파일 삭제 실패: " + e.getMessage());
+        }
+    }
+
+    // 상품 삭제 시 폴더 전체 삭제
+    public void deleteProductFolder(Long productId) {
+        String productFolderPath = Paths.get(uploadPath, "product_" + productId).toString();
+        File productFolder = new File(productFolderPath);
+
+        if (productFolder.exists()) {
+            try {
+                Files.walk(productFolder.toPath())
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+            } catch (IOException e) {
+                log.error("상품 폴더 삭제 중 오류 발생: " + e.getMessage());
+                throw new RuntimeException("상품 폴더 삭제 실패: " + e.getMessage());
+            }
         }
     }
 }

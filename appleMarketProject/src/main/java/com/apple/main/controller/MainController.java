@@ -1,28 +1,33 @@
 package com.apple.main.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class MainController {
-	/*
 	@GetMapping("/")
-	public String hello(Model model) {
-		model.addAttribute("name", "홍길동");
-		return "main";
-		//main.html 이라는 파일을 찾는다는 의미
-	}
-	*/
-	@GetMapping("/")
-	public String main() {
+	public String main(HttpServletRequest request, Model model) {
+		boolean isLoggedIn = false;
+		
+		//jwt 쿠키 확인
 		return "client/main";
 	}
 	
-	@GetMapping("/apple")
-	public String apple() {
-		return "client/apple";
-	}
+//	@GetMapping("/")
+//	public String mainP() {
+//		String userID = SecurityContextHolder.getContext().getAuthentication().getName();
+//		
+//		return "/client/main";
+//	}
+	
+//	@GetMapping("/apple")
+//	public String apple() {
+//		return "client/apple";
+//	}
 	
 	@GetMapping("/locationForm")
 	public String locationForm() {

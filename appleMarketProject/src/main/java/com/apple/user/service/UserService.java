@@ -1,5 +1,8 @@
 package com.apple.user.service;
 
+import java.util.Optional;
+
+
 import com.apple.user.domain.User;
 
 public interface UserService{
@@ -16,6 +19,10 @@ public interface UserService{
 
 	public String findId(User user);
 
-	String findPwd(User user);
+	public String findPwd(User user);
+
+//	public Optional<User> findByUserID(String userID);
+//
+//	boolean authenticate(String userID, String password);
 	
 }

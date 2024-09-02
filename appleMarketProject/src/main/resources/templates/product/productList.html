@@ -31,7 +31,7 @@
 			<div class="col-md-4 productItem" th:each="product : ${productList.dtoList}" th:object="${product}" th:data-no="*{productID}">
 				 <!-- 첫 번째 이미지를 썸네일로 표시 -->
                     <img th:if="${not #lists.isEmpty(product.productImages)}"
-                         th:src="@{'/product/view/' + ${product.productImages[0].filename}}" 
+                         th:src="@{'/product/view/' + ${product.productID} + '/' + ${product.productImages[0].filename}}"
                          class="img-fluid productListImage"/>
                      	
                 <span class="productListName" th:text="*{productName}"></span> 

@@ -12,16 +12,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.apple.user.domain.User;
 import com.apple.user.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @Controller
 public class UserController {
+	
 	@Autowired
 	private UserService userService;
 	
+	//로그인 폼
 	@GetMapping("/user/loginForm")
 	public String loginForm() {
 		return "user/loginForm";
 	}
+	
+	@PostMapping("/user/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // JWT 쿠키를 삭제하는 로직
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("JWT".equals(cookie.getName())) {
+                    // 쿠키를 삭제하려면 동일한 이름과 경로로 만료 시간을 0으로 설정하여 덮어씀
+                    cookie.setValue(null);
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+        return "client/main";
+    }
 	
 	//회원가입 폼
 	@GetMapping("/user/joinForm")

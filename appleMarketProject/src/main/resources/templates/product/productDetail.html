@@ -21,7 +21,7 @@
 				<div class="detail-right" th:if="${dtail.user.userNo == #authentication.principal.userNo}">				
 				 -->
 					<ul>
-						<li class="nav-item dropdown">
+						<li class="nav-item dropdown option">
 						<a class="nav-link dropdown-toggle" id="detail-option" href="#"
 							data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
 							<ul class="dropdown-menu">
@@ -36,7 +36,7 @@
 				<div class="col-md-6">
 					<div class="product-image">
 						<img th:if="${not #lists.isEmpty(detail.productImages)}"
-							th:src="@{'/product/view/' + ${detail.productImages[0].filename}}"
+							th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
 							class="img-fluid productListImage" />
 
 					</div>
@@ -47,8 +47,6 @@
 				<div class="product-info">
 					<h1 class="product-name" th:text="*{productName}"></h1>
 					<p class="product-price" th:text="'₩' + *{productPrice}"></p>
-					<span class="sub-info">찜하기 수</span> <span class="sub-info"
-						th:text="'조회수' + *{productVisitCount}"></span>
 					<!-- 가격 단위 표시 추가 -->
 					<div class="product-subinfo">
 						<label>배송비</label>
@@ -57,38 +55,49 @@
 					</div>
 					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 					<div class="actions">
-						<button class="btn btn-dark">Like</button>
-						<button class="btn btn-dark">Chat</button>
-						<button class="btn btn-dark">Buy</button>
+						<button class="btn btn-dark">찜하기</button>
+						<button class="btn btn-dark">채팅하기</button>
+						<button class="btn btn-dark">구매하기</button>
 					</div>
 				</div>
 			</div>
 		</div>
 </div>
-		<!-- 판매자 정보  -->
-		<div class="seller-container">
-			<div class="seller-info mt-5 d-flex align-items-center">
-				<img src="https://via.placeholder.com/50" alt="Seller Image"
-					class="rounded-circle">
-				<div class="ms-3">
-					<p class="seller-name mb-0">
-						<a href="#" th:text="*{user.userNickname}">판매자 이름</a>
-					</p>
-				</div>
-			</div>
-		</div>
+<!-- 판매자 정보  -->
+<div class="seller-container">
+    <div class="seller-info mt-5 d-flex align-items-center">
+        <img src="https://via.placeholder.com/50" alt="Seller Image" class="rounded-circle">
+        <div class="ms-3 seller-subinfo">
+            <p class="seller-name mb-0">
+                <a href="#" th:text="*{user.userNickname}">판매자 이름</a>
+            </p>
+            <th:block th:if="${detail.user != null}">
+                <p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
+                <p th:if="${detail.user.location == null}" class="mb-0">동네를 설정해주세요.</p>
+            </th:block>
+        </div>
+    </div>
+</div>
+                         
 
 		<div class="product-script-container">
-			<div th:if="${#lists.size(detail.productImages)==2}">
+			<div th:if="${#lists.size(detail.productImages)==2}" class="image-box">
 				<img
-					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
+						class="img-fluid productListImage" />
+				<img
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
 					class="img-fluid productListImage" />
 			</div>
-			<div th:if="${#lists.size(detail.productImages)==3}">
+			<div th:if="${#lists.size(detail.productImages)==3}" class="image-box">
 				<img
-					th:src="@{'/product/view/' + ${detail.productImages[1].filename}}"
-					class="img-fluid productListImage" /> <img
-					th:src="@{'/product/view/' + ${detail.productImages[2].filename}}"
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
+						class="img-fluid productListImage" />
+				<img
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
+					class="img-fluid productListImage" />
+				<img
+					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[2].filename}}"
 					class="img-fluid productListImage" />
 			</div>
 			<div class="product-script" th:text="*{productDescription}">상품
