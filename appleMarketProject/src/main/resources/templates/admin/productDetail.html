@@ -12,9 +12,18 @@
 
 <body>
     <th:block layout:fragment="content">
-  		<div>
-  			상품 정보
+  		<div th:object = "${detail}">
+  			<a>대충 이미지</a>
+  			<a th:text="'제목 : ' + *{productName}">제목</a>
+  			<a th:text="'가격 : ' + *{productPrice}">제목</a>
+  			<a th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</a>
+  			<a th:text="'카테고리 : ' + *{category.categoryName}">제목</a>
   		</div>
+		<div th:each ="report : ${reportDetail}" th:objcet = "${report}">
+			<a th:text="'신고내용' + *{report.reportContent}"></a>
+			<a th:text="'신고인' + *{report.User.userID}"></a>
+			<a th:text="'신고날짜' + *{report.productReportRegDate}"></a>
+		</div>
   		<br>
   		<div>
   			상품 상세 정보

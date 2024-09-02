@@ -1,6 +1,7 @@
 package com.apple.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.apple.admin.domain.ProductReport;
 import com.apple.admin.service.AdminService;
 import com.apple.category.domain.Category;
 import com.apple.product.domain.Product;
@@ -50,9 +52,11 @@ public class AdminController {
 	}
 	//상품 관리 페이지로 이동을 위한 매핑
 	@GetMapping("product")
-	public String product(Product product, Model model) {
+	public String product(Product product,ProductReport productReport, Model model) {
 		List<Product> list = adminService.productList(product);
+		Map<Long, Long> reportCount = adminService.productReportCount(productReport);
 		model.addAttribute("productList", list);
+		model.addAttribute("reportCount", reportCount);
 		
 		return "/admin/product";
 	}
@@ -79,14 +83,18 @@ public class AdminController {
 	
 	
 	@GetMapping("/product/{productID}")
-	public String proudctDetail(@PathVariable String productID, Model modle) {
-	
-		return "/client/admin/productDetail";
-	}
-//	테스트용 매핑 
-	@GetMapping("product/1")
-	public String proudctDetail(Model modle) {
-	
+	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport, Model model) {
+		product.setProductID(productID);
+		Product detail = adminService.productDetail(product);
+		List<ProductReport> Reportdetail = adminService.productReportDetail(productReport);
+		model.addAttribute("detail", detail);
+		model.addAttribute("reportDetail", Reportdetail);
 		return "/admin/productDetail";
 	}
+//	테스트용 매핑 
+//	@GetMapping("product/1")
+//	public String proudctDetail(Model modle) {
+//	
+//		return "/admin/productDetail";
+//	}
 }

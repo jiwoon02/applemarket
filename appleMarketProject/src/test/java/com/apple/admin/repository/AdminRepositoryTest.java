@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.ProductReport;
 //import com.apple.admin.domain.Product;
 //import com.apple.admin.domain.User;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
+import com.apple.user.domain.User;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ public class AdminRepositoryTest {
 	@Setter(onMethod_ = @Autowired)
 	private ProductRepository productRepository;
 
+	@Setter(onMethod_ = @Autowired)
+	private ProductReportRepository productReportRepository;
 //	@Test
 //	public void adminInsertTest() {
 //		Admin admin = new Admin();
@@ -49,13 +53,28 @@ public class AdminRepositoryTest {
 //		
 //	}
 //
+//	@Test
+//	public void productListTest() {
+//		List<Product> productLst = (List<Product>) productRepository.findAll();
+//		for(Product product : productLst) {
+//			log.info(product.toString());
+//			log.info(product.getProductName());
+//		}
+//	}
+//	
+	//신고내용 입력
 	@Test
-	public void productListTest() {
-		List<Product> productLst = (List<Product>) productRepository.findAll();
-		for(Product product : productLst) {
-			log.info(product.toString());
-			log.info(product.getProductName());
-		}
+	public void productReprotdtailInsert() {
+		ProductReport productReport = new ProductReport();
+		Product product = new Product();
+		User user = new User();
+		
+		user.setUserNo(1L);
+		product.setProductID(11L);
+		productReport.setUser(user);
+		productReport.setProductID(product);
+		productReport.setReportContent("대충 신고하는 내용 중복");
+		productReportRepository.save(productReport);
 	}
 //	@Test
 //	public void adminListTest() {

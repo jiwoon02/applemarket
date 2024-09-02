@@ -1,6 +1,7 @@
 package com.apple.admin.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.ProductReport;
 import com.apple.admin.repository.AdminRepository;
 import com.apple.admin.repository.CategoryRepository;
+import com.apple.admin.repository.ProductReportRepository;
 import com.apple.category.domain.Category;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
@@ -33,6 +36,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Setter (onMethod_ = @Autowired)
 	private ProductRepository productRepository;
+	
+	@Setter (onMethod_ = @Autowired)
+	private ProductReportRepository productReportRepository;
 	
 //	@Setter (onMethod_ = @Autowired)
 //	private BCryptPasswordEncoder passwordEncoder;
@@ -67,6 +73,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public Map<Long, Long> productReportCount(ProductReport productReport) {
+		Map<Long, Long> productReportCount = null;
+		productReportCount = (Map<Long, Long>) productReportRepository.ReportConut();
+		return productReportCount;
+	}
+	
+	@Override
 	public void categoryInsert(Category category) {
 		categoryRepository.save(category);
 	}
@@ -85,6 +98,21 @@ public class AdminServiceImpl implements AdminService {
 		updateUser.setUserName(user.getUserName());
 		userRepository.save(updateUser);
 	}
+
+	@Override
+	public Product productDetail(Product product) {
+		Optional<Product> productOptional = productRepository.findById(product.getProductID());
+		Product detail = productOptional.get();
+		return detail;
+	}
+
+	@Override
+	public List<ProductReport> productReportDetail(ProductReport productReport) {
+		 List <ProductReport> ProductReportList = null;
+		ProductReportList = (List<ProductReport>) productReportRepository.findByProductID(productReport.getProductID());
+		return ProductReportList;
+	}
+
 
 
 //	@Override

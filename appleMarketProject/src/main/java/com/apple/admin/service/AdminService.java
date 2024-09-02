@@ -1,12 +1,14 @@
 package com.apple.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.ProductReport;
 import com.apple.category.domain.Category;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
@@ -20,9 +22,12 @@ public interface AdminService {
 	public List<Category> categoryList(Category category);
 	public List<User> userList(User user);
 	public List<Product> productList(Product product);
+	public Map<Long, Long> productReportCount(ProductReport productReport);
 	public void userUpdate(User user);
 	public void categoryInsert(Category category);
 	public void categoryDelete(Category category);
+	public Product productDetail(Product product);
+	public List<ProductReport> productReportDetail(ProductReport product);
 //	public boolean validateAdmin(String adminName, String adminpasswd);
 //	public UserDetails loadAdminByAdminName(String AdminName) throws UsernameNotFoundException;
 	
