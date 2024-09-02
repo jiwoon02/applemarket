@@ -41,7 +41,6 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.findAll();
         }
     */
-<<<<<<< HEAD
     @Override
     public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -77,43 +76,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-=======
-@Override
-public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
-    PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
-    String keyword = pageRequestDTO.getKeyword();
-    String search = pageRequestDTO.getSearch();
-
-    log.info("Received keyword: {}", keyword);
-
-    if (keyword == null || keyword.isEmpty()) {
-        log.info("키워드 없이 기본값. 최신날짜순 정렬");
-        Page<Product> result = productRepository.findAllByOrderByProductRegDateDesc(pageRequest);
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    } else {
-        if (keyword.startsWith("@")) {
-            search = "user_nickname";
-            keyword = keyword.substring(1);  // '@' 제거
-        } else {
-            search = "product_name";  // 기본 검색 필드로 설정
-        }
-
-        log.info("Searching with field: {} and keyword: {}", search, keyword);
-
-        Page<Product> result = productRepository.searchProducts(
-                search,
-                "%" + keyword + "%",  // 와일드카드 추가
-                pageRequestDTO.getStartDate(),
-                pageRequestDTO.getEndDate(),
-                pageRequest
-        );
-
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    }
-}
-
->>>>>>> feature/kimheesoo
     @Override
     public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO){
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -133,11 +96,7 @@ public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
     }
 
     public boolean locationExists(long locationID){
-<<<<<<< HEAD
         return locationRepository.existsById(locationID);
-=======
-    return locationRepository.existsById(locationID);
->>>>>>> feature/kimheesoo
     }
 
     @Override
