@@ -3,6 +3,7 @@ package com.apple.product.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ import com.apple.common.vo.PageResponseDTO;
 import com.apple.product.domain.Product;
 import com.apple.product.domain.ProductImages;
 import com.apple.product.service.ProductService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.apple.common.util.CustomeFileUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -86,6 +90,4 @@ public class ProductController {
 		return "redirect:/product/" + product.getProductID();
 	}
 
-	
-	
 }
