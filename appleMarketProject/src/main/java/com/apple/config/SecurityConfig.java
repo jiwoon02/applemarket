@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.apple.jwt.JwtFilter;
 import com.apple.jwt.JwtUtil;
 import com.apple.security.LoginFilter;
 
@@ -39,7 +41,6 @@ public class SecurityConfig{
 	    return configuration.getAuthenticationManager();
 	}
 
-	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		//LoginFilter 인스턴스 생성 및 커스텀 로그인 URL 설정
@@ -60,9 +61,13 @@ public class SecurityConfig{
 		//경로별 인가 작업
 		http
         	.authorizeHttpRequests((auth) -> auth
-        			.requestMatchers("/product/insertForm").authenticated()
+        			.requestMatchers("/product/insertForm").hasAuthority("USER")
         			.anyRequest().permitAll());
+		//JWTFilter 등록
+		http
+			.addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 		
+		//Login필터 등록
 		http
 			.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 		
@@ -70,9 +75,21 @@ public class SecurityConfig{
 		http
        		.sessionManagement((session) -> session
        				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-			
+		
+		// 인증되지 않은 사용자가 접근할 때 리디렉션 처리
+		 http.exceptionHandling(exception -> exception
+		            .authenticationEntryPoint(authenticationEntryPoint()));  // 인증 실패 시 처리
+
 		return http.build();
 	}
+	
+	@Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> {
+            // 인증되지 않은 사용자가 접근할 때 리다이렉트 처리
+            response.sendRedirect("/user/loginForm");
+        };
+    }
 }
 
 

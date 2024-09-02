@@ -74,7 +74,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	
         String role = auth.getAuthority();
         
-        String token = jwtUtil.createJwt(userID, role, 60*60*10L);
+        String token = jwtUtil.createJwt(userID, role, 3600000L);
         
         //HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 함
         //예시 Authorization: Bearer 인증토큰string
@@ -83,7 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("create token success");
     	System.out.println("login success");
     	
-    	// 메인화면으로 리디렉션
+    	//메인화면으로 리디렉션
 //        try {
 //            response.sendRedirect("/"); // "/"는 메인화면의 경로
 //        } catch (IOException e) {

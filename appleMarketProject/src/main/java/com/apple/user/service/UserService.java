@@ -21,8 +21,8 @@ public interface UserService{
 
 	public String findPwd(User user);
 
-	public Optional<User> findByUserID(String userID);
-
-	boolean authenticate(String userID, String password);
+//	public Optional<User> findByUserID(String userID);
+//
+//	boolean authenticate(String userID, String password);
 	
 }

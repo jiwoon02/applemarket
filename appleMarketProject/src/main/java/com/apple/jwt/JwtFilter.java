@@ -3,7 +3,13 @@ package com.apple.jwt;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.apple.user.domain.User;
+import com.apple.user.dto.CustomUserDetails;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -48,8 +54,25 @@ public class JwtFilter extends OncePerRequestFilter{
         }
         
         //토큰에서 userID와 role 획득
-        String username = jwtUtil.getUserID(token);
-        String role = jwtUtil.getRole(token);
+        String userID = jwtUtil.getUserID(token);
+        String userRole = jwtUtil.getRole(token);
+        
+        //User를 생성하여 값 설정
+        User user = new User();
+        user.setUserID(userID);
+        user.setUserPwd("temppassword");
+        user.setUserRole(userRole);
+        
+        //userdeails에 회원 정보 객체 담기
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        
+        //스프링 시큐리티 인증 토큰 생성
+        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        
+        //세션에 사용자 등록
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        
+        filterChain.doFilter(request, response);
 	}
 
 }

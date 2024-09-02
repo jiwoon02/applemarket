@@ -19,7 +19,7 @@
                     	<p style="color:red;" th:text="${errorMessage}"></p>
                 	</div>
 	            	
-	            	<form id="login-form" th:action="@{/user/login}" method="post">
+	            	<form id="login-form">
 	            		<div class="form-group">
 	            			<input type="text" name="userID" id="userID" maxlength="12" required>
 	            		</div>
@@ -36,7 +36,42 @@
 	    </th:block>
 	
 	    <th:block layout:fragment="script">
-	        <!-- 필요한 스크립트 추가 -->
+	        <script>
+			    document.getElementById('login-form').addEventListener('submit', function(event) {
+			        event.preventDefault(); // 기본 폼 제출 방지
+			
+			        const userID = document.getElementById('userID').value;
+			        const userPwd = document.getElementById('userPwd').value;
+			
+			        fetch('/user/login', {
+			            method: 'POST',
+			            headers: {
+			                'Content-Type': 'application/x-www-form-urlencoded'
+			            },
+			            body: new URLSearchParams({
+			                userID: userID,
+			                userPwd: userPwd
+			            })
+			        })
+			        .then(response => {
+			            if (response.ok) {
+			                const token = response.headers.get('Authorization'); // 서버에서 JWT 토큰을 가져옴
+			                if (token) {
+			                    sessionStorage.setItem('token', token); // JWT 토큰을 localStorage에 저장
+			                    console.log('Token stored successfully:', token);
+			                    window.location.href = '/'; // 로그인 성공 후 리디렉션
+			                }
+			            } else {
+			                console.error('Login failed');
+			                alert('로그인에 실패했습니다.');
+			            }
+			        })
+			        .catch(error => {
+			            console.error('Error:', error);
+			            alert('로그인 중 오류가 발생했습니다.');
+			        });
+			    });
+			</script>
 	    </th:block>
 	</body>
 
