@@ -1,9 +1,11 @@
 package com.apple.order.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.order.domain.Order;
 import com.apple.order.repository.OrderRepository;
@@ -24,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
 //	}
 	
 	@Override
-	public List<Order> orderList(Order order) {
+	public List<Order> orderList() {
 		List<Order> orderList = null;
 		orderList = (List<Order>)orderRepository.orderList();
 		return orderList;
@@ -36,10 +38,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order findById(String orderID) {
+	public Order getOrderByID(String orderID) {
 		// 주문 ID로 주문을 조회하고, 없으면 예외 발생
         Optional<Order> order = orderRepository.findById(orderID);
-        return order.get();
+        if (order.isPresent()) {
+            return order.get();
+        } else {
+            // 적절한 예외 처리나 기본값 반환
+            throw new NoSuchElementException("No order found with ID: " + orderID);
+        }
 	}
 
 }

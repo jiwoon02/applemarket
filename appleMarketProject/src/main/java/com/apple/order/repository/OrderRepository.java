@@ -19,7 +19,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 	public List<Order> orderList();
 	
 	//주문 내역 상세조회
-	@Query("select o from Order o where o.orderID=?1")
-	public Order orderDetail(String orderID);
+	public Order findByOrderID(String orderID);
 
 }

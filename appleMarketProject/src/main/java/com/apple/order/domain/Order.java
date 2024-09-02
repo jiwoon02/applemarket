@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.product.domain.Product;
+import com.apple.product.domain.ProductImages;
 import com.apple.user.domain.User;
 
 import jakarta.persistence.Column;
@@ -17,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,14 +65,17 @@ public class Order {
     @JoinColumns({
         @JoinColumn(name="product_id", referencedColumnName="product_id"),				//상품ID
         @JoinColumn(name="product_price", referencedColumnName="product_price"),		//상품가격
-//      @JoinColumn(name="product_image", referencedColumnName="product_image"),		//상품이미지
         @JoinColumn(name="product_name", referencedColumnName="product_name")			//상품명
     })
 	private Product product;				
+
+	@OneToOne
+	@JoinColumn(name="product_image_id", referencedColumnName="product_image_id")
+	private ProductImages productImages;	//상품이미지ID
 	
 	//@Transient: 필드를 매핑하지 않을 때 사용
-//	@Transient
-//	private MultipartFile file;	//이미지 파일을 위한 필드(컬럼으로 사용 x)
+	@Transient
+	private MultipartFile file;	//이미지 파일을 위한 필드(컬럼으로 사용 x)
 	
 	
 	/*@PrePersist: Entity가 insert되기 전에 호출됨*/
@@ -84,10 +90,10 @@ public class Order {
             this.orderID = this.user.getUserNo() + "O" + this.orderRegDate.format(DateTimeFormatter.ofPattern("YYYYMMDDhhmmssSSSSSS"));
         } 
         else if(this.user == null || this.user.getUserNo() == null){
-            throw new IllegalStateException("OrderId 생성중 예외발생 - User 정보가 없습니다.");
+            throw new IllegalStateException("OrderID 생성중 예외발생 - User 정보가 없습니다.");
         }
         else {
-        	throw new IllegalStateException("OrderId 생성중 예외발생 - orderRegDate 정보가 없습니다.");
+        	throw new IllegalStateException("OrderID 생성중 예외발생 - orderRegDate 정보가 없습니다.");
         }
         
     }

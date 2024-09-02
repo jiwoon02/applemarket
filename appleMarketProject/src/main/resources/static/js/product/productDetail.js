@@ -13,3 +13,4 @@ $(".buyBtn").on("click", function(){
 	//선택한 product 데이터를 함께 전달
 	actionProcess("#dataForm","get","/order/insertForm");
 });
+

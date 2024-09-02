@@ -2,43 +2,39 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
 	layout:decorate="~{template/client/layout/layout}">
 		
-		<th:block layout:fragment="content">
-			<div class="text-center"><h3>주문 내역</h3></div>
-		
-			<div class="board-table-height">
-				<table class="table">
-					<thead>
-						<tr class="text-center">
-							<th class="col-md-2">주문일</th>
-							<th class="col-md-4">주문번호</th>
-							<th class="col-md-2">상품명</th>
-							<th class="col-md-3">배송지</th>
-						</tr>
-					</thead>
-					<tbody>
-						<!-- #lists, #sets, #maps : 컬렉션 관련 기능 제공 -->
-						<tr th:if="${#lists.size(orderList)==0}">
-							<td colspan="4" class="text-center">주문 내역이 존재하지 않습니다.</td>
-						</tr>
-						<!-- 
-							Strings 객체의 유틸리티 메서드는 #strings
-							ex) ${#strings.method(string)} 형태 
-						-->
-						<th:block th:if="${not #strings.isEmpty(orderList)}">
-							<tr class="text-center" th:each="order : ${orderList}" th:object="${order}" th:data-no="*{orderID}">
-								<td th:text="*{#temporals.format(orderRegDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-								<td th:text="*{orderID}">
-								<td class="text-start"><a th:href="@{/order/} + *{product.productID}" th:text="*{product.productName}" ></a></td>
-								<td th:text="*{postAddress}"></td>
-							</tr>
-						</th:block>
-					</tbody>
-				</table>
-			</div>
+		<th:block layout:fragment="css">
+			<link rel="stylesheet" href="/css/order/orderList.css" />
 		</th:block>
 		
+		<th:block layout:fragment="content">
+		    <div class="text-center"><h3>주문 내역</h3></div>
+		    
+		    <div class="transaction-list mt-4">
+		        <!-- Display a message if there are no orders -->
+		        <div th:if="${#lists.size(orderList) == 0}" class="text-center">
+		            주문 내역이 존재하지 않습니다.
+		        </div>
+		        
+		        <div th:each="order : ${orderList}" class="card mb-3" th:object="${order}" th:data-no="*{orderID}">
+		            <div class="card-body">
+		                <div class="date" th:text="*{#temporals.format(orderRegDate, 'yyyy-MM-dd')}"></div>
+		                <div class="details d-flex">
+		                    <!-- Correctly access the imageFileName for each order using the orderID -->
+		                    <img th:if="${imageFileNames[order.orderID]}" th:src="@{'/order/view/' + ${imageFileNames[order.orderID]}}" th:alt="'Product Image'"/>
+		                    <div class="info ml-3">
+		                        <span class="price" th:text="*{product.productPrice}+'원'"></span>
+		                        <a th:href="@{/order/{orderID}(orderID=${order.orderID})}" class="item-name" th:text="*{product.productName}"></a>
+		                        <span class="post-address" th:text="*{postAddress}"></span>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</th:block>
+
+		
 		<th:block layout:fragment="script">
-			<script src="/js/order/orderControl.js" ></script>
+			<script src="/js/order/orderList.js" ></script>
 		</th:block>
 
 </html>

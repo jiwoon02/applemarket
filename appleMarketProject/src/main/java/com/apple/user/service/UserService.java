@@ -17,5 +17,10 @@ public interface UserService{
 	public String findId(User user);
 
 	String findPwd(User user);
+
+	//UserNo로 이름을 얻어옴
+	public String getNameByUserNo(long userNo);
+	//UserNo로 전화번호를 얻어옴
+	public String getPhoneByUserNo(long userNo);
 	
 }
