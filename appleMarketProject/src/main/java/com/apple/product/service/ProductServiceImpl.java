@@ -16,11 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import com.apple.common.util.CustomeFileUtil;
 import com.apple.common.vo.PageRequestDTO;
 import com.apple.common.vo.PageResponseDTO;
+import com.apple.jwt.JwtUtil;
 import com.apple.product.domain.Product;
 import com.apple.product.domain.ProductImages;
 import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
-
+import com.apple.user.domain.User;
+import com.apple.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductImagesRepository productImagesRepository;
     private final CustomeFileUtil fileUtil;
     private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtutil;
 
     /*
         @Override
@@ -123,8 +127,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product productInsert(Product product, List<MultipartFile> files) {
-        log.info("file cnt :" + files.size());
+    public Product productInsert(String token, Product product, List<MultipartFile> files) {
+        String userID = jwtutil.getUserID(token);
+        
+        Optional<User> optionalUser = userRepository.findByUserID(userID);
+        
+        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("Invalid token or user not found."));
+
+    	product.setUser(user);
+    	
+    	log.info("file cnt :" + files.size());
         for(MultipartFile file : files) {
             log.info("file name :" + file.getOriginalFilename());
             log.info("file content :" + file.getContentType());
