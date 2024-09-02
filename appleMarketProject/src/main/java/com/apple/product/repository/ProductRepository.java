@@ -1,7 +1,6 @@
 package com.apple.product.repository;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.apple.product.domain.Product;
@@ -23,7 +22,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                  @Param("endDate") LocalDate endDate,
                                  Pageable pageable);
 
-
-
     Page<Product> findAllByOrderByProductRegDateDesc(Pageable pageable);
+
+    Page<Product> findByCategoryCategoryID(String categoryID, Pageable pageable);
+
+    @Query("select p from Product p where p.user.location.locationID between :startID and :endID")
+    Page<Product> findByUserLocationLocationIDRange(@Param("startID") long startID,
+                                                    @Param("endID") long endID,
+                                                    Pageable pageable);
 }

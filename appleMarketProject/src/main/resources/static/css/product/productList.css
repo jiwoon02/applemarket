@@ -6,7 +6,8 @@
     justify-content: space-between;
 }
 .productPageTitle{
-	margin-top: 20px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	display:flex;
 	justify-content: flex-start;
 	width:100%
@@ -18,7 +19,7 @@
 }
 
 .productListContainer {
-	background-color: rgba(196, 196, 196, 0.20000000298023224);
+	background-color: white;
 	width: 1024px;
 	margin-bottom: 10px;
 	position: relative;

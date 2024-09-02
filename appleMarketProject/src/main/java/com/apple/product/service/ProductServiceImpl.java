@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.apple.location.repository.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import com.apple.common.util.CustomeFileUtil;
 import com.apple.common.vo.PageRequestDTO;
@@ -34,12 +33,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductImagesRepository productImagesRepository;
     private final CustomeFileUtil fileUtil;
-/*
-    @Override
-    public List<Product> productList(Product product) {
-        return productRepository.findAll();
-    }
-*/
+    private final LocationRepository locationRepository;
+
+    /*
+        @Override
+        public List<Product> productList(Product product) {
+            return productRepository.findAll();
+        }
+    */
 @Override
 public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
     PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -75,7 +76,34 @@ public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
     }
 }
 
+    @Override
+    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO){
+        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
+        long startID = locationID -3;
+        long endID = locationID + 3;
+
+        if(!locationExists(startID)){
+            startID = locationID;
+        }
+        if(!locationExists(endID)){
+            endID = locationID;
+        }
+
+        Page<Product> result = productRepository.findByUserLocationLocationIDRange(startID, endID, pageRequest);
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
+    }
+
+    public boolean locationExists(long locationID){
+    return locationRepository.existsById(locationID);
+    }
+
+    @Override
+    public PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO) {
+        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
+        Page<Product> result = productRepository.findByCategoryCategoryID(categoryID, pageRequest);
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
+    }
 
     // 조회수 증가
     @Override

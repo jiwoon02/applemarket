@@ -52,17 +52,17 @@
             <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="categroy_menu" href="#" data-bs-toggle="dropdown" aria-expanded="false" >카테고리</a>
 			            <ul class="dropdown-menu">
-			              <li><a class="dropdown-item" href="#">의류</a></li>
-			               <li><a class="dropdown-item" href="#">악세서리</a></li>
+			              <li><a class="dropdown-item" href="/product/productList?category=clothe">의류</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=accessory">악세서리</a></li>
 			              <li><hr class="dropdown-divider" /></li>
-			               <li><a class="dropdown-item" href="#">전자기기</a></li>
-			               <li><a class="dropdown-item" href="#">스포츠/레저</a></li>
-			               <li><a class="dropdown-item" href="#">키덜트</a></li>
-			               <li><a class="dropdown-item" href="#">예술/음반/악기</a></li>
-			               <li><a class="dropdown-item" href="#">도서/티켓/문구</a></li>
-			               <li><a class="dropdown-item" href="#">가구/인테리어</a></li>
-			               <li><a class="dropdown-item" href="#">생활/주방용품</a></li>
-			               <li><a class="dropdown-item" href="#">기타</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=electronic">전자기기</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=sports">스포츠/레저</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=kidult">키덜트</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=art">예술/음반/악기</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=book">도서/티켓/문구</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=interior">가구/인테리어</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=homegoods">생활/주방용품</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=etc">기타</a></li>
 			            </ul>
 		          	</li>
 		          	</ul>	 
@@ -70,10 +70,13 @@
             <div class="header-bottom-center">
                 <!--로그인 완료시 표시
                 <th:block th:if="${login.user != null}">
-                    <p th:if="${login.user.location != null}" th:text="${detail.user.location.locationName}" class="header-link">판매자 주소</p>
-                    <p th:if="${login.user.location == null}" class="header-link">동네를 설정해주세요.</p>
+                    <p th:if="${login.user.locationID != null}" th:text="${detail.user.location.locationName}" class="header-link">판매자 주소</p>
+                    <a class="header-link" href="/product/productList?locationID=${locationID}">
+            현재 지역(${locationName}) 으로 검색
+        </a>
+                    <p th:if="${login.user.locationID == null}" class="header-link">동네를 설정해주세요.</p>
                 </th:block>-->
-                <p class="header-link">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동)</p>
+                <a class="header-link" href="#">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동) 으로 검색</a>
             </div>
             <div class="header-bottom-right">
                 <button type="button" class="locationFormBtn" id="locationFormBtn">동네 설정하기</button>

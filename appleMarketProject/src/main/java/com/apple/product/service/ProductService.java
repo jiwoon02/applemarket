@@ -28,4 +28,8 @@ public interface ProductService {
     Product getProduct(Long productID);
     
     void deleteProduct(Long productID);
+
+    PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO);
+
+    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO);
 }

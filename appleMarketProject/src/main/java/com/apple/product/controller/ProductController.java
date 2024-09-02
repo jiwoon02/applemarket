@@ -4,11 +4,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.common.util.CustomeFileUtil;
@@ -34,8 +30,15 @@ public class ProductController {
 
     // 페이징처리한 리스트 한페이지당 12개
     @GetMapping("/productList")
-    public String productList(PageRequestDTO pageRequestDTO, Model model) {
-        PageResponseDTO<Product> productList = productService.list(pageRequestDTO);
+    public String productList(PageRequestDTO pageRequestDTO, @RequestParam(value = "category", required = false) String categoryID, Model model) {
+        PageResponseDTO<Product> productList;
+
+        if(categoryID != null) {
+            productList = productService.getProductsByCategory(categoryID, pageRequestDTO);
+        }else{
+            productList = productService.list(pageRequestDTO);
+        }
+
         model.addAttribute("productList", productList);
         return "product/productList";
     }
