@@ -31,8 +31,8 @@
                 </a>
             </div>
             <div class="header-middle-search">
-                <input type="text" placeholder="상품명, 지역명, @상점명 입력" class="search-input">
-                <button class="search-button">검색</button>
+                <input type="text" id="searchInput" placeholder="상품명, @닉네임 입력" class="searchInput">
+                <button id="searchBtn" class="searchBtn" onclick="performSearch()">검색</button>
             </div>
             <div class="header-middle-right">
                 <a href="/product/insertForm" class="header-right-link" id="sell">🍎판매하기</a>
@@ -52,23 +52,31 @@
             <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="categroy_menu" href="#" data-bs-toggle="dropdown" aria-expanded="false" >카테고리</a>
 			            <ul class="dropdown-menu">
-			              <li><a class="dropdown-item" href="#">의류</a></li>
-			               <li><a class="dropdown-item" href="#">악세서리</a></li>
+			              <li><a class="dropdown-item" href="/product/productList?category=clothe">의류</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=accessory">악세서리</a></li>
 			              <li><hr class="dropdown-divider" /></li>
-			               <li><a class="dropdown-item" href="#">전자기기</a></li>
-			               <li><a class="dropdown-item" href="#">스포츠/레저</a></li>
-			               <li><a class="dropdown-item" href="#">키덜트</a></li>
-			               <li><a class="dropdown-item" href="#">예술/음반/악기</a></li>
-			               <li><a class="dropdown-item" href="#">도서/티켓/문구</a></li>
-			               <li><a class="dropdown-item" href="#">가구/인테리어</a></li>
-			               <li><a class="dropdown-item" href="#">생활/주방용품</a></li>
-			               <li><a class="dropdown-item" href="#">기타</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=electronic">전자기기</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=sports">스포츠/레저</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=kidult">키덜트</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=art">예술/음반/악기</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=book">도서/티켓/문구</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=interior">가구/인테리어</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=homegoods">생활/주방용품</a></li>
+			               <li><a class="dropdown-item" href="/product/productList?category=etc">기타</a></li>
 			            </ul>
 		          	</li>
 		          	</ul>	 
             </div>
             <div class="header-bottom-center">
-                <a href="#" class="header-link">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동)</a>
+                <!--로그인 완료시 표시
+                <th:block th:if="${login.user != null}">
+                    <p th:if="${login.user.locationID != null}" th:text="${detail.user.location.locationName}" class="header-link">판매자 주소</p>
+                    <a class="header-link" href="/product/productList?locationID=${locationID}">
+            현재 지역(${locationName}) 으로 검색
+        </a>
+                    <p th:if="${login.user.locationID == null}" class="header-link">동네를 설정해주세요.</p>
+                </th:block>-->
+                <a class="header-link" href="#">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동) 으로 검색</a>
             </div>
             <div class="header-bottom-right">
                 <button type="button" class="locationFormBtn" id="locationFormBtn">동네 설정하기</button>
@@ -110,15 +118,8 @@
                 </p>
           </div>
     
-          <div class="footer_1_div">
-              <p class="footer_txt_1">고객의 소리</p>
-            <hr/>
-            <p class="footer_txt_3">
-                <a href="#">자주 묻는 질문 게시판 이동</a>
-            </p>
-        </div>
-    
-        <hr/>
+
+
       </div>
       <div class="footer_2">
         <p class="footer_txt_2">© AppleMarket</p>

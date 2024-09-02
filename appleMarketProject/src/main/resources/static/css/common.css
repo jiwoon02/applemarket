@@ -56,18 +56,18 @@ body {
     display: flex;
 }
 
-.search-input {
+.searchInput {
     width: 100%;
     padding: 10px;
     border: 2px solid red;
     border-radius: 5px 0 0 5px;
 }
 
-.search-button {
+.searchBtn {
     margin-left: 10px;
     padding: 10px;
     background-color: #f4f4f4;
-    border: 1px solid #e5e5e5;
+    border: 2px solid #e5e5e5;
     border-left: none;
     border-radius: 5px 5px 5px 5px;
     cursor: pointer;
@@ -80,12 +80,15 @@ body {
     text-decoration: none;
 }
 
-.header-link:hover {
-    text-decoration: underline;
-}
-
 #categroy_menu {
     margin-left: 0;
+}
+
+.locationFormBtn{
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid gainsboro;
+    height: 40px;
 }
 
 /* 푸터 스타일 */

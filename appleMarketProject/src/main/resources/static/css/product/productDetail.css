@@ -47,6 +47,10 @@
     font-size: 16px;
     color: #666;
 }
+.reportBtn > a{
+    text-decoration: none;
+    color: black;
+}
 
 .actions {
     margin-top: 20px;
@@ -106,7 +110,8 @@
     margin-top: 30px;
     margin-bottom: 30px;
     width: 100%;
-    height: 500px;
+    min-height: 500px;
+    height: auto;
     justify-items: center;
     justify-content: center;
     align-items: center;
@@ -121,4 +126,18 @@
 .productListImage{
 	width:452px;
 	height:350px;
+}
+.image-box > img {
+    margin-bottom: 20px;
+}
+
+.product-script{
+    min-height: 100px;
+    height: auto;
+    font-size: 20px;
+}
+
+.seller-subinfo{
+    justify-content: center;
+    align-content: center;
 }

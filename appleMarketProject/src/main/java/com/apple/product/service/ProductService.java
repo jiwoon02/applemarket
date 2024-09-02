@@ -11,7 +11,7 @@ import com.apple.product.domain.ProductImages;
 
 public interface ProductService {
 
-	List<Product> productList(Product product);
+	//List<Product> productList(Product product);
 
     PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO);
 
@@ -28,4 +28,8 @@ public interface ProductService {
     Product getProduct(Long productID);
     
     void deleteProduct(Long productID);
+
+    PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO);
+
+    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO);
 }
