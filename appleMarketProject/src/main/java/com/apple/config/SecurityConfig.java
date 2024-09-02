@@ -87,7 +87,7 @@ public class SecurityConfig{
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> {
             // 인증되지 않은 사용자가 접근할 때 리다이렉트 처리
-            response.sendRedirect("/");
+            response.sendRedirect("/user/loginForm");
         };
     }
 }

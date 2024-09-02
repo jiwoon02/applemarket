@@ -32,9 +32,27 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="/js/common.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-	<th:block layout:fragment="script">
 	
+	<!-- 로그아웃을 처리하는 JS 코드 -->
+    <script>
+        function logout() {
+            fetch('/user/logout', {
+                method: 'POST',
+                credentials: 'same-origin' // 쿠키를 포함한 요청을 보냅니다.
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/'; // 로그아웃 후 리디렉트할 페이지
+                } else {
+                    console.error('로그아웃에 실패했습니다.');
+                }
+            })
+            .catch(error => console.error('로그아웃 중 오류 발생:', error));
+        }
+    </script>
+	
+	
+	<th:block layout:fragment="script">
 	</th:block>
 </body>
 </html>
