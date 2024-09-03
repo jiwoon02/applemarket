@@ -9,7 +9,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
 
@@ -27,6 +29,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private JavaMailSender mailSender;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
   
 //    @Override
 //    //로그인 아이디 찾아서 user객체 반환 없으면 null
@@ -163,6 +168,18 @@ public class UserServiceImpl implements UserService {
 		}
 	}
     
+	//쿠키에서 아이디 추출해서 해당 유저 정보 가져오기
+	public User getUser(@CookieValue(value="JWT", required=false) String token) {
+		String userID = jwtUtil.getUserID(token);
+		Optional<User> userOptional = userRepository.findByUserID(userID);
+		
+		if(userOptional.isPresent()) {
+			User user = userOptional.get();
+			return user;
+		}
+		
+		return null;
+	}
 }
 
 
