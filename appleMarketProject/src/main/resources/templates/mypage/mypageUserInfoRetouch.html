@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- 본문 코드가 위치하는 파일로서 상단에 layout:decorate="경로/공통페이아웃파일명"을 선언하여 기본 레이아웃 파일을 사용하겠다라는 의미이다. 
+참고 : thymeleaf 2.x 버전에서는 layout:decorator 이지만 thymeleaf 3.x 버전에서는 layout:decorate를 사용.-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/mypage/mypage.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="mypage">
+        <table class="tbl_mypage">
+            <colgroup>
+                <col style="width:25%;">
+                <col style="width:25%;">
+                <col style="width:25%;">
+                <col style="width:25%;">
+            </colgroup>
+            <thead>
+                <tr class="mainMenu">
+                    <th scope="row">판매 관리</th>
+                    <th scope="row">구매 관리</th>
+                    <th scope="row">정보 관리</th>
+                    <th scope="row">회원 관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="menuList">
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="divUserInfoRetouch">
+            <form th:action="@{/mypage/updateUserInfo/{userNo}(userNo=${user.userNo})}" th:object="${user}" method="post">
+                <div class="divTitle"> 
+                    나의 정보수정
+                </div>
+                <div class="divUserRetouch">
+                    아이디
+                    <input type="text" class="userId" readonly="readonly" th:value="${user.userID}">
+                </div>
+                <div class="divUserRetouch">
+                    비밀번호
+                    <input type="password" id="userPasswd" th:field="*{userPwd}" placeholder="비밀번호">
+                </div>
+                <div class="divUserRetouch">
+                    비밀번호 확인
+                    <input type="password" id="userPasswdChk" placeholder="비밀번호 확인">
+                </div>
+                <div class="divUserRetouch">
+                    이름
+                    <input type="text" th:field="*{userName}" class="userName">
+                </div>
+                <div class="divUserRetouch">
+                    닉네임
+                    <input type="text" th:field="*{userNickname}" class="userNickname">
+                </div>
+                <div class="divUserRetouch">
+                    전화번호
+                    <input type="text" th:field="*{userPhone}" class="userPhoneNumber">
+                </div>
+                <div class="divUserRetouch">
+                    이메일
+                    <div class="divEmail">
+                        <input type="text" id="userEmail1" class="userEmail1">
+                        <span>@</span>
+                        <input type="text" id="userEmail2" class="userEmail2">
+                        <select class="emailSelect">
+                            <option value="">이메일 선택</option>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="daum.net">daum.net</option>
+                            <option value="hanmail.net">hanmail.net</option>
+                            <option value="nate.com">nate.com</option>
+                            <option value="lycos.co.kr">lycos.co.kr</option>
+                            <option value="hotmail.com">hotmail.com</option>
+                            <option value="outlook.com">outlook.com</option>
+                            <option value="korea.com">korea.com</option>
+                            <option value="yahoo.co.kr">yahoo.co.kr</option>
+                            <option value="dreamwiz.com">dreamwiz.com</option>
+                            <!-- <option value="" selected="">직접 입력</option> -->
+                        </select>
+                    </div>
+                    <input type="hidden" th:field="*{userEmail}" id="userEmail">
+                </div>
+                <div class="divUserRetouch">
+                    생년월일
+                    <input type="date" th:field="*{userBirth}" class="userBirth">
+                </div>
+                <div class="divUserBtn">
+                    <button type="submit" class="userBtn">수정하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="/js/jquery-3.7.1.min.js"></script>
+	<script src="/js/mypage/mypageUserInfoRetouch.js"></script>
+</th:block>
+</html>

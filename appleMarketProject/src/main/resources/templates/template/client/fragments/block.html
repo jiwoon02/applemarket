@@ -21,7 +21,7 @@
             <div class="header-top-right">
                 <a th:if="${isLoggedIn}" href="#" onclick="logout()" class="header-link">로그아웃</a>
                 <a th:if="${!isLoggedIn}" href="/user/loginForm" class="header-link">로그인/회원가입</a>
-                <a href="#" class="header-link">마이페이지</a>
+                <a href="/mypage/1" class="header-link">마이페이지</a>
             </div>
         </div>
          <!--헤더 중간-->
@@ -38,7 +38,7 @@
             <div class="header-middle-right">
                 <a href="/product/insertForm" class="header-right-link" id="sell">🍎판매하기</a>
                 <span class="header-middle-link-line"> | </span>
-                <a href="#" class="header-right-link">🏚내상점</a>
+                <a href="/usershop/1" class="header-right-link">🏚내상점</a>
                 <span class="header-middle-link-line"> | </span>
                 <a href="#" class="header-right-link">🗨채팅</a>
                 <span class="header-middle-link-line"> | </span>
