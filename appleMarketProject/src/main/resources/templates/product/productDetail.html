@@ -16,18 +16,16 @@
 					<input type="hidden" name="productID" th:field="*{productID}" />
 				</form>
 
-				<div class="detail-right">
-				 <!--
-				<div class="detail-right" th:if="${dtail.user.userNo == #authentication.principal.userNo}">				
-				 -->
+				<div class="detail-right" th:if="${currentUserID != null and detail.user.userID == currentUserID}">
 					<ul>
 						<li class="nav-item dropdown option">
 						<a class="nav-link dropdown-toggle" id="detail-option" href="#"
 							data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu dropMenu">
 								<li><a class="dropdown-item" id="productUpdateFormBtn">수정</a></li>
 								<li><a class="dropdown-item" id="productDeleteBtn">삭제</a></li>
-							</ul></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 
@@ -44,14 +42,20 @@
 			
 			<div class="col-md-6">
 				<div class="product-info">
-					<h1 class="product-name" th:text="*{productName}"></h1>
-					<p class="product-price" th:text="'₩' + *{productPrice}"></p>
-					<!-- 가격 단위 표시 추가 -->
-					<div class="product-subinfo">
-						<label>배송비</label>
-						<p class="postPrice" th:text="'₩' + *{postPrice}"></p>
+					<div class="product-subinfo d-flex justify-content-end">
+						<label>조회수 </label>
+						<p class="product" th:text=" *{productVisitCount}"></p>
 						<!-- 배송비 단위 표시 추가 -->
 					</div>
+					<h1 class="product-name" th:text="*{productName}"></h1>
+					<p class="product-price" th:text="'₩ ' + *{productPrice}"></p>
+					<!-- 가격 단위 표시 추가 -->
+					<div class="product-subinfo">
+						<label>배송비 </label>
+						<p class="postPrice" th:text="'₩ ' + *{postPrice}"></p>
+						<!-- 배송비 단위 표시 추가 -->
+					</div>
+
 					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 					<div class="actions">
 						<button class="btn btn-dark">찜하기</button>

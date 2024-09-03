@@ -141,3 +141,12 @@
     justify-content: center;
     align-content: center;
 }
+
+.detail-right{
+    display: flex;
+    justify-content: flex-end;
+}
+
+#detail-option{
+    font-weight: bolder;
+}

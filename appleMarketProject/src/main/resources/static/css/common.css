@@ -18,6 +18,12 @@ body {
     min-height: calc(100% - 340px);
 }
 
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .header-container{
     width: 100%;
 }
@@ -51,8 +57,8 @@ body {
 }
 
 .header-middle-search {
+    margin-left: 10px;
     flex-grow: 1;
-    margin: 0 20px;
     display: flex;
 }
 
@@ -74,12 +80,16 @@ body {
     width: 70px;
 }
 
-.header-link, .header-right-link {
+.header-right-link {
     margin-left: 20px;
     color: #333;
     text-decoration: none;
 }
-
+.header-link{
+    color: #333;
+    text-decoration: none;
+    margin-right: 30px;
+}
 #categroy_menu {
     margin-left: 0;
 }

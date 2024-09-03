@@ -1,7 +1,13 @@
 package com.apple.product.controller;
 
+import com.apple.config.SecurityConfig;
+import com.apple.jwt.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +28,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/product/*")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
     private final CustomeFileUtil fileUtil;
     private final ProductImagesRepository productImagesRepository;
+    private final JwtUtil jwtUtil;
 
     // 페이징처리한 리스트 한페이지당 12개
     @GetMapping("/productList")
@@ -44,10 +52,18 @@ public class ProductController {
     }
 
     @GetMapping("/{productID}")
-    public String productDetail(@PathVariable Long productID, Product product, Model model) {
+    public String productDetail(@CookieValue(value = "JWT", required = false) String token, @PathVariable Long productID, Product product, Model model) {
+        String currentUserID = null;
+
+        if(token != null) {
+            currentUserID = jwtUtil.getUserID(token);
+            log.info("현재 토큰 유저 번호==>" + currentUserID);
+        }
+
         product.setProductID(productID);
         Product detail = productService.productDetail(product);
         model.addAttribute("detail", detail);
+        model.addAttribute("currentUserID", currentUserID);
 
         String newLine = System.getProperty("line.separator").toString();
         model.addAttribute("newLine", newLine);
