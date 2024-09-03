@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +32,11 @@ import com.apple.order.service.OrderService;
 import com.apple.product.domain.Product;
 import com.apple.product.service.ProductService;
 import com.apple.user.domain.User;
+import com.apple.user.dto.CustomUserDetails;
 import com.apple.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,20 +51,10 @@ public class OrderController {
 	
 	private final ProductService productService;
 	private final UserService userService;
+	private final JwtUtil jwtUtil;  // JwtUtil 의존성 추가
 	
 	@Value("${portone.api.secret}")
 	private String partoneApiSecret;
-	
-
-//	//주문 목록 페이지
-//	//+페이징 처리 추가 필요
-//	@GetMapping("/orderList")
-//	public String orderList(Order order, Model model) {
-//		List<Order> orderList = orderService.orderList(order);
-//		model.addAttribute("orderList", orderList);
-//		
-//		return "order/orderList";
-//	}
 	
 	//주문 목록 페이지
 	@GetMapping("/orderList")
@@ -81,12 +77,17 @@ public class OrderController {
 	
 	//상세 페이지 -> 주문 페이지
 	@GetMapping("/insertForm")
-	public String insertForm(@RequestParam Long productID, Model model) {
-	    
+	public String insertForm(@RequestParam Long productID, @CookieValue(value="JWT", required=false) String token,Model model) {
+		
+		Long userNo = userService.getUserNo(token);		// 현재 로그인한 사용자의 userNo 가져오기
+		log.info("userNo: "+userNo.toString());
+
+		String userName = userService.getNameByUserNo(userNo);  //사용자 이름
+		String userPhone = userService.getPhoneByUserNo(userNo);	//사용자 전화번호
 		//상품 정보, 상품 이미지 전달
 		Product product = productService.getProduct(productID);
 	    if (product == null) {
-	        return "redirect:/error"; 
+	        return null; 
 	    }
 	    String imageFileName = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getFilename();
 	    Long imageFileID = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getProductImageID();
@@ -98,10 +99,9 @@ public class OrderController {
 	    model.addAttribute("productImageID", imageFileID);
 	    
 	    //사용자 정보 전달
-	    String buyerName = userService.getNameByUserNo(1L);
-	    String buyerPhone = userService.getPhoneByUserNo(1L);
-	    model.addAttribute("buyerName", buyerName);
-	    model.addAttribute("buyerPhone", buyerPhone);
+	    model.addAttribute("userName", userName);
+	    model.addAttribute("userPhone", userPhone);
+	    model.addAttribute("userNo", userNo);
 	    
 	    return "order/insertForm";
 	}

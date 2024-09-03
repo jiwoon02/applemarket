@@ -33,14 +33,15 @@
             <h5 class="mb-3">배송 정보</h5>
             <div class="section order-shipping-info mb-3">
                 <div class="order-input-field">
+                   	<input type="hidden" id="userNo" th:value="${userNo}" />
                     <label for="name">이름</label>
                     <!-- <input type="text" id="name" placeholder="(필수)이름을 입력하세요"> -->
-                    <input type="text" id="name" th:value="${buyerName}" readonly>
+                    <input type="text" id="userName" th:value="${userName}" readonly>
                 </div>
                 <div class="order-input-field">
                     <label for="phone">전화번호</label>
                     <!-- <input type="text" id="phone" placeholder="(필수)전화번호를 입력하세요"> -->
-                    <input type="text" id="phone" th:value="${buyerPhone}" readonly>
+                    <input type="text" id="userPhone" th:value="${userPhone}" readonly>
                 </div>
                 
                 <hr />

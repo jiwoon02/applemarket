@@ -16,7 +16,7 @@ async function requestPayment() {
 		currency: "CURRENCY_KRW",
 		payMethod: "CARD",
 		customer:{
-			fullName:$("#name").val()	//구매자 이름
+			fullName:$("#userName").val()	//구매자 이름
 		}
   });
 
@@ -31,8 +31,6 @@ async function requestPayment() {
 
 // 유효성 검사 함수
 function validatePaymentDetails() {
-    if (!chkData("#name", "이름을")) return false;
-    if (!chkData("#phone", "전화번호를")) return false;
     if (!chkData("#postcode", "우편번호를")) return false;
     if (!chkData("#roadAddress", "도로명주소를")) return false;
     return true; 
@@ -46,7 +44,7 @@ async function sendOrderDetails(paymentId) {
     postNumber: null,
     requestText: $("#requestText").val(),
     user: {
-      userNo: 1 // 사용자 ID 임시저장
+      userNo: $("#userNo").val()
     },
     product: {
       productID: $("#productID").val(),

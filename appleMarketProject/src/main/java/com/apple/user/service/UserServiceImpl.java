@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
 
@@ -27,6 +28,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JavaMailSender mailSender;
   
+    
+    private final JwtUtil jwtUtil;
+    @Autowired
+    public UserServiceImpl(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+    
 //    @Override
 //    //로그인 아이디 찾아서 user객체 반환 없으면 null
 //    public Optional<User> findByUserID(String userID) {
@@ -160,7 +168,25 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
+	
+	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+   @Override
+   public Long getUserNo(String token) {
+      String userID = jwtUtil.getUserID(token);
+      Optional<User> optionalUser = userRepository.findByUserID(userID);
+      
+      Long userNo;
     
+       if(optionalUser.isPresent()) {
+          userNo = optionalUser.get().getUserNo();
+          return userNo;
+       }
+       else {
+          return null;
+       }
+   }
+
+
 }
 
 
