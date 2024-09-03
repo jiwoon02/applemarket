@@ -67,10 +67,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	//로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
+    	//getPrinciple 메소드를 호출하면 인증된 사용자 정보를 가져옴
     	CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
     	
     	String userID = customUserDetails.getUsername();
     	
+    	//사용자 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -92,18 +94,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         
         System.out.println("create token success");
         System.out.println("login success");
-        
-    	//메인화면으로 리디렉션
-        try {
-        	if (response.isCommitted()) {
-        	    log.warn("Response already committed before redirect.");
-        	} else {
-        	    response.sendRedirect("/");
-        	}
-        } catch (IOException e) {
-        	log.info("메인페이지 이동 실패");
-            e.printStackTrace();
-        }
     }
 
 	//로그인 실패시 실행하는 메소드
