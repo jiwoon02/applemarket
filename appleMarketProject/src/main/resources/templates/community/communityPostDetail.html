@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{template/client/layout/layout}">
+	<th:block layout:fragment="css">
+    	<link rel="stylesheet" href="/css/community/communityPostDetail.css" />
+    	<link rel="stylesheet" href="/css/communitycomment/communitycomment.css" />
+    </th:block>
+    
+    <th:block layout:fragment="content">
+        <div class="text-center"><h3>게시글 상세</h3></div>
+
+        <div class="container" th:object="${communityPost}">
+            <div>
+                <form name="dataForm" id="dataForm" method="post">
+                    <input type="hidden" name="communityPostID" th:value="*{communityPostID}" />
+                </form>
+
+                <table class="table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="col">글제목</td>
+                            <td colspan="3" class="text-start" th:text="*{communityTitle}"></td>
+                        </tr>
+                        <tr class="board-table-tr-height">
+                            <td class="col-md-3">글내용</td>
+                            <td colspan="3" class="text-start" th:utext="*{communityContent}"></td>
+                        </tr>
+                        <tr th:if="*{communityImage != null}">
+                            <td class="col-md-3">첨부 이미지</td>
+                            <td colspan="3" class="text-start">
+                                <img th:src="@{'/images/' + *{communityImage}}" class="imgfluid" alt="첨부 이미지" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row text-center">
+                <div class="col text-end">
+                    <input type="button" value="글수정" id="updateFormBtn" class="btn-primary btn-sm" />
+                    <input type="button" value="글삭제" id="boardDeleteBtn" class="btn-primary btn-sm" />
+                    <input type="button" value="신고하기" id="reportBtn" class="btn-primary btn-sm" />
+                </div>
+            </div>
+        </div>
+
+        <!-- 댓글 섹션 포함 -->
+        <th:block th:insert="~{communitycomment/communitycomment :: comment}"></th:block>
+    </th:block>
+	
+    <th:block layout:fragment="script">
+        <script src="/js/community/communityDetail.js"></script>
+        <script src="/js/communitycomment/communitycomment.js"></script>
+    </th:block>
+</html>

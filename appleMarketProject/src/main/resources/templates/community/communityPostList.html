@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/client/layout/layout}">
+<head>
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/css/community/communityPostList.css" />
+    </th:block>
+</head>
+<th:block layout:fragment="content">
+    <div class="createbtn">
+        <button type="button" class="btn-primary" id="createPostBtn">글쓰기</button>
+    </div>
+
+    <div class="tableheight">
+        <table class="table table-hover">
+            <thead>
+                <tr class="text-center">
+                    <th class="md-2">순번</th>
+                    <th class="md-4">제목</th>
+                    <th class="md-2">작성자</th>
+                    <th class="md-3">등록일</th>
+                    <th class="md-1">조회수</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <!-- 게시글 목록이 여기에 추가됩니다. -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 감시 요소 -->
+    <p id="sentinel"></p>
+</th:block>
+<th:block layout:fragment="script">
+    <script src="/js/community/communityPostList.js"></script>
+</th:block>
+</html>

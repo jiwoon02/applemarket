@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="comment">
+    <!-- 댓글 입력 폼 -->
+    <div class="mt-2">
+        <form id="commentForm" name="commentForm">
+            <div class="mb-3">                
+                <label for="userID" class="col-formlabel">작성자</label>
+                <div class="sm-3">
+                    <input type="text" name="userID" id="userID" maxlength="5" class="form-control" />
+                </div>                
+                <button type="button" id="commentInsertBtn" class="btn-secondary">등록</button>
+            </div>
+            <div class="mb-3">
+                <label for="commentContent" class="col-formlabel">댓글내용</label>
+                <div class="sm-11">
+                    <textarea name="commentContent" id="commentContent" class="formcontrol" rows="3"></textarea>
+                </div>
+            </div>                    
+        </form>
+    </div>
+    
+    <!-- 댓글 리스트 -->
+    <div id="commentList">
+        <!-- 댓글 리스트 반복 처리 -->
+        <div th:each="comment : ${comments}" class="card mb-2">
+            <div class="cardheader">
+                <span class="name" th:text="${comment.userNo.userNo}"></span>
+                <span class="date" th:text="${#temporals.format(comment.commentRegDate, 'yyyy-MM-dd HH:mm')}"></span>
+                <button type="button" data-btn="upBtn" class="btn-secondary btn-sm">수정하기</button>
+                <button type="button" data-btn="delBtn" class="btn-secondary btn-sm">삭제하기</button>
+            </div>
+            <div class="cardbody">
+                <p class="cardtext" th:text="${comment.commentContent}"></p>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
