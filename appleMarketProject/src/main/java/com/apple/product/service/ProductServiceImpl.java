@@ -16,11 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import com.apple.common.util.CustomeFileUtil;
 import com.apple.common.vo.PageRequestDTO;
 import com.apple.common.vo.PageResponseDTO;
+import com.apple.jwt.JwtUtil;
 import com.apple.product.domain.Product;
 import com.apple.product.domain.ProductImages;
 import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
-
+import com.apple.user.domain.User;
+import com.apple.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductImagesRepository productImagesRepository;
     private final CustomeFileUtil fileUtil;
     private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtutil;
 
     /*
         @Override
@@ -41,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.findAll();
         }
     */
-<<<<<<< HEAD
     @Override
     public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -77,43 +80,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-=======
-@Override
-public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
-    PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
-    String keyword = pageRequestDTO.getKeyword();
-    String search = pageRequestDTO.getSearch();
-
-    log.info("Received keyword: {}", keyword);
-
-    if (keyword == null || keyword.isEmpty()) {
-        log.info("키워드 없이 기본값. 최신날짜순 정렬");
-        Page<Product> result = productRepository.findAllByOrderByProductRegDateDesc(pageRequest);
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    } else {
-        if (keyword.startsWith("@")) {
-            search = "user_nickname";
-            keyword = keyword.substring(1);  // '@' 제거
-        } else {
-            search = "product_name";  // 기본 검색 필드로 설정
-        }
-
-        log.info("Searching with field: {} and keyword: {}", search, keyword);
-
-        Page<Product> result = productRepository.searchProducts(
-                search,
-                "%" + keyword + "%",  // 와일드카드 추가
-                pageRequestDTO.getStartDate(),
-                pageRequestDTO.getEndDate(),
-                pageRequest
-        );
-
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    }
-}
-
->>>>>>> feature/kimheesoo
     @Override
     public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO){
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -133,11 +100,7 @@ public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
     }
 
     public boolean locationExists(long locationID){
-<<<<<<< HEAD
         return locationRepository.existsById(locationID);
-=======
-    return locationRepository.existsById(locationID);
->>>>>>> feature/kimheesoo
     }
 
     @Override
@@ -164,8 +127,16 @@ public PageResponseDTO<Product> list(PageRequestDTO pageRequestDTO) {
     }
 
     @Override
-    public Product productInsert(Product product, List<MultipartFile> files) {
-        log.info("file cnt :" + files.size());
+    public Product productInsert(String token, Product product, List<MultipartFile> files) {
+        String userID = jwtutil.getUserID(token);
+        
+        Optional<User> optionalUser = userRepository.findByUserID(userID);
+        
+        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("Invalid token or user not found."));
+
+    	product.setUser(user);
+    	
+    	log.info("file cnt :" + files.size());
         for(MultipartFile file : files) {
             log.info("file name :" + file.getOriginalFilename());
             log.info("file content :" + file.getContentType());

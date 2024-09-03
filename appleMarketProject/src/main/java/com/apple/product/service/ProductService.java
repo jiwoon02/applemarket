@@ -19,7 +19,7 @@ public interface ProductService {
 
     Product productDetail(Product product);
 
-    public Product productInsert(Product product, List<MultipartFile> files);
+    public Product productInsert(String token, Product product, List<MultipartFile> files);
 
     public void saveProductImages(List<MultipartFile> files, Product product) throws IOException;
 
