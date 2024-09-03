@@ -61,7 +61,7 @@ public class SecurityConfig{
 		//경로별 인가 작업
 		http
         	.authorizeHttpRequests((auth) -> auth
-        			.requestMatchers("/product/insertForm","/product/productDetail","/product/updateForm").hasAuthority("USER")
+        			.requestMatchers("/product/insertForm","/product/updateForm", "/user/locationForm").hasAuthority("USER")
         			.anyRequest().permitAll());
 		//JWTFilter 등록
 		http

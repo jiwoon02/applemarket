@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -27,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByCategoryCategoryID(String categoryID, Pageable pageable);
 
     @Query("select p from Product p where p.user.location.locationID between :startID and :endID")
-    Page<Product> findByUserLocationLocationIDRange(@Param("startID") long startID,
-                                                    @Param("endID") long endID,
+    Page<Product> findByUserLocationLocationIDRange(@Param("startID") Long startID,
+                                                    @Param("endID") Long endID,
                                                     Pageable pageable);
 }

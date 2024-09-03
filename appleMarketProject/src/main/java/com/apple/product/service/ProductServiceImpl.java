@@ -82,31 +82,31 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO) {
+        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
+        Page<Product> result = productRepository.findByCategoryCategoryID(categoryID, pageRequest);
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
+    }
+
+    public boolean locationExists(Long locationID){
+        return locationRepository.existsById(locationID);
+    }
+    //locationID 기준으로 검색
+    @Override
+    public PageResponseDTO<Product> getProductByLocationIDRange(Long locationID, PageRequestDTO pageRequestDTO){
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
-        long startID = locationID -3;
-        long endID = locationID + 3;
+        Long startID = locationID -3;
+        Long endID = locationID + 3;
 
-        if(!locationExists(startID)){
+        if (!locationExists(startID)) {
             startID = locationID;
         }
-        if(!locationExists(endID)){
+        if (!locationExists(endID)) {
             endID = locationID;
         }
 
         Page<Product> result = productRepository.findByUserLocationLocationIDRange(startID, endID, pageRequest);
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    }
-
-    public boolean locationExists(long locationID){
-        return locationRepository.existsById(locationID);
-    }
-
-    @Override
-    public PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO) {
-        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
-        Page<Product> result = productRepository.findByCategoryCategoryID(categoryID, pageRequest);
         return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
     }
 
@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductService {
         
         Optional<User> optionalUser = userRepository.findByUserID(userID);
         
-        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("Invalid token or user not found."));
+        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("해당 토큰의 유저를 찾을 수 없습니다."));
 
     	product.setUser(user);
     	

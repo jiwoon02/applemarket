@@ -24,5 +24,7 @@ public interface UserService{
 //	public Optional<User> findByUserID(String userID);
 //
 //	boolean authenticate(String userID, String password);
+
+	public void userLocationUpdate(Long userID, Long locationID);
 	
 }

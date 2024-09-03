@@ -3,6 +3,8 @@ package com.apple.user.service;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.apple.location.domain.Location;
+import com.apple.location.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +28,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private JavaMailSender mailSender;
-  
+
+    @Autowired
+    private LocationRepository locationRepository;
 //    @Override
 //    //로그인 아이디 찾아서 user객체 반환 없으면 null
 //    public Optional<User> findByUserID(String userID) {
@@ -133,7 +137,21 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
-    
+    //동네 설정하기
+    @Override
+    public void userLocationUpdate(Long userID, Long locationID) {
+        Optional<User> userOptional = userRepository.findById(userID);
+        Optional<Location> locationOptional = locationRepository.findById(locationID);
+
+        if (userOptional.isPresent() && locationOptional.isPresent()) {
+            User locationUser = userOptional.get();
+            Location location = locationOptional.get();
+            locationUser.setLocation(location);
+            userRepository.save(locationUser);
+        } else {
+            throw new IllegalArgumentException("유효하지 않은 유저 아이디 / 위치 아이디 ==>" + userID + " / " + locationID);
+        }
+    }
 }
 
 
