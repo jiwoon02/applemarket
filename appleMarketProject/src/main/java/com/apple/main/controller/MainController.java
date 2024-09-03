@@ -1,5 +1,6 @@
 package com.apple.main.controller;
 
+
 import com.apple.jwt.JwtUtil;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
@@ -25,7 +26,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main(HttpServletRequest request, Model model) {
-		boolean isLoggedIn = false;
+		//boolean isLoggedIn = false;
 		
 		//jwt 쿠키 확인
 		return "client/main";
