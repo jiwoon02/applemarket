@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
 import com.apple.mypage.service.MypageService;
@@ -26,11 +28,13 @@ import com.apple.usershop.repository.UsershopReviewRepository;
 import com.apple.usershop.service.UsershopService;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/mypage")
 public class MypageController {
-
+	
     @Setter(onMethod_ = @Autowired)
     private MypageService mypageService;
     
@@ -45,13 +49,37 @@ public class MypageController {
     
     @Setter(onMethod_ = @Autowired)
     private UserRepository userRepository;
-
-    @GetMapping("{userNo}")
-    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-        model.addAttribute("items", items);
-        return "mypage/mypage"; // 반환할 뷰의 이름
-    }
+    
+    @Autowired
+    private JwtUtil jwtUtil;
+    
+    //마이페이지
+//    @GetMapping("{userNo}")
+//    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
+//        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
+//        model.addAttribute("items", items);
+//        return "mypage/mypage"; // 반환할 뷰의 이름
+//    }
+	  @GetMapping("")
+	  public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
+		  String userID = jwtUtil.getUserID(token);
+		  Optional<User> optionalUser = userRepository.findByUserID(userID);
+		  Long userNo;
+		  log.info(userID);
+		  
+		  if(optionalUser.isPresent()) {
+			  userNo = optionalUser.get().getUserNo();	//찾은 유저 반환
+		  }
+		  else {
+			  return "해당 정보로 등록된 사용자가 없습니다.";
+		  }
+		  String testNo = String.valueOf(userNo);
+		  log.info(testNo);
+		  
+	      List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
+	      model.addAttribute("items", items);
+	      return "mypage/mypage"; // 반환할 뷰의 이름
+	  }
     
     @GetMapping("/buy{userNo}")
     public String getBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
@@ -61,8 +89,20 @@ public class MypageController {
         return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
     }
     
-    @GetMapping("/sell{userNo}")
-    public String getItemsExcludingOrders(@PathVariable Long userNo, Model model) {
+    //판매상품
+    @GetMapping("/sell")
+    public String getItemsExcludingOrders(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	String userID = jwtUtil.getUserID(token);
+		Optional<User> optionalUser = userRepository.findByUserID(userID);
+		Long userNo;
+		
+		if(optionalUser.isPresent()) {
+			  userNo = optionalUser.get().getUserNo();	//찾은 유저 반환
+		  }
+		  else {
+			  return "해당 정보로 등록된 사용자가 없습니다.";
+		  }
+		
         List<Product> items = mypageService.getItemsExcludingOrders(userNo);
         model.addAttribute("items", items);
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름

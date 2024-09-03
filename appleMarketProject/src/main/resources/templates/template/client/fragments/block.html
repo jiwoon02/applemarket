@@ -21,7 +21,7 @@
             <div class="header-top-right">
                 <a th:if="${isLoggedIn}" href="#" onclick="logout()" class="header-link">로그아웃</a>
                 <a th:if="${!isLoggedIn}" href="/user/loginForm" class="header-link">로그인/회원가입</a>
-                <a href="/mypage/1" class="header-link">마이페이지</a>
+                <a href="/mypage" class="header-link">마이페이지</a>
             </div>
         </div>
          <!--헤더 중간-->
@@ -87,7 +87,6 @@
 </div>
 </th:block>
 
-<<<<<<< HEAD
 <!-- 상단 adminheader -->
 <th:block th:fragment="adminheader">
     <div class="header-container">
