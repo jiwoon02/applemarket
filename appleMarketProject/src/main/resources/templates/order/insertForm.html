@@ -16,9 +16,8 @@
             <h5 class="mb-3">상품 정보</h5>
             <div th:object="${product}" class="section order-summary">
                 <div class="d-flex justify-content-between align-items-center">
-					<!-- <img th:src="@{'/order/view/' + ${imageFileName}}" th:alt="${imageFileName}" />  -->
-					<img th:if="${imageFileName}" th:src="@{/order/view/{fileName}(fileName=${imageFileName})}" th:alt="${imageFileName}"/>
-					<input type="hidden" id="productImageID" th:value="${product.productImages[0].productImageID}" />
+					<img th:if="${imageFileName}" th:src="@{/order/view/product_{productID}/{fileName}(productID=*{productID}, fileName=${imageFileName})}" id="image"/>
+					<input type="hidden" id="productImageID" th:value="${productImageID}" />
 					
                     <div>
      	               	<input type="hidden" th:field="*{productID}" th:value="${productID}" />

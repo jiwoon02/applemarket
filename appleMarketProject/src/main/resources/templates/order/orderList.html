@@ -19,8 +19,7 @@
 		            <div class="card-body">
 		                <div class="date" th:text="*{#temporals.format(orderRegDate, 'yyyy-MM-dd')}"></div>
 		                <div class="details d-flex">
-		                    <!-- Correctly access the imageFileName for each order using the orderID -->
-		                    <img th:if="${imageFileNames[order.orderID]}" th:src="@{'/order/view/' + ${imageFileNames[order.orderID]}}" th:alt="'Product Image'"/>
+		                    <img th:if="${imageFileNames[order.orderID]}" th:src="@{'/order/view/product_'+${order.product.productID}+'/'+ ${imageFileNames[order.orderID]}}" th:alt="'Order Image'"/>
 		                    <div class="info ml-3">
 		                        <span class="price" th:text="*{product.productPrice}+'원'"></span>
 		                        <a th:href="@{/order/{orderID}(orderID=${order.orderID})}" class="item-name" th:text="*{product.productName}"></a>

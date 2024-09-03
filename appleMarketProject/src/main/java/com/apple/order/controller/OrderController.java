@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.common.util.CustomeFileUtil;
+import com.apple.jwt.JwtUtil;
 import com.apple.order.domain.Order;
 import com.apple.order.service.OrderService;
 import com.apple.product.domain.Product;
@@ -88,12 +89,17 @@ public class OrderController {
 	        return "redirect:/error"; 
 	    }
 	    String imageFileName = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getFilename();
+	    Long imageFileID = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getProductImageID();
+	    
+	    log.info("imageFileID: "+imageFileID.toString());
+	    
 	    model.addAttribute("product", product);
-	    model.addAttribute("imageFileName", imageFileName); 
+	    model.addAttribute("imageFileName", imageFileName);
+	    model.addAttribute("productImageID", imageFileID);
 	    
 	    //사용자 정보 전달
-	    String buyerName = userService.getNameByUserNo(2L);
-	    String buyerPhone = userService.getPhoneByUserNo(2L);
+	    String buyerName = userService.getNameByUserNo(1L);
+	    String buyerPhone = userService.getPhoneByUserNo(1L);
 	    model.addAttribute("buyerName", buyerName);
 	    model.addAttribute("buyerPhone", buyerPhone);
 	    
@@ -102,7 +108,7 @@ public class OrderController {
 	
 	
 	//주문 등록 처리
-	@PostMapping(value="/orderInsert")
+	@PostMapping("/orderInsert")
 	public ResponseEntity<String> createOrder(@RequestBody Order order, HttpServletResponse response) throws IOException {
 	    try {
 	        orderService.orderInsert(order);
@@ -129,7 +135,7 @@ public class OrderController {
 	    
 	    log.info("상품 이미지: "+product.getProductImages().get(0).getFilename());
 	    
-	 // product 또는 getProductImages()가 null일 경우를 안전하게 처리
+	 // product 또는 getProductImages()가 null일 경우 처리
 	    String imageFileName = null;
 	    if (product != null && !product.getProductImages().isEmpty()) {
 	        imageFileName = product.getProductImages().get(0).getFilename(); // 첫 번째 이미지의 파일 이름 가져오기
@@ -141,10 +147,11 @@ public class OrderController {
     }
    
     //+상품 이미지 출력
-    @GetMapping("/view/{fileName}")
+    @GetMapping("view/product_{productID}/{fileName}")
     @ResponseBody
-    public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
-    	log.info(fileName);
-    	return fileUtil.getFile(fileName);
+    public ResponseEntity<Resource> viewFileGET(@PathVariable Long productID, @PathVariable String fileName){
+    	log.info("filename: " + fileName);
+    	log.info("productId: " + productID.toString());
+    	return fileUtil.getFile(productID, fileName);
     }
 }
