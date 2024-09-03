@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.apple.product.domain.Product;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -31,4 +32,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByUserLocationLocationIDRange(@Param("startID") Long startID,
                                                     @Param("endID") Long endID,
                                                     Pageable pageable);
+    // 특정 userNo를 가진 Test_item 리스트 조회
+    List<Product> findByUser_UserNo(Long userNo);
+    
+    // userNo를 기준으로 productId의 개수를 가져오는 메서드
+    Long countByUser_UserNo(Long userNo);
 }
