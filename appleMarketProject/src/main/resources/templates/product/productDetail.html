@@ -14,6 +14,9 @@
 			<div class="row productDetailContainer">
 				<form id="dataForm" name="dataForm">
 					<input type="hidden" name="productID" th:field="*{productID}" />
+					<input type="hidden" th:field="*{productName}" th:value="${productName}"/>
+					<input type="hidden" th:field="*{productPrice}" th:value="${productPrice}"/>
+					<input type="hidden" th:field="*{postPrice}" th:value="${postPrice}"/>
 				</form>
 
 				<div class="detail-right">
@@ -54,9 +57,11 @@
 					</div>
 					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 					<div class="actions">
+
 						<button class="btn btn-dark">찜하기</button>
 						<button class="btn btn-dark">채팅하기</button>
-						<button class="btn btn-dark">구매하기</button>
+						<button class="btn btn-dark buyBtn">구매하기</button>
+
 					</div>
 				</div>
 			</div>

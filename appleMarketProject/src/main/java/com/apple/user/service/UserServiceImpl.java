@@ -133,6 +133,33 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+	@Override
+	public String getNameByUserNo(long userNo) {
+		Optional<User> buyer = userRepository.findByUserNo(userNo);
+		String buyerName;
+		
+		if(!buyer.isEmpty()) {
+			buyerName = buyer.get().getUserName();
+			return buyerName;
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public String getPhoneByUserNo(long userNo) {
+		Optional<User> buyer = userRepository.findByUserNo(userNo);
+		String buyerPhone;
+		
+		if(!buyer.isEmpty()) {
+			buyerPhone = buyer.get().getUserPhone();
+			return buyerPhone;
+		}
+		else {
+			return null;
+		}
+	}
     
 }
 
