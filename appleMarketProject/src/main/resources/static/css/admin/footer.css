@@ -1,0 +1,64 @@
+
+/*
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: flex-start;
+    justify-content: center;
+}
+*/
+
+.footer{
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #e5e5e5;
+    justify-content: center;
+  }
+
+.footer_1, .footer_2{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.footer_1_div {
+    flex: 1; /* 모든 .footer_1_div 요소가 동일한 너비를 가짐 */
+    padding: 0 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.footer_1_div:not(:last-child) {
+    border-right: 1px solid #e5e5e5; /* 각 div 사이에 구분선을 추가 */
+}
+
+.footer_txt_1 {
+    font-weight: bold;
+    margin-bottom: 10px;
+    
+}
+
+.footer_txt_2 {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer_2 {
+    justify-content: center; /* AppleMarket 텍스트를 중앙에 배치 */
+}
+
+.footer_txt_2 {
+    font-size: 12px;
+    color: #666;
+}
+.footer_txt_3{
+    font-size: px;
+    font-weight: bold;
+}
+
+.footer_txt_3 > a{
+    text-decoration: none;
+    color: black;
+}

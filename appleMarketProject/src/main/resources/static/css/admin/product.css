@@ -1,0 +1,26 @@
+.productList {
+	background-color: rgb(196,196,196);
+	width: 1024px;
+	height: 220px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+#productImage {
+	float: left;
+	width: 252px;
+	height: 218px;
+}
+
+.productfont {
+	margin-left: 30px;
+	width: 300px;
+	display: block;
+	margin-bottom: 40px;
+	float: left;
+}
+
+.productText {
+	
+	height: 220px;
+}
