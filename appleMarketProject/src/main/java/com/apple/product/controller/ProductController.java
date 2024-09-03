@@ -2,12 +2,12 @@ package com.apple.product.controller;
 
 import com.apple.config.SecurityConfig;
 import com.apple.jwt.JwtUtil;
+import com.apple.user.domain.User;
+import com.apple.user.repository.UserRepository;
+import com.apple.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +35,23 @@ public class ProductController {
     private final CustomeFileUtil fileUtil;
     private final ProductImagesRepository productImagesRepository;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     // 페이징처리한 리스트 한페이지당 12개
     @GetMapping("/productList")
-    public String productList(PageRequestDTO pageRequestDTO, @RequestParam(value = "category", required = false) String categoryID, Model model) {
+    public String productList(PageRequestDTO pageRequestDTO,
+                              @RequestParam(value = "category", required = false) String categoryID,
+                              @RequestParam(value = "locationID", required = false) Long locationID,
+                              Model model) {
+
         PageResponseDTO<Product> productList;
 
         if(categoryID != null) {
             productList = productService.getProductsByCategory(categoryID, pageRequestDTO);
-        }else{
+        }else if(locationID != null) {
+            productList = productService.getProductByLocationIDRange(locationID, pageRequestDTO);
+        } else{
             productList = productService.list(pageRequestDTO);
         }
 

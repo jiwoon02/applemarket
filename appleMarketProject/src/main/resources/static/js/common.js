@@ -95,7 +95,7 @@ function chkFile(item) {
 }
 
 $("#locationFormBtn").on("click", function(){
-	location.href="/locationForm";
+	location.href="/user/locationForm";
 })
 
 //검색버튼클릭

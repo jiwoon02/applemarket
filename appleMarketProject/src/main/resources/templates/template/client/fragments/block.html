@@ -69,15 +69,23 @@
 		          	</ul>	 
             </div>
             <div class="header-bottom-center">
-                <!--로그인 완료시 표시
-                <th:block th:if="${login.user != null}">
-                    <p th:if="${login.user.locationID != null}" th:text="${detail.user.location.locationName}" class="header-link">판매자 주소</p>
-                    <a class="header-link" href="/product/productList?locationID=${locationID}">
-            현재 지역(${locationName}) 으로 검색
-        </a>
-                    <p th:if="${login.user.locationID == null}" class="header-link">동네를 설정해주세요.</p>
-                </th:block>-->
-                <a class="header-link" href="#">현재 지역(ㅇㅇ시 ㅇㅇ구 ㅇㅇ동) 으로 검색</a>
+
+                <th:block th:if="${currentUserID != null}">
+                    <th:block th:if="${userLocation != null}">
+                     <p th:text="${userLocation.locationName}" class="header-link">판매자 주소</p>
+                     <a class="header-link" th:href="@{'/product/productList?locationID=' + ${userLocation.locationID}}">
+                         현재 지역(${userLocation.locationName}) 으로 검색</a>
+                    </th:block>
+
+                    <th:block th:if="${userLocation == null}">
+                        <p class="header-link">동네를 설정해주세요.</p>
+                    </th:block>
+                </th:block>
+
+                <th:block th:if="${currentUserID == null}">
+                    <p>로그인 후 동네별로 상품을 검색해보세요.</p>
+                </th:block>
+
             </div>
             <div class="header-bottom-right">
                 <button type="button" class="locationFormBtn" id="locationFormBtn">동네 설정하기</button>

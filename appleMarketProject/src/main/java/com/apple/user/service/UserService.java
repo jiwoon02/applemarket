@@ -30,5 +30,7 @@ public interface UserService{
 	//UserNo로 전화번호를 얻어옴
 	public String getPhoneByUserNo(long userNo);
 
+	public void userLocationUpdate(Long userID, Long locationID);
+
 	
 }
