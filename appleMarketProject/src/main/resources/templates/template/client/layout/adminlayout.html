@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100" data-bs-theme="auto" >
+<head>
+<th:block th:insert="~{template/client/fragments/block :: config}">
+</th:block>
+	<th:block layout:fragment="css">
+	</th:block>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="content-wrapper">
+			<header><th:block th:replace="~{template/client/fragments/block :: adminheader}"></th:block>
+			</header>
+	
+		<!-- Begin page content -->
+			<main>
+				<div class="container">
+					<!-- layout:frgment는 해당위치에 content라는 레이아웃의 코드를 불러온다는 의미이다. -->
+					<th:block layout:fragment="content"></th:block>
+				</div>
+			</main>
+		</div>
+	<!-- 공통 레이아웃 페이지에서 th:insert="~{파일경로 :: fragment명}"으로 명시. Fragment명을 호출하여 레이아웃을 구성할 수 있다.  -->
+		<footer>
+			<th:block th:replace="~{template/client/fragments/block :: footer}"></th:block>
+		</footer>
+	</div>
+
+	<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script> -->
+	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<!-- 
+	<script src="/js/common.js"></script>
+	-->
+
+	<th:block layout:fragment="script"></th:block>
+</body>
+</html>

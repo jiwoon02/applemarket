@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/adminlayout}">
+
+<head>
+    <title>카테고리 관리</title>
+   <!-- 
+    -->
+    <link type="text/css" rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" >
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+    
+    	<div>
+    		<form id="dataForm" th:each = "category : ${categoryList}" th:object = "${category}">
+    			<input type="hidden" name="categoryID" th:value="*{categoryID}"/>
+    		</form>
+    	</div>
+        <div class="container">
+            <div class="text-center">
+                <h3>카테고리</h3>                
+            </div>
+            <div>
+            	<form id="insertForm" th:object = "${category}" >
+	            	<label >카테고리 ID</label>
+	            	<input type="text"  placeholder="카테고리 ID" th:field="*{categoryID}"/>
+	            	<label >카테고리 이름</label>
+	            	<input type="text"  placeholder="카테고리 name" th:field="*{categoryName}"/>
+            		<button type="button" id="insertBtn" class="btn btn-primary btn-sm" >등록</button>
+            	</form>
+            </div >
+            <hr/>
+            <div class="container">
+            	<h4>카테고리 리스트</h4>
+            	<table class="table table-bordered">
+            		<thead>
+            			<tr class= "text-center">
+            				<th>카테고리 ID</th>
+            				<th>카테고리 이름</th>
+            				<th>등록 횟수</th>
+            				<th>삭제</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+	            			<tr class = "text-center" th:each = "category : ${categoryList}" th:object = "${category}">
+	            				<td th:text="*{categoryID}"></td>
+	            				<td th:text="*{categoryName}"></td>
+	            				<td>0</td>
+	            				<td>
+	            				<button type="button" class="btn btn-primary btn-sm" id="deleteBtn" >삭제</button>
+	            				</td>
+	            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block layout:fragment="script">
+        	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="/js/admin/common.js"></script>
+	<script src="/js/admin/category.js"></script>	
+    </th:block>
+</body>
+
+</html>

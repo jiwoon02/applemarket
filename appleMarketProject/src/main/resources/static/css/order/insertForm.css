@@ -1,0 +1,137 @@
+/* 기본 레이아웃 설정 */
+.order-content-container {
+    background-color: #fff;
+    width: 600px;
+    margin: 20px auto;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif; /* 폰트 패밀리 설정 */
+}
+
+/* 섹션 헤더 스타일 */
+.text-center h3 {
+    text-align: center;
+    font-size: 24px; /* 제목 폰트 크기 */
+    font-weight: bold;
+    color: #333;
+    margin: 20px 0px;
+}
+
+.order-summary span {
+	padding-right:30px;
+}
+
+img{
+	height: 150px;
+	width: 150px;
+}
+
+h5 {
+    font-size: 18px; /* 섹션 제목 폰트 크기 */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* 입력 필드 스타일링 */
+.section {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.order-input-field label {
+    font-size: 14px; /* 레이블 폰트 크기 */
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.order-input-field input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px; /* 입력 필드 폰트 크기 */
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+.order-input-field input:hover {
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+/* 가격 요약 스타일 */
+.order-price-summary {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 16px; /* 요약 항목 폰트 크기 */
+}
+
+.summary-item:last-child {
+    font-weight: bold;
+}
+
+/* 버튼 스타일 */
+.btn-block {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* 버튼 폰트 크기 */
+    font-weight: bold;
+}
+
+.btn-block:hover {
+    background-color: #c9302c;
+}
+
+.order-input-group {
+    display: flex;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden; /* 경계 내에 자식 요소들을 유지합니다 */
+}
+
+.order-input-group input {
+    flex-grow: 1; /* 입력 필드가 가능한 많은 공간을 차지하도록 합니다 */
+    border: none; /* 중복 테두리 제거 */
+    padding: 8px;
+    font-size: 14px;
+    outline: none; /* 선택 상태에서의 테두리 제거 */
+}
+
+.order-input-group-append {
+    background-color: #ccc;
+}
+
+.order-input-group-append button {
+	font-weight:bold;
+	width: 80px;
+    padding: 8px 12px; /* 버튼 내부 패딩 조정 */
+    background-color: #ccc; /* 버튼 배경색 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer; /* 마우스 오버 시 포인터 */
+    color: white; /* 텍스트 색상 */
+}
+
+.order-input-group-append button:hover {
+    background-color: #b0b0b0; /* 버튼 호버 시 색상 변경 */
+}

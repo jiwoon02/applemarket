@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{template/client/layout/adminlayout}">
+
+<head>
+    <title>상품 상세 관리</title>
+   <!-- 
+    -->
+    <link type="text/css" rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" >
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+  		<div th:object = "${detail}">
+  			<a>대충 이미지</a>
+  			<a th:text="'제목 : ' + *{productName}">제목</a>
+  			<a th:text="'가격 : ' + *{productPrice}">제목</a>
+  			<a th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</a>
+  			<a th:text="'카테고리 : ' + *{category.categoryName}">제목</a>
+  		</div>
+		<div th:each ="report : ${reportDetail}" th:objcet = "${report}">
+			<a th:text="'신고내용' + *{report.reportContent}"></a>
+			<a th:text="'신고인' + *{report.User.userID}"></a>
+			<a th:text="'신고날짜' + *{report.productReportRegDate}"></a>
+		</div>
+  		<br>
+  		<div>
+  			상품 상세 정보
+  		</div>
+  		<div>
+  			상품 신고 내용
+  		</div>
+  	
+    </th:block>
+
+    <th:block layout:fragment="script">
+        	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="/js/admin/common.js"></script>
+	<script src="/js/admin/category.js"></script>	
+    </th:block>
+</body>
+
+</html>

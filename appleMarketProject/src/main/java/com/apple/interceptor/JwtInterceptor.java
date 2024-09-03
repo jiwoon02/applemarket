@@ -15,6 +15,7 @@ public class JwtInterceptor implements HandlerInterceptor{
         boolean isLoggedIn = false;
 
         // 쿠키에서 JWT 토큰을 확인
+        //존재하면 isLoggedIn true로 설정
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

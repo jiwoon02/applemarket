@@ -49,6 +49,10 @@ input::placeholder{
     margin-bottom: 20px;
 }
 
+.page-info > hr{
+	margin-bottom: 0px;	
+}
+
 #login-form a{
 	font-size: 14px;
 	color: gray;
@@ -66,4 +70,13 @@ input::placeholder{
     margin: 0 auto;
     display: block;
     border: none;
+}
+
+#error{
+	height: 25px;
+}
+
+#error-message{
+	font-size:15px;
+	color: red;
 }

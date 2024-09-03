@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{template/client/layout/layout}">
+    
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/css/order/insertForm.css" />
+    </th:block>
+    
+    <th:block layout:fragment="content">
+    
+        <div class="text-center"><h3>결제하기</h3></div>
+        
+        <div class="order-content-container" th:object="${order}">
+        
+            <!-- 상품 요약 섹션 -->
+            <h5 class="mb-3">상품 정보</h5>
+            <div th:object="${product}" class="section order-summary">
+                <div class="d-flex justify-content-between align-items-center">
+					<!-- <img th:src="@{'/order/view/' + ${imageFileName}}" th:alt="${imageFileName}" />  -->
+					<img th:if="${imageFileName}" th:src="@{/order/view/{fileName}(fileName=${imageFileName})}" th:alt="${imageFileName}"/>
+					<input type="hidden" id="productImageID" th:value="${product.productImages[0].productImageID}" />
+					
+                    <div>
+     	               	<input type="hidden" th:field="*{productID}" th:value="${productID}" />
+     	               	<input type="hidden" th:field="*{postPrice}" th:value="${postPrice}" />
+                        <span th:text="*{productPrice}+' 원'" id="productPrice" th:value="*{productPrice}"></span>
+                        <br />
+                        <span th:text="*{productName}" id="productName" th:value="*{productName}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 배송 정보 입력 섹션 -->
+            <h5 class="mb-3">배송 정보</h5>
+            <div class="section order-shipping-info mb-3">
+                <div class="order-input-field">
+                    <label for="name">이름</label>
+                    <!-- <input type="text" id="name" placeholder="(필수)이름을 입력하세요"> -->
+                    <input type="text" id="name" th:value="${buyerName}" readonly>
+                </div>
+                <div class="order-input-field">
+                    <label for="phone">전화번호</label>
+                    <!-- <input type="text" id="phone" placeholder="(필수)전화번호를 입력하세요"> -->
+                    <input type="text" id="phone" th:value="${buyerPhone}" readonly>
+                </div>
+                
+                <hr />
+                
+                <div class="order-input-field">
+				    <label for="postcode">우편번호</label>
+				    <div class="order-input-group">
+				        <input type="text" id="postcode" placeholder="(필수)우편번호">
+				        <div class="order-input-group-append">
+				            <button type="button" onclick="execDaumPostcode()">찾기</button>
+				        </div>
+				    </div>
+				</div>
+                <div class="order-input-field">
+                    <label for="roadAddress">도로명주소</label>
+                    <input type="text" id="roadAddress" placeholder="(필수)도로명주소를 입력하세요">
+                </div>
+                <div class="order-input-field">
+                    <label for="detailAddress">상세주소</label>
+                    <input type="text" id="detailAddress" placeholder="(선택)상세주소를 입력하세요">
+                </div>
+            </div>
+            
+            <!-- 요청 사항 입력 섹션 -->
+            <div class="section order-request-info mb-3">
+                <div class="order-input-field">
+                    <label for="requestText">요청사항</label>
+                    <input type="text" id="requestText" placeholder="(선택) 예) 포장 꼼꼼하게 부탁드려요">
+                </div>
+            </div>
+        
+            <!-- 가격 요약 -->
+            <div th:object="${product}" class="section order-price-summary mb-3">
+                <div class="summary-item">
+                    <span>상품 금액</span>
+                    <span th:text="*{productPrice} + ' 원'"></span>
+                </div>
+                <div class="summary-item">
+                    <span>배송비</span>
+                    <span th:text="*{postPrice} + ' 원'"></span>
+                </div>
+                <hr />
+                <div class="summary-item font-weight-bold">
+                    <span>총 결제금액</span>
+                    <span th:text="*{productPrice}+*{postPrice} + ' 원'"></span>
+                </div>
+            </div>
+
+            <button class="btn btn-block payBtn" onclick="requestPayment()">결제하기</button>
+        </div>
+        
+    </th:block>
+    
+    <th:block layout:fragment="script">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+        <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+        <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="/js/order/address.js" ></script>
+        <script src="/js/order/payment.js" ></script>
+    </th:block>
+</html>
