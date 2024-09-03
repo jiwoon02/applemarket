@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- 본문 코드가 위치하는 파일로서 상단에 layout:decorate="경로/공통페이아웃파일명"을 선언하여 기본 레이아웃 파일을 사용하겠다는 의미이다. 
+참고: thymeleaf 2.x 버전에서는 layout:decorator 이지만 thymeleaf 3.x 버전에서는 layout:decorate를 사용.-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/mypage/mypage.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="mypage">
+        <table class="tbl_mypage">
+            <colgroup>
+                <col style="width:25%;">
+                <col style="width:25%;">
+                <col style="width:25%;">
+                <col style="width:25%;">
+            </colgroup>
+            <thead>
+                <tr class="mainMenu">
+                    <th scope="row">판매 관리</th>
+                    <th scope="row">구매 관리</th>
+                    <th scope="row">정보 관리</th>
+                    <th scope="row">회원 관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="menuList">
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="divReviewWrite">
+		    <div class="divTitle">
+		        리뷰 작성
+		    </div>
+		    <form action="/mypage/addReview" method="post" id="reviewForm">
+		        <div class="divReviewInfo">
+		            <div class="divUserImg">
+		                <img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" alt="상점이미지">
+		            </div>
+		            <div class="userInfo2">
+		                <div class="shopName2" th:text="${userNickname}">사용자명</div>
+		                <div class="divStarImg">
+		                    <img class="reviewStar1" alt="별점">
+		                    <img class="reviewStar2" alt="별점">
+		                    <img class="reviewStar3" alt="별점">
+		                    <img class="reviewStar4" alt="별점">
+		                    <img class="reviewStar5" alt="별점">
+		                    <input type="hidden" id="averageStarRating" th:value="${averageStarRating}" />
+		                </div>
+		                <div class="divItemBtn2">
+		                    <button type="button" class="itemBtn2" th:text="${productName}">상품명</button>
+		                </div>
+		            </div>
+		        </div>
+		
+		        <div class="divStarRate">
+		            <div class="starImg2">
+		                <img th:src="@{/images/usershop/star2.png}" alt="별점" id="star1" data-rating="1">
+		                <img th:src="@{/images/usershop/star2.png}" alt="별점" id="star2" data-rating="2">
+		                <img th:src="@{/images/usershop/star2.png}" alt="별점" id="star3" data-rating="3">
+		                <img th:src="@{/images/usershop/star2.png}" alt="별점" id="star4" data-rating="4">
+		                <img th:src="@{/images/usershop/star2.png}" alt="별점" id="star5" data-rating="5">
+		            </div>
+		        </div>
+		
+		        <div class="divSelectComment">
+		            <div class="divComment2">
+		                <div class="comment2" data-review-index="1">
+		                    <img th:src="@{/images/usershop/review1.png}" alt="후기이미지">
+		                    상품 설명과 실제 상품이 동일해요
+		                </div>
+		            </div>
+		            <div class="divComment2">
+		                <div class="comment2" data-review-index="2">
+		                    <img th:src="@{/images/usershop/review2.png}" alt="후기이미지">
+		                    채팅 답변이 빨라요
+		                </div>
+		            </div>
+		            <div class="divComment2">
+		                <div class="comment2" data-review-index="3">
+		                    <img th:src="@{/images/usershop/review3.png}" alt="후기이미지">
+		                    친절하고 배려가 넘쳐요
+		                </div>
+		            </div>
+		            <div class="divComment2">
+		                <div class="comment2" data-review-index="4">
+		                    <img th:src="@{/images/usershop/review4.png}" alt="후기이미지">
+		                    포장이 깔끔해요
+		                </div>
+		            </div>
+		            <div class="divComment2">
+		                <div class="comment2" data-review-index="5">
+		                    <img th:src="@{/images/usershop/review5.png}" alt="후기이미지">
+		                    상품 정보가 자세히 적혀있어요
+		                </div>
+		            </div>
+		            <input type="hidden" name="userNo" th:value="${userNo}"> <!-- value="${userNo}" 작성자!!!!-->
+		            <input type="hidden" name="shopId" th:value="${shopId}"> <!-- shopId 값 설정, 리뷰 작성할 shopId(상대방)!!!!-->
+		            <input type="hidden" name="starRating" id="starRating" value=0> <!-- 선택된 별점 값을 여기에 설정합니다 -->
+		            <input type="hidden" name="productID" id="productID" th:value="${productID}">
+		            <input type="hidden" id="selectReview1" name="selectReview1" value=0>
+				    <input type="hidden" id="selectReview2" name="selectReview2" value=0>
+				    <input type="hidden" id="selectReview3" name="selectReview3" value=0>
+				    <input type="hidden" id="selectReview4" name="selectReview4" value=0>
+				    <input type="hidden" id="selectReview5" name="selectReview5" value=0>
+		        </div>
+		
+		        <div class="divCommentWrite">
+		            <textarea class="commentWrite" name="reviewContent" placeholder="리뷰 내용을 작성해 주세요."></textarea>
+		            <div class="divReviewBtn">
+		                <button type="button" class="cancelBtn">취소하기</button>
+		                <button type="submit" class="submitBtn">작성완료</button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<script th:src="@{/js/mypage/mypageReview.js}"></script>
+</th:block>
+</html>
