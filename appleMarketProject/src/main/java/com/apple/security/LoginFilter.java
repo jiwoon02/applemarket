@@ -56,7 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String userID = obtainUsername(request);
         String userPwd = obtainPassword(request);
         
-        System.out.println(userID);
+//        System.out.println(userID);
         
         // 스프링 시큐리티에서 인증을 처리하기 위해 UsernamePasswordAuthenticationToken 생성
 		//스프링 시큐리티에서 사용자를 검증하기 위해서는 token에 아디,비번을 담아야 함
@@ -87,16 +87,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //헤더방식
         //HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 함
         //예시 Authorization: Bearer 인증토큰string
-//        response.addHeader("Authorization", "Bearer " + token);
-//        
-//        System.out.println("create token success");
-//    	System.out.println("login success");
+        /*
+        response.addHeader("Authorization", "Bearer " + token);
+        
+        System.out.println("create token success");
+    	System.out.println("login success");
+    	*/
     	
         Cookie jwtCookie = jwtUtil.createCookie(token);
         response.addCookie(jwtCookie);
         
-        System.out.println("create token success");
-        System.out.println("login success");
+//        System.out.println("create token success");
+//        System.out.println("login success");
     }
 
 	//로그인 실패시 실행하는 메소드

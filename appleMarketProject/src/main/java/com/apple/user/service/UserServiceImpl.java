@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -124,7 +125,8 @@ public class UserServiceImpl implements UserService {
         return UUID.randomUUID().toString().substring(0, 8);
     }
 	
-	//메일 전송
+	//메일 전송, 비동기처리
+	@Async
 	private void sendEmail(String to, String tempPwd) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
