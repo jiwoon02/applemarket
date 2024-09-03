@@ -1,7 +1,5 @@
 package com.apple.security;
 
-
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,37 +31,42 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.jwtUtil = jwtUtil;
     }
     
+    //로그인 요청을 처리할 url을 커스텀지정 할수있게 하는 메소드
     @Override
     public void setFilterProcessesUrl(String filterProcessesUrl) {
     	super.setFilterProcessesUrl(filterProcessesUrl);
     }
     
+    // 로그인 폼에서 전달된 userID 파라미터의 값을 추출하여 반환하는 메서드
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter("userID");  // 폼에서 userID로 전달된 값을 추출
+        return request.getParameter("userID");
     }
     
+    // 로그인 폼에서 전달된 userPwd 파라미터의 값을 추출하여 반환하는 메서드
     @Override
     protected String obtainPassword(HttpServletRequest request) {
-        return request.getParameter("userPwd");  // 폼에서 userPwd로 전달된 값을 추출
+        return request.getParameter("userPwd");
     }
     
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-		//클라이언트 요청에서 username, password 추출
+		//클라이언트 요청에서 id,비번 추출
         String userID = obtainUsername(request);
         String userPwd = obtainPassword(request);
         
         System.out.println(userID);
-
-		//스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
+        
+        // 스프링 시큐리티에서 인증을 처리하기 위해 UsernamePasswordAuthenticationToken 생성
+		//스프링 시큐리티에서 사용자를 검증하기 위해서는 token에 아디,비번을 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userID, userPwd, null);
 
-		//token에 담은 검증을 위한 AuthenticationManager로 전달
+        // 생성한 인증 토큰(authToken)을 AuthenticationManager로 전달하여 인증을 시도
+        // AuthenticationManager는 전달된 토큰을 이용해 실제 인증을 수행하고 결과를 반환
         return authenticationManager.authenticate(authToken);
     }
-
+    
 	//로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {

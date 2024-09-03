@@ -15,9 +15,9 @@
 	            		<hr/>
 	            	</div>
 	            	
-	            	<div th:if="${errorMessage != null}">
-                    	<p style="color:red;" th:text="${errorMessage}"></p>
-                	</div>
+	            	<div id="error">
+					    <p id="error-message" hidden=true>아이디 비밀번호가 일치하지 않습니다.</p>
+					</div>
 	            	
 	            	<form id="login-form">
 	            		<div class="form-group">
@@ -55,11 +55,9 @@
 			        })
 			        .then(response => {
 			            if (response.ok) {
-			                console.log('로그인성공');
-			                location.href='/';
+			                history.back();
 			            } else {
-			                console.log('Login failed');
-			                alert('아이디 비밀번호가 일치하지 않습니다.');
+			                document.getElementById('error-message').hidden = false;
 			            }
 			        })
 			        .catch(error => {
