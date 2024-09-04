@@ -17,13 +17,13 @@
     <div class="header-container">
         <div class="header">
             <!--헤더 위-->
-            <div class="header-top">
+            <div class="row header-top">
                 <div class="header-top-right">
                     <a th:if="${isLoggedIn}" href="#" onclick="logout()" class="header-link">로그아웃</a>
                     <a th:if="${!isLoggedIn}" href="/user/loginForm" class="header-link">로그인/회원가입</a>
                     <a href="/mypage" class="header-link">마이페이지</a>
+                    <a href="/community/communityPostList" class="text-end header-link">📢우리 동네 커뮤니티</a>
                 </div>
-            </div>
             <!--헤더 중간-->
             <div class="header-middle">
                 <div class="header-middle-left">

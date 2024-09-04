@@ -1,5 +1,5 @@
 .deatilContainer{
-	width:880px;
+    width:880px;
 }
 .productDetailContainer{
     margin-top: 50px;
@@ -54,13 +54,8 @@
     color: black;
 }
 
-.actions {
-    margin-top: 20px;
-}
 
-.actions button {
-    margin-right: 10px;
-}
+
 
 .seller-info {
     background-color: #fff;
@@ -121,13 +116,13 @@
 }
 
 .product_thum_img{
-	width:358px;
-	height:358px;
+    width:358px;
+    height:358px;
 }
 
 .productListImage{
-	width:452px;
-	height:350px;
+    width:452px;
+    height:350px;
 }
 .image-box > img {
     margin-bottom: 20px;
@@ -233,4 +228,3 @@
     object-fit: cover; /* 이미지 비율을 유지하면서 잘림 없이 컨테이너에 맞춤 */
     border-radius: 50%; /* 이미지가 원형으로 보이게 함 */
 }
-

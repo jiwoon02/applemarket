@@ -32,7 +32,7 @@
 }
 
 .productItem {
-	width: 24%; /* 네 아이템이 한 줄에 들어가도록 설정 (100%를 4등분) */
+	width: 22%; /* 네 아이템이 한 줄에 들어가도록 설정 (100%를 4등분) */
 	display: flex;
 	flex-direction: column;
 	text-align: center;
@@ -44,6 +44,7 @@
 	padding-right: 0;
 	box-sizing: border-box; /* 패딩 포함한 크기 설정 */
 	height: 300px;
+	margin-bottom: 30px;
 }
 
 .productItem > img {
@@ -84,13 +85,13 @@
 	justify-content: center;
 	align-items: center;
 	width: 100%;  /* 이미지 크기와 동일하게 설정 */
-	height: 230px; /* 이미지 크기와 동일하게 설정 */
+	height: 180px; /* 이미지 크기와 동일하게 설정 */
 }
 
 /* 이미지 스타일 */
 .productListImage {
 	width: 100%;
-	height: 100%;
+	height: 180px;
 	object-fit: cover;
 	border-radius: 10px;
 }
