@@ -12,12 +12,7 @@ import com.apple.product.domain.Product;
 public interface ProductReportRepository extends JpaRepository<ProductReport, Long>{
 	
 	@Query("SELECT r.productID, COUNT(r) FROM ProductReport r GROUP BY productID")
-	public Map<Long, Long> ReportConutDetail();
-	
-	@Query("SELECT COUNT(r) FROM ProductReport r GROUP BY productID")
-	public Long ReportCount();
-	
-	
+	public Map<Long, Long> ReportConut();
 	public List<ProductReport> findByProductID(Product product);
 
 }

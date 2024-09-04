@@ -10,14 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apple.mypage.domain.Test_order;
 import com.apple.product.domain.Product;
+import com.apple.order.domain.Order;
 
 
 
-public interface MypageRepository extends JpaRepository<Test_order, String> {
-    // userNo로 Test_order 목록을 찾는 메서드
-    List<Test_order> findByUserUserNo(Long userNo);
+public interface MypageRepository extends JpaRepository<Order, String> {
+    // userNo로 Order 목록을 찾는 메서드
+    List<Order> findByUserUserNo(Long userNo);
     
     // Test_order의 productId를 제외한 나머지 Product들을 가져옴(판매중 상품)
     @Query("SELECT i FROM Product i WHERE i.user.userNo = :userNo AND i.productID NOT IN (SELECT o.item.productID FROM Test_order o)")

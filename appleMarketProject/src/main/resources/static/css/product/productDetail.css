@@ -54,8 +54,13 @@
     color: black;
 }
 
+.actions {
+    margin-top: 20px;
+}
 
-
+.actions button {
+    margin-right: 10px;
+}
 
 .seller-info {
     background-color: #fff;
@@ -228,3 +233,4 @@
     object-fit: cover; /* 이미지 비율을 유지하면서 잘림 없이 컨테이너에 맞춤 */
     border-radius: 50%; /* 이미지가 원형으로 보이게 함 */
 }
+

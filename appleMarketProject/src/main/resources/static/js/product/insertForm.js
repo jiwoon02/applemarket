@@ -90,7 +90,7 @@ $("#productInsertBtn").on("click", function(){
         contentType: false,
         success: function(data) {
             alert('상품이 등록되었습니다.');
-            location.href = '/';
+            location.href = '/product/productList';
         },
         error: function(xhr, status, error) {
             alert('상품 등록 중 오류가 발생했습니다.');

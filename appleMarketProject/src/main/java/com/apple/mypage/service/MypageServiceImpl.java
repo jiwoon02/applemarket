@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 
@@ -13,6 +14,7 @@ import com.apple.jwt.JwtUtil;
 import com.apple.mypage.domain.Test_order;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.repository.MypageRepository;
+import com.apple.order.domain.Order;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
@@ -29,6 +31,9 @@ public class MypageServiceImpl implements MypageService {
 	
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
     @Setter(onMethod_ = @Autowired)
     private MypageRepository mypageRepository;
@@ -55,11 +60,11 @@ public class MypageServiceImpl implements MypageService {
     @Override
     public List<Product> getBuyItemsByUserNo(Long userNo) {
         // 해당 userNo로 Test_order 목록을 가져옴
-        List<Test_order> orders = mypageRepository.findByUserUserNo(userNo);
+        List<Order> orders = mypageRepository.findByUserUserNo(userNo);
         
         // 각 주문에서 productID를 사용하여 Product 목록을 반환
         return orders.stream()
-                     .map(Test_order::getItem)
+                     .map(Order::getProduct)
                      .collect(Collectors.toList());
     }
     
@@ -150,7 +155,8 @@ public class MypageServiceImpl implements MypageService {
 		Optional<User> optionalUser = userRepository.findByUserNo(userNo);
 		User user = optionalUser.get();
         if (user != null) {
-            return user.getUserPwd().equals(inputPassword); // 입력된 비밀번호와 저장된 비밀번호 비교
+        	// passwordEncoder를 사용하여 암호화된 비밀번호와 입력된 비밀번호 비교
+            return passwordEncoder.matches(inputPassword, user.getUserPwd());
         }
         return false;
 	}
@@ -160,7 +166,8 @@ public class MypageServiceImpl implements MypageService {
 		Optional<User> optionalUser = userRepository.findByUserNo(userNo);
 		User existingUser = optionalUser.get();
         if (existingUser != null) {
-        	existingUser.setUserPwd(updatedUser.getUserPwd());  // 비밀번호 수정
+        	String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPwd());
+        	existingUser.setUserPwd(encryptedPassword);  // 비밀번호 수정
             existingUser.setUserName(updatedUser.getUserName());  // 이름 수정
             existingUser.setUserNickname(updatedUser.getUserNickname());  // 닉네임 수정
             existingUser.setUserPhone(updatedUser.getUserPhone());  // 전화번호 수정

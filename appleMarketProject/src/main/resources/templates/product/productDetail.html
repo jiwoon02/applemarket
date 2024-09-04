@@ -1,75 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{template/client/layout/layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
 
-<!-- CSS 부분 -->
 <th:block layout:fragment="css">
-	<link rel="stylesheet" href="/css/product/productDetail.css"/>
-	<style>
-		#reportPopup {
-			display: none;
-		}
-
-		h2 {
-			margin-top: 20px;
-		}
-
-		.popup {
-			position: fixed;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.5);
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			z-index: 1000;  /* 팝업을 모든 요소 위로 올림 */
-		}
-
-		.popup-content {
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 5px;
-			text-align: center;
-			width: 800px;
-			height: 500px;
-		}
-
-		.s-form {
-			margin-top: 40px;
-			margin-bottom: 40px;
-			height: 280px;
-		}
-
-		.s-form option {
-			padding: 10px;
-			font-size: 18px;
-			line-height: 1.5;
-			border-top: 1px solid gainsboro;
-			border-bottom: 1px solid gainsboro;
-		}
-
-		.s-form option:first-child {
-			border-top: none;
-		}
-
-	</style>
+	<link rel="stylesheet" href="/css/product/productDetail.css" />
 </th:block>
 
-<!-- Content 부분 -->
 <th:block layout:fragment="content">
-
 	<div th:object="${detail}" class="deatilContainer">
+
 		<div id="productDetailpageContainer mt-5">
 			<div class="row productDetailContainer">
 				<form id="dataForm" name="dataForm">
-					<input type="hidden" name="productID" th:field="*{productID}"/>
+					<input type="hidden" name="productID" th:field="*{productID}" />
 					<input type="hidden" th:field="*{productName}" th:value="${productName}"/>
 					<input type="hidden" th:field="*{productPrice}" th:value="${productPrice}"/>
 					<input type="hidden" th:field="*{postPrice}" th:value="${postPrice}"/>
 				</form>
+
 
 				<div>
 					<div class="text-start detail-left">
@@ -77,11 +26,12 @@
 						<span class="category-link"> > </span>
 						<a class="category-link" href="/" th:text="${detail.category.categoryName}" th:href="@{'/?category=' + ${detail.category.categoryID}}"> </a>
 					</div>
+
 				<div class="detail-right" th:if="${currentUserID != null and detail.user.userID == currentUserID}">
 					<ul>
 						<li class="nav-item dropdown option">
-							<a class="nav-link dropdown-toggle" id="detail-option" href="#"
-							   data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
+						<a class="nav-link dropdown-toggle" id="detail-option" href="#"
+							data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
 							<ul class="dropdown-menu dropMenu">
 								<li><a class="dropdown-item" id="productUpdateFormBtn">수정</a></li>
 								<li><a class="dropdown-item" id="productDeleteBtn">삭제</a></li>
@@ -89,9 +39,9 @@
 						</li>
 					</ul>
 				</div>
-				</div>
 
-				<!-- 상품 사진, 이름, 가격 -->
+
+				<!-- 상품 사진, 이름, 가격,  -->
 				<div class="col-md-6">
 					<div class="product-image">
 						<img th:if="${not #lists.isEmpty(detail.productImages)}"
@@ -100,24 +50,34 @@
 						<div class="sold-out-overlay" th:if="${detail.productStatus == '판매 완료'}">
 							판매 완료
 						</div>
+
 					</div>
 				</div>
+			
+			
+			<div class="col-md-6">
+				<div class="product-info">
+					<div class="product-subinfo d-flex justify-content-end">
+						<label>조회수 </label>
+						<p class="product" th:text=" *{productVisitCount}"></p>
+						<!-- 배송비 단위 표시 추가 -->
+					</div>
+					<h1 class="product-name" th:text="*{productName}"></h1>
+					<p class="product-price" th:text="'₩ ' + *{productPrice}"></p>
+					<!-- 가격 단위 표시 추가 -->
+					<div class="product-subinfo">
+						<label>배송비 </label>
+						<p class="postPrice" th:text="'₩ ' + *{postPrice}"></p>
+						<!-- 배송비 단위 표시 추가 -->
+					</div>
 
-				<div class="col-md-6">
-					<div class="product-info">
-						<div class="product-subinfo d-flex justify-content-end">
-							<label>조회수</label>
-							<p class="product" th:text=" *{productVisitCount}"></p>
-						</div>
-						<h1 class="product-name" th:text="*{productName}"></h1>
-						<p class="product-price" th:text="*{productPrice} + ' 원'"></p>
-						<hr />
-						<div class="product-subinfo flex-column">
-							<label>배송비 </label>
-							<p class="postPrice text-start" th:text="*{postPrice} + ' 원'"></p>
-						</div>
+					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
+					<div class="actions">
 
-						<span class="text-end reportBtn"><a href="#">신고하기</a></span>
+						<button class="btn btn-dark">찜하기</button>
+						<button class="btn btn-dark">채팅하기</button>
+						<button class="btn btn-dark buyBtn">구매하기</button>
+
 
 						<div class="actions">
 							<button id="WishBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">찜하기</button>
@@ -128,6 +88,8 @@
 				</div>
 			</div>
 		</div>
+
+</div>                         
 
 		<!-- 판매자 정보  -->
 		<div class="seller-container">
@@ -155,28 +117,28 @@
 			</div>
 		</div>
 
-	<div class="product-script-container">
-		<div th:if="${#lists.size(detail.productImages)==2}" class="image-box">
-			<img
-					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
-					class="img-fluid productListImage" />
-			<img
+		<div class="product-script-container">
+			<div th:if="${#lists.size(detail.productImages)==2}" class="image-box">
+				<img
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
+						class="img-fluid productListImage" />
+				<img
 					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
 					class="img-fluid productListImage" />
-		</div>
-		<div th:if="${#lists.size(detail.productImages)==3}" class="image-box">
-			<img
-					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
-					class="img-fluid productListImage" />
-			<img
+			</div>
+			<div th:if="${#lists.size(detail.productImages)==3}" class="image-box">
+				<img
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
+						class="img-fluid productListImage" />
+				<img
 					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
 					class="img-fluid productListImage" />
-			<img
+				<img
 					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[2].filename}}"
 					class="img-fluid productListImage" />
-		</div>
-		<div class="product-script" th:text="*{productDescription}">상품
-			설명이 들어가는 영역</div>
+			</div>
+			<div class="product-script" th:text="*{productDescription}">상품
+				설명이 들어가는 영역</div>
 
 	</div>
 	</div>
@@ -198,33 +160,9 @@
 			<button type="button" id="reportCancelBtn" class="btn btn-secondary">취소</button>
 		</div>
 	</div>
-
 </th:block>
 
-<!-- JavaScript 부분 -->
 <th:block layout:fragment="script">
 	<script src="/js/product/productDetail.js"></script>
-	<script>
-		$(document).ready(function() {
-			// 신고하기 버튼 클릭 시 팝업을 보여줌
-			$('.reportBtn a').on('click', function(event) {
-				event.preventDefault();  // 기본 동작 방지
-				console.log("신고하기 버튼이 클릭되었습니다.");
-				$('#reportPopup').css('display', 'flex');  // 팝업을 보이게 함
-			});
-
-			// 팝업 내 확인 버튼 클릭 시 팝업 닫기
-			$('#reportConfirmBtn').on('click', function() {
-				console.log("팝업에서 확인 버튼이 클릭되었습니다.");
-				$('#reportPopup').css('display', 'none');  // 팝업을 다시 숨김
-				alert('신고해주신 내용은 검토한 뒤에 조치하겠습니다.');
-			});
-
-			$('#reportCancelBtn').on('click', function (){
-				$('#reportPopup').css('display', 'none');
-			});
-		});
-	</script>
 </th:block>
-
 </html>

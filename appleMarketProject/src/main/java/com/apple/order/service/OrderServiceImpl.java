@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.order.domain.Order;
 import com.apple.order.repository.OrderRepository;
@@ -21,9 +22,9 @@ public class OrderServiceImpl implements OrderService {
 	private final ProductRepository productRepository;
 
 	@Override
-	public List<Order> orderList(Long userNo) {
+	public List<Order> orderList() {
 		List<Order> orderList = null;
-		orderList = (List<Order>)orderRepository.orderList(userNo);
+		orderList = (List<Order>)orderRepository.orderList();
 		return orderList;
 	}
 	

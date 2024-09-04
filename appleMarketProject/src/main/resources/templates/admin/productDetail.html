@@ -17,21 +17,12 @@
   			<a th:text="'제목 : ' + *{productName}">제목</a>
   			<a th:text="'가격 : ' + *{productPrice}">제목</a>
   			<a th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</a>
-  			<a th:text="'내용 : ' + *{productDescription}">제목</a>
-					<select>
-						<th:block id="changeCategory" th:each = "category : ${categoryList} " th:object ="${category}">
-							<option th:value="*{categoryID}" th:text ="*{categoryName}"></option>
-						</th:block>
-					</select>
-				<button id="categoryChange">
-				변경
-				</button>
-									
+  			<a th:text="'카테고리 : ' + *{category.categoryName}">제목</a>
   		</div>
 		<div th:each ="report : ${reportDetail}" th:objcet = "${report}">
 			<a th:text="'신고내용' + *{report.reportContent}"></a>
 			<a th:text="'신고인' + *{report.User.userID}"></a>
-			<a th:text="'신고날짜' + *{#temporals.format(report.productReportRegDate, 'yy년MM월dd일')}"></a>
+			<a th:text="'신고날짜' + *{report.productReportRegDate}"></a>
 		</div>
   		<br>
   		<div>
@@ -46,7 +37,7 @@
     <th:block layout:fragment="script">
         	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="/js/admin/common.js"></script>
-	<script src="/js/admin/productDetail.js"></script>	
+	<script src="/js/admin/category.js"></script>	
     </th:block>
 </body>
 
