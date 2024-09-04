@@ -72,22 +72,31 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => console.error('Error loading comments:', error));
     }
 
-    // 댓글 삭제 함수
-    function deleteComment(commentID, communityPostID) {
-        fetch(`/comments/delete/${commentID}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.text())
-        .then(result => {
-            if (result === 'SUCCESS') {
-                alert('댓글이 삭제되었습니다.');
-                loadComments(communityPostID);
-            } else {
-                alert('댓글 삭제에 실패했습니다.');
-            }
-        })
-        .catch(error => console.error('Error deleting comment:', error));
-    }
+	// 댓글 삭제 버튼 이벤트 리스너 설정
+   	document.querySelectorAll('.delete-comment').forEach(button => {
+       button.addEventListener('click', (event) => {
+           event.preventDefault(); // 기본 이벤트 취소
+           const commentId = button.getAttribute('data-id');
+           
+           // AJAX로 댓글 삭제 요청 (서버로 삭제 요청)
+           fetch(`/comments/${commentId}/delete`, {
+               method: 'DELETE',
+               headers: {
+                   'Content-Type': 'application/json'
+               }
+           })
+           .then(response => {
+               if (response.ok) {
+                   button.closest('.flex').remove(); // 성공 시 부모 댓글 요소 삭제
+               } else {
+                   console.error('댓글 삭제 실패');
+               }
+           })
+           .catch(error => {
+               console.error('에러 발생:', error);
+           });
+       });
+   });
 
     // 댓글 수정 함수
     function updateComment(commentID, communityPostID) {

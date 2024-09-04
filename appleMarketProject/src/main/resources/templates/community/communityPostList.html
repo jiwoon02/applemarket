@@ -3,33 +3,34 @@
       layout:decorate="~{template/client/layout/layout}">
 <head>
     <th:block layout:fragment="css">
-        <link rel="stylesheet" href="/css/community/communityPostList.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Noto Sans KR', sans-serif;
+            }
+        </style>
     </th:block>
 </head>
 <th:block layout:fragment="content">
-    <div class="createbtn">
-        <button type="button" class="btn-primary" id="createPostBtn">글쓰기</button>
-    </div>
+    <div class="table-container bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">우리동네 커뮤니티 게시판</h1>
+        
+        <div class="createbtn text-right mb-4">
+            <button type="button" class="btn-primary bg-blue-500 text-white py-2 px-4 rounded-lg">글쓰기</button>
+        </div>
 
-    <div class="tableheight">
-        <table class="table table-hover">
-            <thead>
-                <tr class="text-center">
-                    <th class="md-2">순번</th>
-                    <th class="md-4">제목</th>
-                    <th class="md-2">작성자</th>
-                    <th class="md-3">등록일</th>
-                    <th class="md-1">조회수</th>
-                </tr>
-            </thead>
-            <tbody class="list">
-                <!-- 게시글 목록이 여기에 추가됩니다. -->
-            </tbody>
-        </table>
-    </div>
+        <div class="tableheight">
+            <table class="table table-hover bg-white border-collapse rounded-lg" style="width: 800px;">
+			    <tbody class="list">
+			        <!-- 게시글 목록이 여기에 추가됩니다. -->
+			    </tbody>
+			</table>
+        </div>
 
-    <!-- 감시 요소 -->
-    <p id="sentinel"></p>
+        <!-- 감시 요소 -->
+        <p id="sentinel"></p>
+    </div>
 </th:block>
 <th:block layout:fragment="script">
     <script src="/js/community/communityPostList.js"></script>

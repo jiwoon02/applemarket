@@ -12,4 +12,9 @@ document.addEventListener("DOMContentLoaded", function() {
             window.location.href = "/community/posts/" + postId + "/delete";
         }
     });
+
+    // 신고 버튼 클릭 이벤트 처리
+    document.getElementById("reportBtn").addEventListener("click", function() {
+        console.log("신고가 완료되었습니다");
+    });
 });

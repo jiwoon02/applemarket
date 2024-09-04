@@ -1,12 +1,13 @@
 package com.apple.client.community.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apple.client.communityComment.service.CommunityCommentService;
 import com.apple.client.community.domain.CommunityPost;
@@ -39,13 +41,20 @@ public class CommunityPostController {
         return "community/communityPostList";
     }
 
-    // 무한 스크롤용 게시글 리스트 API
+ // 무한 스크롤로 게시글 데이터를 제공하는 API
     @GetMapping("/api/communityPostList")
-    public ResponseEntity<Page<CommunityPost>> getAllCommunityPostsApi(@RequestParam(defaultValue = "0") int page, 
-                                                                       @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("communityPostID").ascending());
+    @ResponseBody
+    public Map<String, Object> getCommunityPosts(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("communityPostID").descending());
         Page<CommunityPost> posts = communityService.findAllPosts(pageable);
-        return ResponseEntity.ok(posts);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", posts.getContent());
+        response.put("totalPages", posts.getTotalPages());
+        response.put("currentPage", posts.getNumber());
+
+        return response;
     }
 
     // 게시글 상세 페이지로 이동 및 조회수 증가

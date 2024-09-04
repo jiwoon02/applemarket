@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="comment">
-    <!-- 댓글 입력 폼 -->
-    <div class="mt-2">
-        <form id="commentForm" name="commentForm">
-            <div class="mb-3">                
-                <label for="userID" class="col-formlabel">작성자</label>
-                <div class="sm-3">
-                    <input type="text" name="userID" id="userID" maxlength="5" class="form-control" />
-                </div>                
-                <button type="button" id="commentInsertBtn" class="btn-secondary">등록</button>
-            </div>
-            <div class="mb-3">
-                <label for="commentContent" class="col-formlabel">댓글내용</label>
-                <div class="sm-11">
-                    <textarea name="commentContent" id="commentContent" class="formcontrol" rows="3"></textarea>
+    <body class="bg-100 p-6">
+        <div class="comment-container max-w-2xl mx-auto bg-white p-4 rounded-lg shadow-md">
+            <!-- 댓글 입력 섹션 -->
+            <div class="flex items-start space-x-4 mb-6">
+                <div class="w-15 h-15 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span class="text-gray-500">사용자</span>
                 </div>
-            </div>                    
-        </form>
-    </div>
-    
-    <!-- 댓글 리스트 -->
-    <div id="commentList">
-        <!-- 댓글 리스트 반복 처리 -->
-        <div th:each="comment : ${comments}" class="card mb-2">
-            <div class="cardheader">
-                <span class="name" th:text="${comment.userNo.userNo}"></span>
-                <span class="date" th:text="${#temporals.format(comment.commentRegDate, 'yyyy-MM-dd HH:mm')}"></span>
-                <button type="button" data-btn="upBtn" class="btn-secondary btn-sm">수정하기</button>
-                <button type="button" data-btn="delBtn" class="btn-secondary btn-sm">삭제하기</button>
+                <div class="flex-1">
+                    <form id="commentForm" name="commentForm" th:action="@{/comments}" method="post">
+                        <div class="mb-4">
+                            <!-- 댓글 입력창의 가로 및 세로 크기 수정 -->
+                            <textarea name="commentContent" id="commentContent" class="comment-textarea" placeholder="내용을 입력해 주세요"></textarea>
+                        </div>
+                        <!-- 버튼을 오른쪽 아래에 고정 -->
+                        <div class="fixed-buttons flex justify-end">
+                            <button type="submit" id="commentInsertBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">등록</button>
+                            <button type="reset" class="ml-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">취소</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="cardbody">
-                <p class="cardtext" th:text="${comment.commentContent}"></p>
+
+            <!-- 댓글 리스트 섹션 -->
+            <div id="commentList" class="comment-list">
+                <!-- 댓글이 있을 경우 반복 처리 -->
+                <div th:each="comment : ${comments}" class="flex items-start space-x-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                        <span class="text-gray-500" th:text="${comment.userNo.userName}"></span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-gray-500 text-sm" th:text="${#temporals.format(comment.commentRegDate, 'yyyy-MM-dd HH:mm')}"></span>
+                                </div>
+                                <button class="p-2 rounded-full hover:bg-gray-200 delete-comment" th:data-id="${comment.commentID}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="mt-2" th:text="${comment.commentContent}"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </body>
 </th:block>
 </html>

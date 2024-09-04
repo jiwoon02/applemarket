@@ -5,17 +5,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const postList = document.querySelector('.list'); // 게시글 리스트 영역
 
     // 글쓰기 버튼 클릭 이벤트 처리
-    document.getElementById("createPostBtn").addEventListener("click", function() {
-        window.location.href = "/community/communityInsertForm";
-    });
-
-    // 게시글 제목 클릭 이벤트 처리
-    document.querySelectorAll(".goDetail").forEach(function(element) {
-        element.addEventListener("click", function() {
-            var postId = this.getAttribute("data-post-id");
-            window.location.href = "/community/communityPostDetail/" + postId;
+    const createPostBtn = document.querySelector(".btn-primary");
+    if (createPostBtn) {
+        createPostBtn.addEventListener("click", function() {
+            window.location.href = "/community/communityInsertForm";
         });
-    });
+    }
 
     // IntersectionObserver 설정
     const io = new IntersectionObserver((entries, observer) => {
@@ -29,12 +24,15 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // 감시 시작
-    io.observe(document.getElementById('sentinel'));
+    const sentinel = document.getElementById('sentinel');
+    if (sentinel) {
+        io.observe(sentinel);
+    }
 
     // 게시글 리스트 로드 함수
     function loadPosts(page, size) {
         isLoading = true;
-        
+
         fetch(`/community/api/communityPostList?page=${page}&size=${size}`)
             .then(response => {
                 if (!response.ok) {
@@ -45,26 +43,32 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 const posts = data.content;
                 if (posts.length === 0) {
-                    io.unobserve(document.getElementById('sentinel')); // 더 이상 로드할 데이터가 없으면 감시 중지
+                    io.unobserve(sentinel); // 더 이상 로드할 데이터가 없으면 감시 중지
                     return;
                 }
 
                 posts.forEach(post => {
-                    const tr = document.createElement('tr');
-                    tr.classList.add('text-center');
-                    tr.innerHTML = `
-                        <td>${post.communityPostID}</td>
-                        <td>
-                            <span class="goDetail" data-post-id="${post.communityPostID}">${post.communityTitle}</span>
-                        </td>
-                        <td>${post.userNo}</td>
-                        <td>${new Date(post.communityRegDate).toLocaleDateString()}</td>
-                        <td>${post.communityCount}</td>
+                    const row = document.createElement('div');
+                    row.classList.add('flex', 'items-center', 'border', 'p-4', 'rounded-lg', 'mb-2');
+                    row.innerHTML = `
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-700 font-bold">
+                                ${post.userNo.userName}
+                            </div>
+                        </div>
+                        <div class="ml-4 flex-grow">
+                            <div class="text-lg font-semibold goDetail" data-post-id="${post.communityPostID}">
+                                ${post.communityTitle}
+                            </div>
+                            <div class="text-gray-500">
+                                ${new Date(post.communityRegDate).toLocaleDateString()} / 조회수: ${post.communityCount}
+                            </div>
+                        </div>
                     `;
-                    postList.appendChild(tr);
+                    postList.appendChild(row);
 
                     // 새로 추가된 게시글에 클릭 이벤트 추가
-                    tr.querySelector(".goDetail").addEventListener("click", function() {
+                    row.querySelector(".goDetail").addEventListener("click", function() {
                         var postId = this.getAttribute("data-post-id");
                         window.location.href = "/community/communityPostDetail/" + postId;
                     });
