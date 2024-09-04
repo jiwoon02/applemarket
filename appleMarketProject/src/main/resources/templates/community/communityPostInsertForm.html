@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{template/client/layout/layout}">
+    
+    <th:block layout:fragment="css">
+    	<link rel="stylesheet" href="/css/community/communityPostInsert.css" />
+    </th:block>
+    <th:block layout:fragment="content">
+        <div class="text-center"><h3>커뮤니티 게시글 입력</h3></div>
+        
+        <div class="container">
+            <form id="communityInsertForm" th:object="${communityPost}" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <label class="colformlabel">제목</label>
+                    <div class="col-sm">
+                        <input type="text" class="formcontrol" th:field="*{communityTitle}" />
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <label class="sm-2 colformlabel">내용</label>
+                    <div class="col-sm">
+                        <textarea class="formcontrol boardtextarea" rows="8" th:field="*{communityContent}"></textarea>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="sm-2 colformlabel">이미지</label>
+                    <div class="col-sm">
+                        <input type="file" class="formcontrol" th:field="*{communityImage}" />
+                    </div>
+                </div>                
+            </form>
+            
+            <div class="textend">
+                <input type="button" value="저장" id="communityInsertBtn" class="btn-primary btn-sm" />
+                <input type="button" value="취소" id="communityCancelBtn" class="btn-primary btn-sm" />
+                <input type="button" value="목록" id="communityListBtn" class="btn-primary btn-sm" />
+            </div>
+        </div>                        
+    </th:block>        
+    
+    <th:block layout:fragment="script">
+        <script src="/js/community/communityInsertForm.js"></script>
+    </th:block>
+</html>
