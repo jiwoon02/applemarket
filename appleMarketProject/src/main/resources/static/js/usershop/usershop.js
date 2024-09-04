@@ -10,7 +10,7 @@ $(function() {
     $('.heightImg').click(function() {
         var commentSelect = $('.divCommentSelect');
         if (commentSelect.css('height') == '200px') {
-            commentSelect.css('height', '315px');  // 높이를 100%로 늘림
+            commentSelect.css('height', '330px');  // 높이를 100%로 늘림
             $(this).attr('src', '../images/usershop/heightImg2.png');  // 이미지 변경
         } else {
             commentSelect.css('height', '200px');  // 높이를 40%로 줄임
@@ -26,17 +26,6 @@ $(function() {
 		$(".divContent").css("display", "block");
 		$(".divModifyContent").css("display", "none");
 		$(".divModifyBtn").css("display", "none");
-		
-		/*console.log($(".divModifyContent").html());
-		$(".introText").val($(".divModifyContent").html());*/
-		
-		/*var currentNickname = $(".divShopName2").text();
-		$(".divShopName2").text("");  // 텍스트를 지우기
-		$(".divShopName2").append(
-	        '<form name="nickname" class="nicknameForm" id="nickname">' +
-	        '<input type="text" class="nicknameInput" name="shopName" value="' + currentNickname + '" />' +
-	        '</form>'
-	    );*/
 		
 		$(".divShopName2").css("display", "none");
 		$("#nickname").css("display", "block");
@@ -115,17 +104,29 @@ $(function() {
 		$(".reviewStar5").attr("src", "../images/usershop/star.png");
 	}
 	
-	/*document.querySelectorAll('.profileImg').forEach(function(imgElement) {
-	    const userNo = imgElement.getAttribute('data-userNo');
-	    
-	    fetch(`/usershop/getShopImg/${userNo}`)
-	        .then(response => response.text())
-	        .then(shopImgName => {
-	            imgElement.src = `/usershop/view/${shopImgName}`;
-	        })
-	        .catch(error => console.error('Error fetching shop image:', error));
-	});*/
+	// 정렬 기능 추가
+    $('#sortNewest').on('click', function() {
+        sortItems('newest');
+    });
 
+    $('#sortLowestPrice').on('click', function() {
+        sortItems('lowestPrice');
+    });
+
+    $('#sortHighestPrice').on('click', function() {
+        sortItems('highestPrice');
+    });
+	
+	$(".divItems").on("click", ".divItem", function() {
+	    var productId = $(this).data("product-id");
+	    location.href = "/product/" + productId;
+	});
+	
+	/*$(".profileImg2").on("click", function() {
+		
+		location.href="/usershop/list" + 
+	})*/
+	
 });
 
 function showItems() {
@@ -171,4 +172,27 @@ function chkFile(item) {
 	} else {
 		return true;
 	}
+}
+
+function sortItems(criteria) {
+    let items = $('.divItem').get();  // 모든 상품 아이템을 가져옴
+
+    items.sort(function(a, b) {
+        let aValue, bValue;
+
+        if (criteria === 'newest') {
+            aValue = new Date($(a).find('.itemTime').text());
+            bValue = new Date($(b).find('.itemTime').text());
+            return bValue - aValue;  // 최신순 (내림차순)
+        } else if (criteria === 'lowestPrice') {
+            aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            return aValue - bValue;  // 저가순 (오름차순)
+        } else if (criteria === 'highestPrice') {
+            aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            return bValue - aValue;  // 고가순 (내림차순)
+        }
+    });
+	$('.divItems').html(items);
 }

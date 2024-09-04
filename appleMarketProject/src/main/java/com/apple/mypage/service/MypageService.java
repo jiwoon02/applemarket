@@ -26,7 +26,7 @@ public interface MypageService {
     
     public Product getItemByProductId(Long productID);
     
-    public String getUserNicknameByShopId(String shopId);
+    public String getUserNicknameByShopId(Long shopId);
     
     public void addReview(MypageReviewDTO reviewDtom);
     

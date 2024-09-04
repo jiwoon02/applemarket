@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class MypageReviewDTO {
 	private Long userNo;
-    private String shopId;
+    private Long shopId;
     private long starRating;
     private String reviewContent;
     private long productID;

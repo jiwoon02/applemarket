@@ -2,12 +2,14 @@ package com.apple.usershop.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.common.util.UsershopImgUtil;
+import com.apple.jwt.JwtUtil;
 import com.apple.product.domain.Product;
+import com.apple.user.domain.User;
+import com.apple.user.repository.UserRepository;
 import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
 import com.apple.usershop.service.UsershopService;
@@ -26,19 +31,39 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Controller
-@RequestMapping("/usershop")
+@RequestMapping("/usershop/*")
 @RequiredArgsConstructor
 public class UsershopController {
 
     @Setter(onMethod_ = @Autowired)
     private UsershopService usershopService;
     
+    @Setter(onMethod_ = @Autowired)
+    private UserRepository userRepository;
+    
     private final UsershopImgUtil fileUtil;  // 이미지 유틸리티 주입
+    
+    private final JwtUtil jwtUtil;  // JwtUtil을 주입
 
-    // 특정 userNo에 대한 상점 페이지를 가져옴
-    @GetMapping("/{userNo}")
-    public String usershop(@PathVariable Long userNo, Model model) {
-        if (userNo != null) {
+    // User 객체를 가져오는 메서드
+    public User getUser(@CookieValue(value="JWT", required=false) String token) {
+        if (token != null) {
+            String userID = jwtUtil.getUserID(token);
+            Optional<User> userOptional = userRepository.findByUserID(userID);
+        
+            return userOptional.orElse(null);
+        }
+        return null;
+    }
+
+    // 특정 사용자에 대한 상점 페이지를 가져옴
+    @GetMapping("/usershop")
+    public String usershop(@CookieValue(value="JWT", required=false) String token, Model model) {
+        User user = getUser(token);
+        
+        if (user != null) {
+            Long userNo = user.getUserNo();
+            
             // Usershop 정보 설정
             Usershop usershop = usershopService.findByUserNo(userNo);
             model.addAttribute("usershop", usershop);
@@ -80,6 +105,8 @@ public class UsershopController {
             model.addAttribute("sumSelectReview3", sumSelectReview3);
             model.addAttribute("sumSelectReview4", sumSelectReview4);
             model.addAttribute("sumSelectReview5", sumSelectReview5);
+        } else {
+        	return "/user/loginForm";
         }
 
         return "usershop/usershop";
@@ -87,41 +114,50 @@ public class UsershopController {
 
     // 상점 정보 업데이트
     @PostMapping("/usershopUpdate")
-    public String userShopUpdate(@RequestParam("userNo") Long userNo, 
+    public String userShopUpdate(@CookieValue(value="JWT", required=false) String token, 
                                  @RequestParam("introText") String introText, 
                                  @RequestParam("newNickname") String newNickname) {
 
-        Usershop usershop = usershopService.findByUserNo(userNo);
+        User user = getUser(token);
+        if (user != null) {
+            Long userNo = user.getUserNo();
+            Usershop usershop = usershopService.findByUserNo(userNo);
 
-        if (usershop != null) {
-            usershopService.updateShopIntroduce(usershop.getShopId(), introText);
-            usershopService.updateUserNickname(userNo, newNickname);
-            return "redirect:/usershop/" + userNo;  // 업데이트 후 다시 페이지로 리다이렉트
-        } else {
-            return "redirect:/errorPage";  // 에러 페이지로 리다이렉트
+            if (usershop != null) {
+                usershopService.updateShopIntroduce(usershop.getShopId(), introText);
+                usershopService.updateUserNickname(userNo, newNickname);
+                return "redirect:/usershop/usershop";  // 업데이트 후 다시 페이지로 리다이렉트
+            }
         }
+        return "redirect:/errorPage";  // 에러 페이지로 리다이렉트
     }
 
     // 상점 이미지 업데이트
     @PostMapping("/shopImgUpdate")
-    public String shopImgUpdate(@RequestParam("file") MultipartFile file, @RequestParam("shopId") String shopId) {
-        Usershop usershop = usershopService.findByShopId(shopId);
+    public String shopImgUpdate(@CookieValue(value="JWT", required=false) String token,
+                                @RequestParam("file") MultipartFile file) {
+        User user = getUser(token);
+        if (user != null) {
+            Long userNo = user.getUserNo();
+            Usershop usershop = usershopService.findByUserNo(userNo);
 
-        if (usershop != null && !file.isEmpty()) {
-            // 파일 저장 및 상점 이미지 업데이트
-            String uploadFileName = fileUtil.saveFile(file);
-            usershop.setShopImgName(uploadFileName);
-            usershopService.updateUsershop(usershop);  // 변경 사항 저장
+            if (usershop != null && !file.isEmpty()) {
+                // 파일 저장 및 상점 이미지 업데이트
+                String uploadFileName = fileUtil.saveFile(file);
+                usershop.setShopImgName(uploadFileName);
+                usershopService.updateUsershop(usershop);  // 변경 사항 저장
+            }
+
+            return "redirect:/usershop/usershop";
         }
-
-        return "redirect:/usershop/" + usershop.getUser().getUserNo();
+        return "redirect:/errorPage";  // 에러 페이지로 리다이렉트
     }
 
     // 특정 상점에 대한 리뷰 및 기타 정보를 조회
     @GetMapping("/list{userNo}")
     public String usershopList(@PathVariable Long userNo, Model model) {
         if (userNo != null) {
-        	// Usershop 정보 설정
+            // Usershop 정보 설정
             Usershop usershop = usershopService.findByUserNo(userNo);
             model.addAttribute("usershop", usershop);
             
@@ -162,13 +198,15 @@ public class UsershopController {
             model.addAttribute("sumSelectReview3", sumSelectReview3);
             model.addAttribute("sumSelectReview4", sumSelectReview4);
             model.addAttribute("sumSelectReview5", sumSelectReview5);
+            return "usershop/usershopList";
         }
 
-        // "client/usershop/usershopList"를 반환하여 올바른 뷰를 렌더링
-        return "usershop/usershopList";
+        else {
+        	return "/user/loginForm";
+        }
     }
 
-    
+
     // 이미지 파일을 보여줌
     @ResponseBody
     @GetMapping("/view/{fileName}")
@@ -176,3 +214,4 @@ public class UsershopController {
         return fileUtil.getFile(fileName);
     }
 }
+

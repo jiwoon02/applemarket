@@ -120,14 +120,14 @@
 					<div class="itemTitle">
 
 						<div class="itemSort">
-							<button class="sortBtn">최신순</button>
-							<button class="sortBtn">저가순</button>
-							<button class="sortBtn">고가순</button>
+							<button id="sortNewest" class="sortBtn">최신순</button>
+							<button id="sortLowestPrice" class="sortBtn">저가순</button>
+							<button id="sortHighestPrice" class="sortBtn">고가순</button>
 						</div>
 					</div>
 				</div>
 				<div class="divItems">
-					<div th:each="item : ${usershopItemList}" class="divItem">
+					<div th:each="item : ${usershopItemList}" th:data-product-id="${item.productID}" class="divItem">
 						<div class="divItemImg">
 							<!-- 여기서 productImageId를 사용 
 							<img th:src="@{'../images/usershop/' + ${item.productImageId}}"
@@ -140,6 +140,7 @@
 								<div class="itemTime"
 									th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></div>
 							</div>
+							<!-- <input type="hidden" id="productId" th:value="${item.productID}" /> -->
 						</div>
 					</div>
 				</div>
@@ -212,7 +213,7 @@
 							<div class="divUserOne">
 								<img
 									th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}"
-									class="profileImg">
+									class="profileImg2">
 
 								<div class="DivUserInfo">
 									<div class="userInfo">
