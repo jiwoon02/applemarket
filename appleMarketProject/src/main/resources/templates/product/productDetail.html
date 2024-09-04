@@ -70,23 +70,24 @@
 				</div>
 			</div>
 		</div>
-</div>
-<!-- 판매자 정보  -->
-<div class="seller-container">
-    <div class="seller-info mt-5 d-flex align-items-center">
-        <img src="https://via.placeholder.com/50" alt="Seller Image" class="rounded-circle">
-        <div class="ms-3 seller-subinfo">
-            <p class="seller-name mb-0">
-                <a th:href="@{'/usershop/list' + ${detail.user.userNo}}" th:text="*{user.userNickname}">판매자 이름</a>
-            </p>
-            <th:block th:if="${detail.user != null}">
-                <p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
-                <p th:if="${detail.user.location == null}" class="mb-0">동네를 설정해주세요.</p>
-            </th:block>
-        </div>
-    </div>
-</div>
-                         
+
+</div>                         
+
+		<!-- 판매자 정보  -->
+		<div class="seller-container">
+			<div class="seller-info mt-5 d-flex align-items-center">
+				<img src="/images/shop_icon.png" alt="Seller Image" class="rounded-circle">
+				<div class="ms-3 seller-subinfo">
+					<p class="seller-name mb-0">
+						<a href="#" th:text="*{user.userNickname}">판매자 이름</a>
+					</p>
+					<th:block th:if="${detail.user != null}">
+						<p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
+						<p th:if="${detail.user.location == null}" class="mb-0">동네를 설정해주세요.</p>
+					</th:block>
+				</div>
+			</div>
+		</div>
 
 		<div class="product-script-container">
 			<div th:if="${#lists.size(detail.productImages)==2}" class="image-box">
@@ -111,6 +112,24 @@
 			<div class="product-script" th:text="*{productDescription}">상품
 				설명이 들어가는 영역</div>
 
+	</div>
+	</div>
+	</div>
+	</div>
+	<!-- 신고하기 팝업 -->
+	<div id="reportPopup" class="popup">
+		<div class="popup-content">
+			<h2>게시글을 신고하는 이유를 선택해주세요.</h2>
+			<select class="s-form form-select" size="6">
+				<option>거래 금지 물품이에요</option>
+				<option>중고거래 게시글이 아니에요</option>
+				<option>전문 판매업자 같아요</option>
+				<option>거래 중 분쟁이 발생했어요</option>
+				<option>사기인 것 같아요</option>
+				<option>기타 부적절한 행위가 있어요</option>
+			</select>
+			<button id="reportConfirmBtn" class="btn btn-primary">확인</button>
+			<button type="button" id="reportCancelBtn" class="btn btn-secondary">취소</button>
 		</div>
 	</div>
 </th:block>
