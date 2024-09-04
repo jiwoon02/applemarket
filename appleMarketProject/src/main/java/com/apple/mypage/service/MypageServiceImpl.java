@@ -183,12 +183,12 @@ public class MypageServiceImpl implements MypageService {
         Withdraw withdraw = new Withdraw();
         withdraw.setUserNo(withdrawDTO.getUserNo());
         withdraw.setWithdrawDate(new Date());
-        withdraw.setReason(withdrawDTO.getReason());  // 실제로는 DTO로부터 이유를 받아올 수 있음
+        withdraw.setReason(withdrawDTO.getReason());
 
         withdrawRepository.save(withdraw);
         
-        // 회원 삭제
-        userRepository.deleteById(withdrawDTO.getUserNo());
+        // 회원 삭제: deleteByUserNo를 사용하여 삭제
+        userRepository.deleteByUserNo(withdrawDTO.getUserNo());
     }
 	
 	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
