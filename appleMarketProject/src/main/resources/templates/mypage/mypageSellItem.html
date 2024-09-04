@@ -11,7 +11,7 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-    <form id="deleteForm" method="post" th:action="@{/mypage/delete/sell{userNo}(userNo=${userNo})}">
+    <form id="deleteForm" method="post" > <!-- th:action="@{/mypage/delete/sell{userNo}(userNo=${userNo})}" -->
         <table class="tbl_mypage">
             <colgroup>
                 <col style="width:25%;">
@@ -31,17 +31,17 @@
                 <tr class="menuList">
                     <td>
                         <ul>
-                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">구매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
                         </ul>
                     </td>
                     <td>
@@ -98,13 +98,13 @@
                         <!-- <img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" alt="상품이미지" class="itemImg"> -->
                         <div th:text="${item.productName}" class="itemName">상품명</div>
                     </td>
-                    <td th:text="${item.productPrice}+'원'">17,000원</td>
+                    <td th:text="${item.productPrice}+'원'"></td>
                     <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}">상품 등록일</td>
-                    <td class="productState" th:text="${itemStatuses != null ? (itemStatuses[iterStat.index] == 'selling' ? '판매중' : '판매완료') : '알 수 없음'}">판매중</td>
+                    <td class="productState" th:text="${itemStatuses != null ? (itemStatuses[iterStat.index] == 'selling' ? '판매중' : '판매완료') : '알 수 없음'}"></td>
                 </tr>
                 
                 <tr th:each="item : ${items}" id="trHide" style="display:none;">
-                	<td><input type="hidden" id="userNoHide" th:value ="${userNo}" /></td>
+                	<!-- <td><input type="hidden" id="userNoHide" th:value ="${userNo}" /></td>  이거 뭐지?-->
                 </tr> 
           </tbody>
         <!-- 반복구문끝 -->

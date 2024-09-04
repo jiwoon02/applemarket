@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.mypage.domain.Test_order;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.repository.MypageRepository;
@@ -24,7 +26,10 @@ import lombok.Setter;
 
 @Service
 public class MypageServiceImpl implements MypageService {
-
+	
+	@Autowired
+	private JwtUtil jwtUtil;
+	
     @Setter(onMethod_ = @Autowired)
     private MypageRepository mypageRepository;
     
@@ -165,4 +170,21 @@ public class MypageServiceImpl implements MypageService {
             userRepository.save(existingUser); // 변경된 내용을 저장
         }
     }
+	
+	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+	@Override
+	public Long getUserNo(String token) {
+		String userID = jwtUtil.getUserID(token);
+		Optional<User> optionalUser = userRepository.findByUserID(userID);
+		
+		Long userNo;
+	 
+    	if(optionalUser.isPresent()) {
+    		userNo = optionalUser.get().getUserNo();
+    		return userNo;
+    	}
+    	else {
+    		return null;
+    	}
+	}
 }
