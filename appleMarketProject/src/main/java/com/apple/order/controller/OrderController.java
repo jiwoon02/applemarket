@@ -48,21 +48,24 @@ public class OrderController {
 	
 	//주문 목록 페이지
 	@GetMapping("/orderList")
-	public String orderList(Model model) {
-	    List<Order> orderList = orderService.orderList(); // 주문 목록 가져오기
-	    Map<String, String> imageFileNames = new HashMap<>();
-
-	    for (Order order : orderList) {
-	        Product product = order.getProduct();
-	        String imageFileName = product.getProductImages().isEmpty() ? "default.jpg" : product.getProductImages().get(0).getFilename();
-	        imageFileNames.put(order.getOrderID(), imageFileName);
-	    }
-
-	    model.addAttribute("orderList", orderList);
-	    model.addAttribute("imageFileNames", imageFileNames); // 각 주문의 상품 이미지 파일명 매핑
-
-	    return "order/orderList";
+	public String orderList(@CookieValue(value="JWT", required=false) String token, Model model) {
+		Long userNo = userService.getUserNo(token);		// 현재 로그인한 사용자의 userNo 가져오기
+		List<Order> orderList = orderService.orderList(userNo); // 주문 목록 가져오기
+		Map<String, String> imageFileNames = new HashMap<>();
+		
+		
+		for (Order order : orderList) {
+			Product product = order.getProduct();
+			String imageFileName = product.getProductImages().isEmpty() ? "default.jpg" : product.getProductImages().get(0).getFilename();
+			imageFileNames.put(order.getOrderID(), imageFileName);
+		}
+		
+		model.addAttribute("orderList", orderList);
+		model.addAttribute("imageFileNames", imageFileNames); // 각 주문의 상품 이미지 파일명 매핑
+		
+		return "order/orderList";
 	}
+
 
 	
 	//상세 페이지 -> 주문 페이지
