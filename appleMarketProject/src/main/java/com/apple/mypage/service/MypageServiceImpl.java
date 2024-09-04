@@ -113,7 +113,7 @@ public class MypageServiceImpl implements MypageService {
     
     // shopId로 userNickname을 가져오는 메서드 추가
     @Override
-    public String getUserNicknameByShopId(String shopId) {
+    public String getUserNicknameByShopId(Long shopId) {
         Usershop usershop = usershopRepository.findByShopId(shopId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid shop ID"));
 

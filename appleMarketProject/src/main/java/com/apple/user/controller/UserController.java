@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.apple.user.domain.User;
 import com.apple.user.service.UserService;
+import com.apple.usershop.service.UsershopService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,11 @@ public class UserController {
     private UserRepository userRepository;
 
     //로그인 폼
+	
+	@Autowired
+	private UsershopService usershopService;
+	
+	//로그인 폼
 	@GetMapping("/user/loginForm")
 	public String loginForm() {
 		return "user/loginForm";
@@ -66,6 +72,9 @@ public class UserController {
     @PostMapping("/user/join")
     public String createUser(@ModelAttribute User user) {
         userService.createUser(user);
+        
+        // Usershop 생성
+        usershopService.createUsershop(user);
         return "redirect:joinSuccess"; // 회원가입 성공알림페이지로 리다이렉트
     }
 

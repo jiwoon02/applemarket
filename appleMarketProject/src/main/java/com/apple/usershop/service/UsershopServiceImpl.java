@@ -3,6 +3,7 @@ package com.apple.usershop.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,7 @@ public class UsershopServiceImpl implements UsershopService {
 	}
 	
 	@Override
-    public List<ItemReview> usershopReviewListByShopId(String shopId) {
+    public List<ItemReview> usershopReviewListByShopId(Long shopId) {
         return usershopReviewRepository.findByUsershop_ShopId(shopId);
     }
 
@@ -87,7 +88,7 @@ public class UsershopServiceImpl implements UsershopService {
 
 	@Override
     @Transactional
-    public void updateShopIntroduce(String shopId, String shopIntroduce) {
+    public void updateShopIntroduce(Long shopId, String shopIntroduce) {
         Optional<Usershop> optionalUsershop = usershopRepository.findById(shopId);
         if (optionalUsershop.isPresent()) {
             Usershop usershop = optionalUsershop.get();
@@ -127,7 +128,7 @@ public class UsershopServiceImpl implements UsershopService {
 	}
 	
 	@Override
-	public Usershop findByShopId(String shopId) {
+	public Usershop findByShopId(Long shopId) {
 	    return usershopRepository.findById(shopId).orElse(null);
 	}
 
@@ -138,7 +139,7 @@ public class UsershopServiceImpl implements UsershopService {
 	}
 
 	@Override
-	public void shopVisitCount(String shopId) {
+	public void shopVisitCount(Long shopId) {
 		Optional<Usershop> optionalUsershop = usershopRepository.findById(shopId);
         if (optionalUsershop.isPresent()) {
             Usershop usershop = optionalUsershop.get();
@@ -151,33 +152,46 @@ public class UsershopServiceImpl implements UsershopService {
 	
 	// shopId를 기준으로 각 selectReview 항목의 합을 구하는 메서드
     @Override
-    public long sumSelectReview1ByShopId(String shopId) {
+    public long sumSelectReview1ByShopId(Long shopId) {
     	Long result = usershopReviewRepository.sumSelectReview1ByShopId(shopId);
         return result != null ? result : 0L;
     }
     
     @Override
-    public long sumSelectReview2ByShopId(String shopId) {
+    public long sumSelectReview2ByShopId(Long shopId) {
     	Long result = usershopReviewRepository.sumSelectReview2ByShopId(shopId);
         return result != null ? result : 0L;
     }
     
     @Override
-    public long sumSelectReview3ByShopId(String shopId) {
+    public long sumSelectReview3ByShopId(Long shopId) {
     	Long result = usershopReviewRepository.sumSelectReview3ByShopId(shopId);
         return result != null ? result : 0L;
     }
     
     @Override
-    public long sumSelectReview4ByShopId(String shopId) {
+    public long sumSelectReview4ByShopId(Long shopId) {
     	Long result = usershopReviewRepository.sumSelectReview4ByShopId(shopId);
         return result != null ? result : 0L;
     }
     
     @Override
-    public long sumSelectReview5ByShopId(String shopId) {
+    public long sumSelectReview5ByShopId(Long shopId) {
     	Long result = usershopReviewRepository.sumSelectReview5ByShopId(shopId);
         return result != null ? result : 0L;
+    }
+    
+    @Override
+	public Usershop createUsershop(User user) {
+        Usershop usershop = new Usershop();
+        usershop.setUser(user);
+        
+        // 기본값 설정
+        usershop.setShopVisitCount(0L);
+        usershop.setShopIntroduce("소개글을 입력해 주세요.");
+        
+        // Usershop 객체 저장
+        return usershopRepository.save(usershop);
     }
 }
 

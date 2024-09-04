@@ -7,7 +7,7 @@ import com.apple.user.domain.User;
 
 public interface UserService{
 
-	public void createUser(User user);
+	public User createUser(User user);
 
 	boolean isUserIDAvailable(String userID);
 

@@ -69,6 +69,12 @@ public class MypageController {
     	model.addAttribute("items", items);
 	 
 	 return "mypage/mypage"; // 반환할 뷰의 이름
+
+    @GetMapping("/mypage")
+    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
+        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
+        model.addAttribute("items", items);
+        return "mypage/mypage"; // 반환할 뷰의 이름
     }
     
     //판매상품
@@ -141,7 +147,7 @@ public class MypageController {
     // 리뷰 작성 페이지를 보여주는 메서드 추가
     @GetMapping("/addReview/{productName}/{shopId}/{productID}/{userNo}")
     public String showAddReviewForm(@PathVariable String productName, 
-                                    @PathVariable String shopId, 
+                                    @PathVariable Long shopId, 
                                     @PathVariable Long productID, 
                                     @PathVariable Long userNo,
                                     Model model) {

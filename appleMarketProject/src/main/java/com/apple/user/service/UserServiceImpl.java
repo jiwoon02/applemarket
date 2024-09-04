@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 import com.apple.jwt.JwtUtil;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
+import com.apple.usershop.domain.Usershop;
+import com.apple.usershop.service.UsershopService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JwtUtil jwtUtil;
   
+    @Autowired
+    private UsershopService usershopService;
+    
 //    @Override
 //    //로그인 아이디 찾아서 user객체 반환 없으면 null
 //    public Optional<User> findByUserID(String userID) {
@@ -64,9 +69,15 @@ public class UserServiceImpl implements UserService {
     
     //회원가입
     @Override
-    public void createUser(User user) {
+    public User createUser(User user) {
     	user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
-    	userRepository.save(user);
+    	User savedUser = userRepository.save(user);
+    	
+    	// Usershop 생성 및 연결
+        //Usershop usershop = usershopService.createUsershop(savedUser);
+        //savedUser.setUsershop(usershop);
+        
+        return savedUser;
     }
     
  // 주어진 ID가 사용 가능한지 확인하는 메서드
