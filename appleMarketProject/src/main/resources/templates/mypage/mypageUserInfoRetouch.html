@@ -30,17 +30,17 @@
                 <tr class="menuList">
                     <td>
                         <ul>
-                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">구매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
                         </ul>
                     </td>
                     <td>
@@ -53,7 +53,7 @@
         </table>
 
         <div class="divUserInfoRetouch">
-            <form th:action="@{/mypage/updateUserInfo/{userNo}(userNo=${user.userNo})}" th:object="${user}" method="post">
+            <form th:action="@{/mypage/updateUserInfo}" th:object="${user}" method="post">
                 <div class="divTitle"> 
                     나의 정보수정
                 </div>
