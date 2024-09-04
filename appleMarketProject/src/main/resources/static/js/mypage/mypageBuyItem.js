@@ -24,8 +24,8 @@ $(function() {
     $(".reviewBtn").on("click", function() {
         // 클릭한 버튼에 해당하는 상품의 데이터를 가져오기
         var row = $(this).closest("tr");
-        var productName = row.find(".itemName").data("product-name");
-        var shopId = row.find(".itemName").data("shop-id");
+        var productName = document.getElementById("itemName").textContent
+        var shopId = document.getElementById("shopId").textContent
         var productId = row.find(".buyChk").val();
         var userNo = $("#userNoHide").val(); // userNo를 서버에서 전달받아 설정
         
