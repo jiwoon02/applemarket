@@ -73,9 +73,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Map<Long, Long> productReportCountDetail(ProductReport productReport) {
+	public Map<Long, Long> productReportCount(ProductReport productReport) {
 		Map<Long, Long> productReportCount = null;
-		productReportCount = (Map<Long, Long>) productReportRepository.ReportConutDetail();
+		productReportCount = (Map<Long, Long>) productReportRepository.ReportConut();
 		return productReportCount;
 	}
 	
@@ -112,36 +112,6 @@ public class AdminServiceImpl implements AdminService {
 		ProductReportList = (List<ProductReport>) productReportRepository.findByProductID(productReport.getProductID());
 		return ProductReportList;
 	}
-
-	@Override
-	public long productReportCount(ProductReport productReport) {
-		Long productReprotCount = null;
-		productReprotCount = (Long) productReportRepository.ReportCount();
-		if(productReprotCount == null) productReprotCount = 0L;
-		return productReprotCount;
-		
-	}
-	
-	@Override
-	public long categoryCount(Product product) {
-		Long categoryCount = null;
-		categoryCount = (Long) productRepository.findcategoryCount();
-		if(categoryCount == null) categoryCount = 0L;
-		return categoryCount;
-	}
-
-	@Override
-	public void categoryChange(Product product) {
-		Optional<Product> categoryOptional = productRepository.findById(product.getProductID());
-		Product changeCategory =  categoryOptional.get();
-		
-		changeCategory.setCategory(product.getCategory());
-		
-		productRepository.save(changeCategory);
-		
-	}
-
-
 
 
 

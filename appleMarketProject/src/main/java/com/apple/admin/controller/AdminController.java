@@ -1,6 +1,5 @@
 package com.apple.admin.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,12 +30,9 @@ public class AdminController {
 
 	//카테고리 관리 페이지로 이동을 위한 매핑
 	@GetMapping("category")
-	public String categoryList(Category category,Product product, Model model) {
+	public String categoryList(Category category, Model model) {
 		List<Category> list = adminService.categoryList(category);
-		Long categoryCount = adminService.categoryCount(product);
-		
 		model.addAttribute("categoryList", list);
-		model.addAttribute("Count", categoryCount);
 		
 		return "/admin/category";
 	}
@@ -58,38 +54,13 @@ public class AdminController {
 	@GetMapping("product")
 	public String product(Product product,ProductReport productReport, Model model) {
 		List<Product> list = adminService.productList(product);
-		System.out.println("list : " + list);
-		
-//		Map<Long, Long> reportCountDetail = adminService.productReportCountDetail(productReport);
-//		System.out.println("reportCount : " + reportCountDetail.values());
-//		
-		
-		Long reportCount = adminService.productReportCount(productReport);
-		System.out.println("Count: " + reportCount);
-		model.addAttribute("reportCount", reportCount);
+		Map<Long, Long> reportCount = adminService.productReportCount(productReport);
 		model.addAttribute("productList", list);
-//		model.addAttribute("reportCountDetail", reportCountDetail);
+		model.addAttribute("reportCount", reportCount);
 		
 		return "/admin/product";
 	}
 	
-	@GetMapping("/product/{productID}")
-	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport,Category category, Model model) {
-		product.setProductID(productID);
-		Product detail = adminService.productDetail(product);
-		List<ProductReport> Reportdetail = adminService.productReportDetail(productReport);
-		List<Category> categoryList = adminService.categoryList(category);
-		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("detail", detail);
-		model.addAttribute("reportDetail", Reportdetail);
-		return "/admin/productDetail";
-	}
-	
-	@PostMapping("product/category/change")
-	public String categoryChange(Product product) {
-		adminService.categoryChange(product);
-		return "redirect:/admin/success/admin";
-	}
 	
 	@PostMapping("category/insert")
 	public String categoryInsert(Category category) {
@@ -111,6 +82,15 @@ public class AdminController {
 	}
 	
 	
+	@GetMapping("/product/{productID}")
+	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport, Model model) {
+		product.setProductID(productID);
+		Product detail = adminService.productDetail(product);
+		List<ProductReport> Reportdetail = adminService.productReportDetail(productReport);
+		model.addAttribute("detail", detail);
+		model.addAttribute("reportDetail", Reportdetail);
+		return "/admin/productDetail";
+	}
 //	테스트용 매핑 
 //	@GetMapping("product/1")
 //	public String proudctDetail(Model modle) {

@@ -82,5 +82,5 @@ $("#productCancelBtn").on("click", function() {
 });
 
 $("#productListBtn").on("click", function() {
-    location.href = "/";
+    location.href = "/product/productList";
 });

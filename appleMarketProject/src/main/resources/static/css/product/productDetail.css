@@ -31,7 +31,6 @@
     font-size: 24px;
     color: #000;
     margin-bottom: 10px;
-    font: bolder;
 }
 .product-subinfo{
     padding-top: 10px;
@@ -53,8 +52,13 @@
     color: black;
 }
 
+.actions {
+    margin-top: 20px;
+}
 
-
+.actions button {
+    margin-right: 10px;
+}
 
 .seller-info {
     background-color: #fff;
@@ -145,45 +149,4 @@
 
 #detail-option{
     font-weight: bolder;
-}
-
-.category-link{
-    text-decoration: none;
-    color: #5c636a;
-    margin-right: 10px;
-}
-
-.product{
-    margin-left: 10px;
-}
-
-.DetailBtn{
-    width: 118px;
-    height: 50px;
-    border-radius: 5px;
-    border: none;
-    margin-right: 10px;
-    color: white;
-    font-weight: bolder;
-}
-.actions {
-    margin-top: 20px;
-    justify-content: space-between;
-    justify-content: space-between;
-}
-
-.DetailBtn:last-child{
-    margin-right: 0;
-}
-
-#BuyBtn{
-    background-color: #F70000;
-}
-
-#ChatBtn{
-    background-color: #FFA425;
-}
-
-#WishBtn{
-    background-color: #CCCCCC;
 }
