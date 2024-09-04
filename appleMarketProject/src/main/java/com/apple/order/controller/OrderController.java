@@ -51,7 +51,6 @@ public class OrderController {
 	
 	private final ProductService productService;
 	private final UserService userService;
-	private final JwtUtil jwtUtil;  // JwtUtil 의존성 추가
 	
 	@Value("${portone.api.secret}")
 	private String partoneApiSecret;
