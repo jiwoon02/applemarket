@@ -18,13 +18,6 @@ public class OrderServiceImpl implements OrderService {
 
 	private final OrderRepository orderRepository;
 	
-//	@Override
-//	public List<Order> orderList(Order order) {
-//		List<Order> orderList = null;
-//		orderList = (List<Order>)orderRepository.findAll();
-//		return orderList;
-//	}
-	
 	@Override
 	public List<Order> orderList() {
 		List<Order> orderList = null;

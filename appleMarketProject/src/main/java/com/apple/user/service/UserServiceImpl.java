@@ -44,6 +44,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UsershopService usershopService;
     
+    private final JwtUtil jwtUtil;
+    @Autowired
+    public UserServiceImpl(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+    
 //    @Override
 //    //로그인 아이디 찾아서 user객체 반환 없으면 null
 //    public Optional<User> findByUserID(String userID) {
@@ -184,7 +190,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-    
+	
     //동네 설정하기
     @Override
     public void userLocationUpdate(Long userID, Long locationID) {
@@ -213,6 +219,23 @@ public class UserServiceImpl implements UserService {
 		
 		return null;
 	}
+
+    	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+   @Override
+   public Long getUserNo(String token) {
+      String userID = jwtUtil.getUserID(token);
+      Optional<User> optionalUser = userRepository.findByUserID(userID);
+      
+      Long userNo;
+    
+       if(optionalUser.isPresent()) {
+          userNo = optionalUser.get().getUserNo();
+          return userNo;
+       }
+       else {
+          return null;
+       }
+   }
 
 }
 
