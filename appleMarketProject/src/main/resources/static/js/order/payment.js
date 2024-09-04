@@ -49,7 +49,7 @@ async function sendOrderDetails(paymentId) {
     product: {
       productID: $("#productID").val(),
       productName: $("#productName").text(),
-      productPrice: parseInt($("#productPrice").text()),
+      productPrice: parseInt($("#productPrice").text())
     },
 	productImages: {
 		productImageID: $("#productImageID").val()

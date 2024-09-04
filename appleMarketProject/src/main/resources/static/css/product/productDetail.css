@@ -31,7 +31,7 @@
     font-size: 24px;
     color: #000;
     margin-bottom: 10px;
-    font: bolder;
+    font-weight: bolder;
 }
 .product-subinfo{
     padding-top: 10px;
