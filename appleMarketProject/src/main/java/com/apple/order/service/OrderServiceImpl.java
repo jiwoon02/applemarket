@@ -19,9 +19,9 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	
 	@Override
-	public List<Order> orderList() {
+	public List<Order> orderList(Long userNo) {
 		List<Order> orderList = null;
-		orderList = (List<Order>)orderRepository.orderList();
+		orderList = (List<Order>)orderRepository.orderList(userNo);
 		return orderList;
 	}
 
