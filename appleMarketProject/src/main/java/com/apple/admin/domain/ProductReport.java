@@ -40,7 +40,7 @@ public class ProductReport {
 	
 	@Column
 	private String reportContent;
-	
+
 	@UpdateTimestamp
 	@Column(name = "product_report_reg_date")
 	@ColumnDefault(value = "sysdate")

@@ -27,7 +27,7 @@
          <!--헤더 중간-->
         <div class="header-middle">
             <div class="header-middle-left">
-                <a href="/product/productList" class="logo">
+                <a href="/" class="logo">
                     <img src="/images/logo.png" alt="사과로고" width="130px" height=auto>
                 </a>
             </div>
@@ -53,28 +53,25 @@
             <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="categroy_menu" href="#" data-bs-toggle="dropdown" aria-expanded="false" >카테고리</a>
 			            <ul class="dropdown-menu">
-			              <li><a class="dropdown-item" href="/product/productList?category=clothe">의류</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=accessory">악세서리</a></li>
-			              <li><hr class="dropdown-divider" /></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=electronic">전자기기</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=sports">스포츠/레저</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=kidult">키덜트</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=art">예술/음반/악기</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=book">도서/티켓/문구</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=interior">가구/인테리어</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=homegoods">생활/주방용품</a></li>
-			               <li><a class="dropdown-item" href="/product/productList?category=etc">기타</a></li>
+			              <li><a class="dropdown-item" href="/?category=clothe">의류</a></li>
+			               <li><a class="dropdown-item" href="/?category=accessory">악세서리</a></li>
+			               <li><a class="dropdown-item" href="/?category=electronic">전자기기</a></li>
+			               <li><a class="dropdown-item" href="/?category=sports">스포츠/레저</a></li>
+			               <li><a class="dropdown-item" href="/?category=kidult">키덜트</a></li>
+			               <li><a class="dropdown-item" href="/?category=art">예술/음반/악기</a></li>
+			               <li><a class="dropdown-item" href="/?category=book">도서/티켓/문구</a></li>
+			               <li><a class="dropdown-item" href="/?category=interior">가구/인테리어</a></li>
+			               <li><a class="dropdown-item" href="/?category=homegoods">생활/주방용품</a></li>
+			               <li><a class="dropdown-item" href="/?category=etc">기타</a></li>
 			            </ul>
 		          	</li>
 		          	</ul>	 
             </div>
             <div class="header-bottom-center">
-
                 <th:block th:if="${currentUserID != null}">
                     <th:block th:if="${userLocation != null}">
-                     <p th:text="${userLocation.locationName}" class="header-link">판매자 주소</p>
-                     <a class="header-link" th:href="@{'/product/productList?locationID=' + ${userLocation.locationID}}">
-                         현재 지역(${userLocation.locationName}) 으로 검색</a>
+                        <a class="header-link" th:href="@{'/?locationID=' + ${userLocation.locationID}}">
+                            현재 지역 ([[${userLocation.locationName}]]) 으로 검색</a>
                     </th:block>
 
                     <th:block th:if="${userLocation == null}">
@@ -94,7 +91,6 @@
 </div>
 </div>
 </th:block>
-
 <!-- 상단 adminheader -->
 <th:block th:fragment="adminheader">
     <div class="header-container">
@@ -129,9 +125,6 @@
 	</div>
 </th:block>
 
-
-=======
->>>>>>> 75bf251be4070eeb65437efe270f05c6c32d6cb5
 <!-- fotter -->
 <th:block th:fragment="footer">
     <div class="footer-container">
