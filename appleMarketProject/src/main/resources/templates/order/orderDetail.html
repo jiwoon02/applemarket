@@ -38,8 +38,7 @@
 		            <h5>상품 정보</h5>
 		            <div class="order-summary" th:object="${order.product}">
 		                <div class="d-flex justify-content-between align-items-center">
-		                   <!--  <img th:src="@{'/order/view/' + ${fileName}}"  th:alt="*{productName}" class="img-thumbnail"> -->
-		                    <img th:if="${imageFileName}" th:src="@{/order/view/{fileName}(fileName=${imageFileName})}" th:alt="${imageFileName}"/>
+		                    <img th:if="${imageFileName}" th:src="@{/order/view/product_{productID}/{fileName}(productID=${order.product.productID}, fileName=${imageFileName})}" th:alt="${imageFileName}" id="image"/>
 		                    <div>
 		                        <p><strong>상품명:</strong> <span th:text="*{productName}"></span></p>
 		                        <p><strong>가격:</strong> <span th:text="*{productPrice}+' 원'"></span></p>

@@ -60,12 +60,23 @@ public class Order {
 	@JoinColumn(name = "user_no")			//외래키 생성, User 엔티티의 기본키(userNo)와 매핑
 	private User user;						//이 주문에 해당하는 회원(구매자)
 	
+	/*
+	 * @OneToOne //Product - Order 를 일대일 관계로 설정(이하 컬럼들 모두 동일)
+	 * 
+	 * @JoinColumns({
+	 * 
+	 * @JoinColumn(name="product_id", referencedColumnName="product_id"), //상품ID
+	 * 
+	 * @JoinColumn(name="product_price", referencedColumnName="product_price"),
+	 * //상품가격
+	 * 
+	 * @JoinColumn(name="product_name", referencedColumnName="product_name") //상품명
+	 * }) private Product product;
+	 */
+
+	
 	@OneToOne								//Product - Order 를 일대일 관계로 설정(이하 컬럼들 모두 동일)
-    @JoinColumns({
-        @JoinColumn(name="product_id", referencedColumnName="product_id"),				//상품ID
-        @JoinColumn(name="product_price", referencedColumnName="product_price"),		//상품가격
-        @JoinColumn(name="product_name", referencedColumnName="product_name")			//상품명
-    })
+	@JoinColumn(name="product_id", referencedColumnName="product_id")			//상품ID
 	private Product product;				
 
 	@OneToOne

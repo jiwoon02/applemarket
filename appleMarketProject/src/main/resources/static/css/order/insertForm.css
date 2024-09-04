@@ -19,19 +19,21 @@
 }
 
 .order-summary span {
-	padding-right:30px;
+ 	padding-right:30px;
 }
 
-img{
-	height: 150px;
-	width: 150px;
-}
 
 h5 {
     font-size: 18px; /* 섹션 제목 폰트 크기 */
     font-weight: bold;
     color: #333;
     margin-bottom: 15px;
+}
+
+#image {
+	height: 150px;
+	width: 150px;
+	border-radius: 5px;
 }
 
 /* 입력 필드 스타일링 */

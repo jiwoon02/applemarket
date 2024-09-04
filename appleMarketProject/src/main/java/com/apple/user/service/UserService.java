@@ -1,8 +1,5 @@
 package com.apple.user.service;
 
-import java.util.Optional;
-
-
 import com.apple.user.domain.User;
 
 public interface UserService{
@@ -25,12 +22,14 @@ public interface UserService{
 //
 //	boolean authenticate(String userID, String password);
 
-	//UserNo로 이름을 얻어옴
+	//userNo로 이름을 얻어옴
 	public String getNameByUserNo(long userNo);
-	//UserNo로 전화번호를 얻어옴
+	//userNo로 전화번호를 얻어옴
 	public String getPhoneByUserNo(long userNo);
 
 	public void userLocationUpdate(Long userID, Long locationID);
 
 	
+	//토큰으로 userNo를 얻어옴
+	public Long getUserNo(String token);
 }
