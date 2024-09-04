@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.order.domain.Order;
 import com.apple.order.repository.OrderRepository;
@@ -19,9 +18,9 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	
 	@Override
-	public List<Order> orderList() {
+	public List<Order> orderList(Long userNo) {
 		List<Order> orderList = null;
-		orderList = (List<Order>)orderRepository.orderList();
+		orderList = (List<Order>)orderRepository.orderList(userNo);
 		return orderList;
 	}
 

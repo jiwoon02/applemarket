@@ -15,8 +15,12 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 	
 	//유저ID별로 조회하도록 조건 추가 필요
 	//주문 목록 조회
-	@Query("select o from Order o")
-	public List<Order> orderList();
+//	@Query("select o from Order o")
+//	public List<Order> orderList();
+	
+	//주문 목록 조회
+	@Query("select o from Order o where o.user.userNo=?1")
+	public List<Order> orderList(Long userNo);
 	
 	//주문 내역 상세조회
 	public Order findByOrderID(String orderID);
