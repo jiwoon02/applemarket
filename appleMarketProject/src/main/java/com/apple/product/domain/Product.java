@@ -63,7 +63,7 @@ public class Product {
     private String productDescription;
 
     @Column(name = "product_status")
-    private String status = "판매 중";
+    private String productStatus = "판매 중";
 
     @CreationTimestamp
     @Column(name = "product_reg_date", nullable = false)

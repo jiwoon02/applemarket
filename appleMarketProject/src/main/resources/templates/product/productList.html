@@ -29,15 +29,33 @@
 	<th:block th:if="${not #lists.isEmpty(productList.dtoList)}">
 		<div class="row productListContainer">
 			<div class="col-md-4 productItem" th:each="product : ${productList.dtoList}" th:object="${product}" th:data-no="*{productID}">
-				 <!-- 첫 번째 이미지를 썸네일로 표시 -->
+				<!-- 첫 번째 이미지를 썸네일로 표시 -->
+				<div class="image-container">
+
                     <img th:if="${not #lists.isEmpty(product.productImages)}"
                          th:src="@{'/product/view/' + ${product.productID} + '/' + ${product.productImages[0].filename}}"
                          class="img-fluid productListImage"/>
-                     	
-                <span class="productListName" th:text="*{productName}"></span> 
-                <span class="productListPrice" th:text="*{productPrice}"></span>
+				<div class="sold-out-overlay" th:if="${product.productStatus == '판매 완료'}">
+					판매 완료
+				</div>
+				</div>
+				<div class="text-start productNameContainer">
+
+                <p class="productListName" th:text="*{productName}"></p>
+                <p class="productListPrice" th:text="*{productPrice} + '원'"></p>
+				</div>
+				<div class="text-start productNameContainer">
+					<img src="/images/location_icon.png" alt="location_icon" height="20px" />
+
+					<!-- location이 null이 아닌 경우에만 표시 -->
+					<span class="location-name" th:if="${product.user != null and product.user.location != null}" th:text="${product.user.location.locationName}"></span>
+
+					<!-- location이 null인 경우 기본 텍스트 표시 -->
+					<span class="location-name" th:if="${product.user == null or product.user.location == null}">지역 정보 없음</span>
+
+				</div>
 			</div>
-		</div>
+			</div>
 	</th:block>
 	</div>
 	

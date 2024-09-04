@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.apple.order.domain.Order;
@@ -29,13 +28,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	//주문완료시 상품 상태변경 추가
-	@Transactional
 	@Override
 	public void orderInsert(Order order) {
-		Product product = order.getProduct();
-		product.setStatus("판매완료");
-		productRepository.save(product);
 		orderRepository.save(order);
+
+		// 2. 주문이 성공적으로 저장된 후, 해당 상품 상태를 "판매 완료"로 변경
+		productRepository.updateProductStatus(order.getProduct().getProductID(), "판매 완료");
 	}
 
 	@Override

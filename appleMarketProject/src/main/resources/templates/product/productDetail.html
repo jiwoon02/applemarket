@@ -73,7 +73,7 @@
 
 				<div>
 					<div class="text-start detail-left">
-						<a class="category-link" href="/">홈</a>
+						<img height="18px"/><a class="category-link" href="/">홈</a>
 						<span class="category-link"> > </span>
 						<a class="category-link" href="/" th:text="${detail.category.categoryName}" th:href="@{'/?category=' + ${detail.category.categoryID}}"> </a>
 					</div>
@@ -97,6 +97,9 @@
 						<img th:if="${not #lists.isEmpty(detail.productImages)}"
 							 th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
 							 class="img-fluid productListImage"/>
+						<div class="sold-out-overlay" th:if="${detail.productStatus == '판매 완료'}">
+							판매 완료
+						</div>
 					</div>
 				</div>
 
@@ -117,9 +120,9 @@
 						<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 
 						<div class="actions">
-							<button id="WishBtn" class="DetailBtn">찜하기</button>
-							<button id="ChatBtn" class="DetailBtn">채팅하기</button>
-							<button id="BuyBtn" class="DetailBtn">구매하기</button>
+							<button id="WishBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">찜하기</button>
+							<button id="ChatBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">채팅하기</button>
+							<button id="BuyBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">구매하기</button>
 						</div>
 					</div>
 				</div>
@@ -129,7 +132,17 @@
 		<!-- 판매자 정보  -->
 		<div class="seller-container">
 			<div class="seller-info mt-5 d-flex align-items-center">
-				<img src="/images/shop_icon.png" alt="Seller Image" class="rounded-circle">
+				<th:block th:if="${not #lists.isEmpty(detail.user.usershop.shopImgName)}">
+
+				<img th:src="@{'/usershop/view/' + ${detail.user.usershop.shopImgName}}"
+					 class="img-fluid"/>
+				</th:block>
+
+				<th:block th:if="${#lists.isEmpty(detail.user.usershop.shopImgName)}">
+					<img src="/images/shop-icon.png" class="img-fluid"/>
+				</th:block>
+
+
 				<div class="ms-3 seller-subinfo">
 					<p class="seller-name mb-0">
 						<a href="#" th:text="*{user.userNickname}">판매자 이름</a>
