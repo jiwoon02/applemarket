@@ -1,18 +1,21 @@
 package com.apple.mypage.service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import com.apple.jwt.JwtUtil;
-import com.apple.mypage.domain.Test_order;
+import com.apple.mypage.domain.Withdraw;
 import com.apple.mypage.dto.MypageReviewDTO;
+import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.repository.MypageRepository;
+import com.apple.mypage.repository.WithdrawRepository;
+import com.apple.order.domain.Order;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
@@ -45,6 +48,9 @@ public class MypageServiceImpl implements MypageService {
     @Setter(onMethod_ = @Autowired)
     private ProductRepository productRepository;
     
+    @Setter(onMethod_ = @Autowired)
+    private WithdrawRepository withdrawRepository;
+    
     // 최근 3개월 동안 구매한 상품을 가져오는 메서드
     @Override
     public List<Product> getRecentBuyItemsByUserNo(Long userNo) {
@@ -54,12 +60,12 @@ public class MypageServiceImpl implements MypageService {
     
     @Override
     public List<Product> getBuyItemsByUserNo(Long userNo) {
-        // 해당 userNo로 Test_order 목록을 가져옴
-        List<Test_order> orders = mypageRepository.findByUserUserNo(userNo);
+        // 해당 userNo로 Order 목록을 가져옴
+        List<Order> orders = mypageRepository.findByUserUserNo(userNo);
         
         // 각 주문에서 productID를 사용하여 Product 목록을 반환
         return orders.stream()
-                     .map(Test_order::getItem)
+                     .map(Order::getProduct)
                      .collect(Collectors.toList());
     }
     
@@ -169,6 +175,20 @@ public class MypageServiceImpl implements MypageService {
 
             userRepository.save(existingUser); // 변경된 내용을 저장
         }
+    }
+	
+	@Override
+	public void deleteUser(WithdrawDTO withdrawDTO) {
+		// 탈퇴 정보를 저장
+        Withdraw withdraw = new Withdraw();
+        withdraw.setUserNo(withdrawDTO.getUserNo());
+        withdraw.setWithdrawDate(new Date());
+        withdraw.setReason(withdrawDTO.getReason());  // 실제로는 DTO로부터 이유를 받아올 수 있음
+
+        withdrawRepository.save(withdraw);
+        
+        // 회원 삭제
+        userRepository.deleteById(withdrawDTO.getUserNo());
     }
 	
 	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기

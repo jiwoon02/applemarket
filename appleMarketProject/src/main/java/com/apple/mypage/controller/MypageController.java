@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.apple.jwt.JwtUtil;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
+import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.service.MypageService;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/mypage")
 public class MypageController {
 	
-    @Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = @Autowired)
     private MypageService mypageService;
     
     @Setter(onMethod_ = @Autowired)
@@ -49,9 +49,6 @@ public class MypageController {
     
     @Setter(onMethod_ = @Autowired)
     private UserRepository userRepository;
-    
-    @Autowired
-    private JwtUtil jwtUtil;
     
     //마이페이지
 //    @GetMapping("{userNo}")
@@ -68,7 +65,8 @@ public class MypageController {
     	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
     	model.addAttribute("items", items);
 	 
-	 return "mypage/mypage"; // 반환할 뷰의 이름
+    	return "mypage/mypage"; // 반환할 뷰의 이름
+    }
 
     @GetMapping("/mypage")
     public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
@@ -217,4 +215,37 @@ public class MypageController {
         mypageService.updateUserInfo(userNo, updatedUser);
         return "redirect:/mypage/" + userNo; // 수정 완료 후 마이페이지로 리다이렉트
     }
+    
+    @GetMapping("/withdraw")
+    public String withdrawPage() {
+    	return "mypage/mypageWithdraw";
+    }
+    
+    @GetMapping("/withdrawNote")
+    public String withdrawNotePage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawNote";
+    }
+    
+    @GetMapping("/withdrawComment")
+    public String withdrawCommentPage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawComment";
+    }
+    
+    @PostMapping("/userDelete")
+    public String deleteUser(@CookieValue(value="JWT", required=false) String token, @RequestParam("reason") String reason) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	// WithdrawDTO에 탈퇴 사유를 설정
+        WithdrawDTO withdrawDTO = new WithdrawDTO();
+        withdrawDTO.setUserNo(userNo);
+        withdrawDTO.setReason(reason);
+
+        mypageService.deleteUser(withdrawDTO);
+        return "redirect:/mypage"; // 사용자 목록 페이지로 리다이렉트
+    }
 }
+    

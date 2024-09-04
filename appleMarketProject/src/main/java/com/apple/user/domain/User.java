@@ -108,10 +108,10 @@ public class User{
         this.userEditDate = new Date(); // 수정일을 현재 시간으로 설정
     }
     
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Usershop usershop;
 	
 	// Test_user 엔티티는 여러 개의 Test_item 엔티티를 가질 수 있음
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Product> items;
 }

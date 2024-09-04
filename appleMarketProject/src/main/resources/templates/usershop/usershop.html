@@ -213,11 +213,12 @@
 							<div class="divUserOne">
 								<img
 									th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}"
-									class="profileImg2">
+									class="profileImg2 shopPage">
+								<input type="hidden" th:value="${review.user.userNo}" class="userImg" />
 
 								<div class="DivUserInfo">
 									<div class="userInfo">
-										<div th:text="${review.user.userNickname}" class="shopName">사용자명</div>
+										<div th:text="${review.user.userNickname}" class="shopName shopPage">사용자명</div>
 										<div class="starImg">
 											<img
 												th:src="${review.starRating >= 1 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
@@ -233,6 +234,7 @@
 										</div>
 										<div class="divItemBtn">
 											<button th:text="${review.product.productName}" class="itemBtn">상품명</button>
+											<input type="hidden" th:value="${review.product.productID}" id="productId" />
 										</div>
 									</div>
 									<div class="divReview" th:text="${review.reviewContent}">
