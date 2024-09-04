@@ -68,8 +68,9 @@ public class MypageController {
     	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
     	model.addAttribute("items", items);
 	 
-	 return "mypage/mypage"; // 반환할 뷰의 이름
-
+    	return "mypage/mypage"; // 반환할 뷰의 이름
+    }
+    
     @GetMapping("/mypage")
     public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
         List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
