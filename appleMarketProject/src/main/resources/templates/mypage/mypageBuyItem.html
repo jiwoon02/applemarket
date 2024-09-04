@@ -11,7 +11,7 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-        <form id="deleteForm" method="post" th:action="@{/mypage/delete/buy{userNo}(userNo=${userNo})}">
+        <form id="deleteForm" method="post"> <!--  th:action="@{/mypage/delete/buy{userNo}(userNo=${userNo})}" -->
         	<input type="hidden" id="userNoHide" th:value="${userNo}" />
             <table class="tbl_mypage">
                 <colgroup>
@@ -32,17 +32,17 @@
                     <tr class="menuList">
                         <td>
                             <ul>
-                                <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                                <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                             </ul>
                         </td>
                         <td>
                             <ul>
-                                <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                                <li><a href="/mypage/buy" class="underline">구매 상품</a></li>
                             </ul>
                         </td>
                         <td>
                             <ul>
-                                <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                                <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
                             </ul>
                         </td>
                         <td>

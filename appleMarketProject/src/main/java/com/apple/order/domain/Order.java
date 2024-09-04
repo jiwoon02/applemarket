@@ -55,7 +55,6 @@ public class Order {
 	@Column(name="request_text", length = 50)
 	private String requestText;				//요청사항
 	
-	
 	/*외래 키 생성*/
 	@ManyToOne								//Order(다)-User(일) 를 다대일 관계로 설정
 	@JoinColumn(name = "user_no")			//외래키 생성, User 엔티티의 기본키(userNo)와 매핑
