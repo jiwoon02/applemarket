@@ -1,6 +1,8 @@
 package com.apple.user.controller;
 
 import com.apple.jwt.JwtUtil;
+import com.apple.location.domain.Location;
+import com.apple.location.repository.LocationRepository;
 import com.apple.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class UserController {
     private JwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LocationRepository locationRepository;
 
     //로그인 폼
 	@GetMapping("/user/loginForm")
@@ -172,18 +176,23 @@ public class UserController {
 
     //locationID 업데이트(동네설정완료 버튼 클릭시)
     @PostMapping("/user/updateLocation")
-    public ResponseEntity<String> updateLocation(@CookieValue(value = "JWT", required = false) String token,  @RequestBody Map<String, Long> payload) {
-        try{
+    public ResponseEntity<?> updateLocation(@CookieValue(value = "JWT", required = false) String token,  @RequestBody Map<String, Long> payload) {
+        try {
             String userID = jwtUtil.getUserID(token);
 
-            User user = userRepository.findByUserID(userID).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+            User user = userRepository.findByUserID(userID)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
 
             Long locationID = payload.get("locationID");
-            userService.userLocationUpdate(user.getUserNo(), locationID);
+            Location location = locationRepository.findById(locationID)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid location ID"));
 
-            return ResponseEntity.ok("Location updated successfully");
+            // 사용자의 위치 정보 업데이트
+            user.setLocation(location);
+            userRepository.save(user);
 
-        }catch (Exception e) {
+            return ResponseEntity.ok("위치 설정이 성공적으로 완료되었습니다.");
+        } catch (Exception e) {
             return ResponseEntity.status(500).body("동네 설정 중 오류가 발생했습니다.");
         }
     }

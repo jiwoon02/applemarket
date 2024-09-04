@@ -109,7 +109,7 @@ function performSearch(){
 	}
 
 	console.log('searchInput==>' + searchInput);
-	location.href=`/product/productList?keyword=${encodeURIComponent(searchInput)}&search=p${searchField}`;
+	location.href=`/?keyword=${encodeURIComponent(searchInput)}&search=p${searchField}`;
 }
 
 

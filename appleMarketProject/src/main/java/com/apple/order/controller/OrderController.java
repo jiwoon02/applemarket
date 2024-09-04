@@ -143,8 +143,9 @@ public class OrderController {
     //+상품 이미지 출력
     @GetMapping("/view/{fileName}")
     @ResponseBody
-    public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
-    	log.info(fileName);
-    	return fileUtil.getFile(fileName);
-    }
+	public ResponseEntity<Resource> viewFileGET(@PathVariable Long productID, @PathVariable String fileName){
+		log.info("filename: " + fileName);
+		log.info("productId: " + productID.toString());
+		return fileUtil.getFile(productID, fileName);
+	}
 }

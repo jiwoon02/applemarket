@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
 	
 	//메일 전송, 비동기처리
 	@Async
-	private void sendEmail(String to, String tempPwd) {
+	public void sendEmail(String to, String tempPwd) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("사과마켓 임시 비밀번호 발급 안내");
