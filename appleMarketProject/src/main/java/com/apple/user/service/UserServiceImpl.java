@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UsershopService usershopService;
     
-    private final JwtUtil jwtUtil;
     @Autowired
     public UserServiceImpl(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
