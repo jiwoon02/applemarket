@@ -11,7 +11,7 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-        <form id="deleteForm" method="post" th:action="@{/mypage/delete/buy{userNo}(userNo=${userNo})}">
+        <form id="deleteForm" method="post"> <!--  th:action="@{/mypage/delete/buy{userNo}(userNo=${userNo})}" -->
         	<input type="hidden" id="userNoHide" th:value="${userNo}" />
             <table class="tbl_mypage">
                 <colgroup>

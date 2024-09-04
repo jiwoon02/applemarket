@@ -33,4 +33,6 @@ public interface MypageService {
     public boolean checkPassword(Long userNo, String inputPassword);
     
     public void updateUserInfo(Long userNo, User updatedUser);
+
+	Long getUserNo(String token);
 }

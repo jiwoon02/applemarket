@@ -60,63 +60,55 @@ public class MypageController {
 //        model.addAttribute("items", items);
 //        return "mypage/mypage"; // 반환할 뷰의 이름
 //    }
-	  @GetMapping("")
-	  public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
-		  String userID = jwtUtil.getUserID(token);
-		  Optional<User> optionalUser = userRepository.findByUserID(userID);
-		  Long userNo;
-		  log.info(userID);
-		  
-		  if(optionalUser.isPresent()) {
-			  userNo = optionalUser.get().getUserNo();	//찾은 유저 반환
-		  }
-		  else {
-			  return "해당 정보로 등록된 사용자가 없습니다.";
-		  }
-		  String testNo = String.valueOf(userNo);
-		  log.info(testNo);
-		  
-	      List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-	      model.addAttribute("items", items);
-	      return "mypage/mypage"; // 반환할 뷰의 이름
-	  }
     
-    @GetMapping("/buy{userNo}")
-    public String getBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-        List<Product> items = mypageService.getBuyItemsByUserNo(userNo);
-        model.addAttribute("items", items);
-        model.addAttribute("userNo", userNo);
-        return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
+    @GetMapping("")
+    public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
+    	model.addAttribute("items", items);
+	 
+	 return "mypage/mypage"; // 반환할 뷰의 이름
     }
     
     //판매상품
     @GetMapping("/sell")
     public String getItemsExcludingOrders(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	String userID = jwtUtil.getUserID(token);
-		Optional<User> optionalUser = userRepository.findByUserID(userID);
-		Long userNo;
-		
-		if(optionalUser.isPresent()) {
-			  userNo = optionalUser.get().getUserNo();	//찾은 유저 반환
-		  }
-		  else {
-			  return "해당 정보로 등록된 사용자가 없습니다.";
-		  }
-		
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	
         List<Product> items = mypageService.getItemsExcludingOrders(userNo);
         model.addAttribute("items", items);
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
-    @GetMapping("sold{userNo}")
-    public String getSoldItems(@PathVariable Long userNo, Model model) {
+	@GetMapping("/buy")
+	public String getBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
+		Long userNo = mypageService.getUserNo(token);
+		model.addAttribute("userNo", userNo);
+		
+	    List<Product> items = mypageService.getBuyItemsByUserNo(userNo);
+	    model.addAttribute("items", items);
+
+	    return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
+	}
+    
+    @GetMapping("sold")
+    public String getSoldItems(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	
         List<Product> items = mypageService.getSoldItems(userNo);
         model.addAttribute("items", items);
+        
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
-    @GetMapping("sellAll{userNo}")
-    public String getAllItemsByUserNo(@PathVariable Long userNo, Model model) {
+    @GetMapping("sellAll")
+    public String getAllItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	
         List<Product> items = mypageService.getAllItemsByUserNo(userNo);
         List<String> itemStatuses = mypageService.getItemStatusByUserNo(userNo); // 각 상품의 상태 가져오기
         
@@ -126,8 +118,9 @@ public class MypageController {
     }
     
     // 특정 상품을 삭제하는 메서드
-    @PostMapping("/delete/buy{userNo}")
-    public String deleteBuyItem(@PathVariable Long userNo, @RequestParam("productIds[]") List<Long> productID, Model model) {
+    @PostMapping("/delete/buy")
+    public String deleteBuyItem(@CookieValue(value="JWT", required=false) String token, @RequestParam("productIds[]") List<Long> productID, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
     	for (Long product : productID) {
             mypageService.deleteBuyItem(userNo, product);
         }
