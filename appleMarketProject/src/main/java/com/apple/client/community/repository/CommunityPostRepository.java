@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.apple.client.community.domain.CommunityPost;
+import com.apple.location.domain.Location;
 import com.apple.user.domain.User;
 
 public interface CommunityPostRepository extends JpaRepository<CommunityPost, Long> {
@@ -21,7 +22,7 @@ public interface CommunityPostRepository extends JpaRepository<CommunityPost, Lo
     List<CommunityPost> findByUserNo(User userNo);
     
     // 페이징 처리
-    Page<CommunityPost> findByLocationID(Location location, Pageable pageable);
+    Page<CommunityPost> findByLocation(Location location, Pageable pageable);
     
     // userNo를 기준으로 Usershop 삭제
     void deleteByUserNo_UserNo(Long userNo);
