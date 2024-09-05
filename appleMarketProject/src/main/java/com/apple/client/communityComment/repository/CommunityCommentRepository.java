@@ -10,4 +10,7 @@ public interface CommunityCommentRepository extends JpaRepository<CommunityComme
 	
 	// 특정 게시글 ID에 해당하는 모든 댓글 조회
     List<CommunityComment> findByCommunityPost_CommunityPostID(Long postId);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUserNo_UserNo(Long userNo);
 }

@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apple.admin.repository.ProductReportRepository;
+import com.apple.client.community.repository.CommunityPostRepository;
+import com.apple.client.communityComment.repository.CommunityCommentRepository;
 import com.apple.jwt.JwtUtil;
 import com.apple.mypage.domain.Withdraw;
 import com.apple.mypage.dto.MypageReviewDTO;
@@ -17,7 +20,9 @@ import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.repository.MypageRepository;
 import com.apple.mypage.repository.WithdrawRepository;
 import com.apple.order.domain.Order;
+import com.apple.order.repository.OrderRepository;
 import com.apple.product.domain.Product;
+import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
@@ -26,6 +31,8 @@ import com.apple.usershop.domain.Usershop;
 import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.Setter;
 
 @Service
@@ -54,6 +61,27 @@ public class MypageServiceImpl implements MypageService {
     
     @Setter(onMethod_ = @Autowired)
     private WithdrawRepository withdrawRepository;
+    
+    @Setter(onMethod_ = @Autowired)
+    private ProductReportRepository productReportRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+    private CommunityCommentRepository communityCommentRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+    private CommunityPostRepository communityPostRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+    private UsershopReviewRepository itemReviewRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+    private OrderRepository orderRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+    private ProductImagesRepository productImagesRepository;
+	
+	@Autowired
+	private EntityManager entityManager;
     
     // 최근 3개월 동안 구매한 상품을 가져오는 메서드
     @Override
@@ -185,17 +213,70 @@ public class MypageServiceImpl implements MypageService {
     }
 	
 	@Override
+	@Transactional
 	public void deleteUser(WithdrawDTO withdrawDTO) {
 		// 탈퇴 정보를 저장
         Withdraw withdraw = new Withdraw();
         withdraw.setUserNo(withdrawDTO.getUserNo());
         withdraw.setWithdrawDate(new Date());
-        withdraw.setReason(withdrawDTO.getReason());  // 실제로는 DTO로부터 이유를 받아올 수 있음
+        withdraw.setReason(withdrawDTO.getReason());
 
         withdrawRepository.save(withdraw);
         
-        // 회원 삭제
-        userRepository.deleteById(withdrawDTO.getUserNo());
+        // 자식 엔티티들을 먼저 삭제
+        Long userNo = withdrawDTO.getUserNo();
+
+        try {
+            // 1. mypage 데이터 삭제
+            mypageRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+            
+            // 2. productReport 데이터 삭제
+            productReportRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+            
+            // 3. itemReview 데이터 삭제
+            itemReviewRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+            
+            // 4. communityComment 데이터 삭제
+            communityCommentRepository.deleteByUserNo_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+            
+            // 5. communityPost 데이터 삭제
+            communityPostRepository.deleteByUserNo_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+            
+            // 6. order 데이터 삭제
+            orderRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+
+            // 7. Product와 관련된 데이터 삭제
+            List<Product> products = productRepository.findByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+
+            // ProductImages 삭제
+            for (Product product : products) {
+                productImagesRepository.deleteByProduct(product);
+                entityManager.flush(); // 삭제 후 즉시 반영
+            }
+
+            // Product 삭제
+            productRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+
+            // 8. Usershop 데이터 삭제
+            usershopRepository.deleteByUser_UserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+
+            // 9. 회원 데이터 삭제
+            userRepository.deleteByUserNo(userNo);
+            entityManager.flush(); // 삭제 후 즉시 반영
+
+        } catch (Exception e) {
+            // 예외 발생 시 처리
+            throw new RuntimeException("삭제 중 오류 발생: " + e.getMessage());
+        }
     }
 	
 	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기

@@ -14,5 +14,7 @@ public interface ProductReportRepository extends JpaRepository<ProductReport, Lo
 	@Query("SELECT r.productID, COUNT(r) FROM ProductReport r GROUP BY productID")
 	public Map<Long, Long> ReportConut();
 	public List<ProductReport> findByProductID(Product product);
-
+	
+	// userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }

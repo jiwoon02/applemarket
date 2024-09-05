@@ -19,4 +19,7 @@ public interface CommunityPostRepository extends JpaRepository<CommunityPost, Lo
     
     // 페이징 처리
     Page<CommunityPost> findByLocationID(Location location, Pageable pageable);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUserNo_UserNo(Long userNo);
 }

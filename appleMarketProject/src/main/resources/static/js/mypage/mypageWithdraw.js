@@ -20,6 +20,7 @@ $(function() {
             alert("탈퇴 사유를 작성해 주세요.");
             e.preventDefault(); // 폼 전송을 막음
         }
+		
 	})
 });
 

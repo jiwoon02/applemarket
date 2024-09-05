@@ -27,4 +27,7 @@ public interface UsershopReviewRepository extends JpaRepository<ItemReview, Long
     
     @Query("SELECT SUM(ir.selectReview5) FROM ItemReview ir WHERE ir.usershop.shopId = :shopId")
     Long sumSelectReview5ByShopId(@Param("shopId") Long shopId);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }
