@@ -134,12 +134,11 @@ td ul li a {
 /* 부모 요소에 flexbox 적용 */
 .tdItemName {
     display: flex;
-    align-items: center; /* 이미지와 텍스트를 수직으로 가운데 정렬 */
+   	text-align: center;
 }
 
 /* 이미지와 텍스트 사이 간격 조정 */
 .itemName {
-    margin-left: 35px; /* 이미지와 텍스트 사이의 간격을 설정 */
     font-size: 1em; /* 텍스트 크기 설정 */
     color: #333; /* 텍스트 색상 설정 */
     white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
@@ -561,4 +560,8 @@ td ul li a {
 
 #blank{
 	height:200px;
+}
+
+.trSellItem td{
+	text-align: center;
 }

@@ -63,18 +63,13 @@ public class MypageController {
     
     @GetMapping("")
     public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
     	
-    	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-    	model.addAttribute("items", items);
-	 
     	return "mypage/mypage"; // 반환할 뷰의 이름
     }
     
     @GetMapping("/mypage")
     public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-        model.addAttribute("items", items);
+
         return "mypage/mypage"; // 반환할 뷰의 이름
     }
     
@@ -117,10 +112,10 @@ public class MypageController {
     	model.addAttribute("userNo", userNo);
     	
         List<Product> items = mypageService.getAllItemsByUserNo(userNo);
-        List<String> itemStatuses = mypageService.getItemStatusByUserNo(userNo); // 각 상품의 상태 가져오기
+
         
         model.addAttribute("items", items);
-        model.addAttribute("itemStatuses", itemStatuses); // 상태를 모델에 추가
+        
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     

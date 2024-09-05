@@ -51,15 +51,17 @@ public class MypageServiceImpl implements MypageService {
     private ProductRepository productRepository;
     
     // 최근 3개월 동안 구매한 상품을 가져오는 메서드
+    /*
     @Override
     public List<Product> getRecentBuyItemsByUserNo(Long userNo) {
         LocalDateTime threeMonthsAgo = LocalDateTime.now().minusMonths(3);
         return mypageRepository.findRecentBuyItemsByUserNo(userNo, threeMonthsAgo);
     }
+    */
     
     @Override
     public List<Product> getBuyItemsByUserNo(Long userNo) {
-        // 해당 userNo로 Test_order 목록을 가져옴
+        // 해당 userNo로 apple_order 목록을 가져옴
         List<Order> orders = mypageRepository.findByUserUserNo(userNo);
         
         // 각 주문에서 productID를 사용하여 Product 목록을 반환
