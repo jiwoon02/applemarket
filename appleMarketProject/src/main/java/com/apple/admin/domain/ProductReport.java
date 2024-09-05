@@ -32,9 +32,9 @@ public class ProductReport {
 	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
-	private Product productID;
+	private Product product;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "user_no")
 	private User user;
 	
@@ -45,6 +45,7 @@ public class ProductReport {
 	@Column(name = "product_report_reg_date")
 	@ColumnDefault(value = "sysdate")
 	private LocalDateTime productReportRegDate;
-	
+
+
 	
 }

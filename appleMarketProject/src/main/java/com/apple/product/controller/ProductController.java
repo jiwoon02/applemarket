@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -135,6 +136,18 @@ public class ProductController {
 
         // 삭제 후 목록 페이지로 리다이렉트
         return "redirect:/";
+    }
+
+    @PostMapping("/product/productReportInsert")
+    public String reportProduct(@RequestParam Long productID, @RequestParam String reportContent, @RequestParam Long userNo) {
+        // userNo로 유저를 조회
+        User user = userRepository.findByUserNo(userNo)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+
+        // 신고 처리
+        productService.reportProduct(productID, reportContent, user);
+
+        return "redirect:/product/" + productID;
     }
 
 

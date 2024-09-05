@@ -22,12 +22,13 @@ public interface AdminService {
 	public List<Category> categoryList(Category category);
 	public List<User> userList(User user);
 	public List<Product> productList(Product product);
-	public Map<Long, Long> productReportCount(ProductReport productReport);
+	//public Map<Long, Long> productReportCount(ProductReport productReport);
 	public void userUpdate(User user);
 	public void categoryInsert(Category category);
 	public void categoryDelete(Category category);
 	public Product productDetail(Product product);
-	public List<ProductReport> productReportDetail(ProductReport product);
+	public List<ProductReport> productReportDetail();
+	//public List<ProductReport> productReportDetail(ProductReport product);
 //	public boolean validateAdmin(String adminName, String adminpasswd);
 //	public UserDetails loadAdminByAdminName(String AdminName) throws UsernameNotFoundException;
 	

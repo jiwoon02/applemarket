@@ -186,7 +186,10 @@
 	<div id="reportPopup" class="popup">
 		<div class="popup-content">
 			<h2>게시글을 신고하는 이유를 선택해주세요.</h2>
-			<select class="s-form form-select" size="6">
+			<form id="reportForm" name="reportForm">
+				<input type="hidden" name="productID" value="${detail.productID}">
+				<input type="hidden" name="userNo" th:value="${detail.user.userNo}"/>
+			<select class="s-form form-select" size="6" name="reportContent">
 				<option>거래 금지 물품이에요</option>
 				<option>중고거래 게시글이 아니에요</option>
 				<option>전문 판매업자 같아요</option>
@@ -194,6 +197,7 @@
 				<option>사기인 것 같아요</option>
 				<option>기타 부적절한 행위가 있어요</option>
 			</select>
+			</form>
 			<button id="reportConfirmBtn" class="btn btn-primary">확인</button>
 			<button type="button" id="reportCancelBtn" class="btn btn-secondary">취소</button>
 		</div>
@@ -216,8 +220,31 @@
 			// 팝업 내 확인 버튼 클릭 시 팝업 닫기
 			$('#reportConfirmBtn').on('click', function() {
 				console.log("팝업에서 확인 버튼이 클릭되었습니다.");
+				var userNo = $('[name=userNo]').val();
+				var productID = $('[name=productID]').val();  // 상품 ID 가져오기
+				var reportContent = $('[name=reportContent]').val();  // 신고 내용 가져오기
+				console.log("유저번호==>" + userNo);
+				console.log("제품아이디==>" + productID);
+				$.ajax({
+					url: '/product/productReportInsert',  // 서버에 요청을 보낼 URL
+					type: 'POST',
+					data: {
+						productID: productID,
+						reportContent: reportContent,
+						userNo : userNo
+					},
+					success: function (response) {
+						alert('신고해주신 내용은 검토한 뒤에 조치하겠습니다.');
+						$('#reportPopup').css('display', 'none');  // 팝업을 닫음
+						// 필요한 경우 신고 후 추가 작업을 여기서 처리
+					},
+					error: function (error) {
+						alert('신고 처리 중 오류가 발생했습니다.');
+					}
+				});
+
 				$('#reportPopup').css('display', 'none');  // 팝업을 다시 숨김
-				alert('신고해주신 내용은 검토한 뒤에 조치하겠습니다.');
+
 			});
 
 			$('#reportCancelBtn').on('click', function (){

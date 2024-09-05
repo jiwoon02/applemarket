@@ -3,6 +3,7 @@ package com.apple.admin.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.apple.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ public class AdminController {
 	
 	@Setter(onMethod_ = @Autowired)
 	private AdminService adminService;
+	private ProductServiceImpl productServiceImpl;
 
 	//카테고리 관리 페이지로 이동을 위한 매핑
 	@GetMapping("category")
@@ -54,7 +56,7 @@ public class AdminController {
 	@GetMapping("product")
 	public String product(Product product,ProductReport productReport, Model model) {
 		List<Product> list = adminService.productList(product);
-		Map<Long, Long> reportCount = adminService.productReportCount(productReport);
+		Long reportCount = productServiceImpl.getReportCountByProductID(product.getProductID());
 		model.addAttribute("productList", list);
 		model.addAttribute("reportCount", reportCount);
 		
@@ -86,10 +88,15 @@ public class AdminController {
 	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport, Model model) {
 		product.setProductID(productID);
 		Product detail = adminService.productDetail(product);
-		List<ProductReport> Reportdetail = adminService.productReportDetail(productReport);
+		List<ProductReport> Reportdetail = adminService.productReportDetail();
 		model.addAttribute("detail", detail);
 		model.addAttribute("reportDetail", Reportdetail);
 		return "/admin/productDetail";
+	}
+
+    @Autowired
+    public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
+		this.productServiceImpl = productServiceImpl;
 	}
 //	테스트용 매핑 
 //	@GetMapping("product/1")

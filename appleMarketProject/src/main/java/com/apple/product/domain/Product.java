@@ -89,4 +89,5 @@ public class Product {
 
     @Transient
     private List<String> deletedImageFilenames; // 삭제할 파일 이름 리스트
+
 }
