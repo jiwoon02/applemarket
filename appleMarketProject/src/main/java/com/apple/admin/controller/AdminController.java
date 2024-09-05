@@ -1,6 +1,7 @@
 package com.apple.admin.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apple.admin.domain.ProductReport;
 import com.apple.admin.service.AdminService;
@@ -33,7 +37,7 @@ public class AdminController {
 	@GetMapping("category")
 	public String categoryList(Category category,Product product, Model model) {
 		List<Category> list = adminService.categoryList(category);
-		Long categoryCount = adminService.categoryCount(product);
+		Map<String, Long> categoryCount = adminService.CategoryCounts();
 		
 		model.addAttribute("categoryList", list);
 		model.addAttribute("Count", categoryCount);
@@ -58,17 +62,15 @@ public class AdminController {
 	@GetMapping("product")
 	public String product(Product product,ProductReport productReport, Model model) {
 		List<Product> list = adminService.productList(product);
-		System.out.println("list : " + list);
+		//디버그
+//		System.out.println("list : " + list);
 		
-//		Map<Long, Long> reportCountDetail = adminService.productReportCountDetail(productReport);
-//		System.out.println("reportCount : " + reportCountDetail.values());
-//		
 		
-		Long reportCount = adminService.productReportCount(productReport);
-		System.out.println("Count: " + reportCount);
+		Map<Long, Long> reportCount = adminService.productReportCount();
+		//디버그
+		System.out.println("id : " + reportCount.values());
 		model.addAttribute("reportCount", reportCount);
 		model.addAttribute("productList", list);
-//		model.addAttribute("reportCountDetail", reportCountDetail);
 		
 		return "/admin/product";
 	}
@@ -85,10 +87,11 @@ public class AdminController {
 		return "/admin/productDetail";
 	}
 	
-	@PostMapping("product/category/change")
-	public String categoryChange(Product product) {
-		adminService.categoryChange(product);
-		return "redirect:/admin/success/admin";
+	@PostMapping("product/{productID}/category/change")
+	public String categoryChange(@PathVariable Long productID, @RequestBody Map<String, String> requestBody) {
+	    String categoryID = requestBody.get("categoryID");
+	    adminService.categoryChange(productID, categoryID);
+	    return "redirect:/admin/success/product/" + productID;
 	}
 	
 	@PostMapping("category/insert")
@@ -110,6 +113,13 @@ public class AdminController {
 		return "redirect:/admin/success/administration";
 	}
 	
+
+	@PostMapping("product/{productID}/product/delete")
+	public String productDelete(@PathVariable Long productID, @RequestBody List<Long> productIds ) {
+		adminService.productDelete(productID, productIds);
+		
+		return "redirect:/admin/success/product";
+	}
 	
 //	테스트용 매핑 
 //	@GetMapping("product/1")

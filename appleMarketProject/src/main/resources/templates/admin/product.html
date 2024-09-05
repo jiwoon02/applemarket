@@ -12,7 +12,6 @@
 
 <body>
     <th:block layout:fragment="content">
-  
             <div class="text-center">
                 <h3>상품 관리</h3>                
             </div>
@@ -26,7 +25,7 @@
 		          		<li class="productfont" id="productPrice" th:text="'가격 : ' + *{productPrice}">가격:</li>
 		          		<li class="productfont" id="productDate" th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">작성날자</li>
 		          		<li class="productfont" id="productCategory" th:text="'카테고리 : ' + *{category.categoryName}">카테고리</li>
-		          		<li class="productfont" id="productReportCnt" th:text="'신고횟수 : ' + ${reportCount}">신고횟수 : 0</li>
+		          		<li class="productfont" id="productReportCnt" th:text="${reportCount[product.productID]} != null ? '신고 횟수: ' + ${reportCount[product.productID]} : '신고 횟수: ' +  0">신고횟수 : 0</li>
 					</ul>
 				</div>
     		</th:block>

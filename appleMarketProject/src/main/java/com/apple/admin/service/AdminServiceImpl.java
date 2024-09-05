@@ -1,5 +1,6 @@
 package com.apple.admin.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.admin.domain.Admin;
 import com.apple.admin.domain.ProductReport;
@@ -71,14 +73,28 @@ public class AdminServiceImpl implements AdminService {
 		productList = (List<Product>) productRepository.findAll();
 		return productList;
 	}
-
+	
 	@Override
-	public Map<Long, Long> productReportCountDetail(ProductReport productReport) {
-		Map<Long, Long> productReportCount = null;
-		productReportCount = (Map<Long, Long>) productReportRepository.ReportConutDetail();
-		return productReportCount;
+	public void categoryChange(Long productID, String newCategoryID) {
+		Optional<Product> productOptional = productRepository.findById(productID);
+		if (productOptional.isPresent()) {
+			Product existingProduct = productOptional.get();
+			
+			// Find the new category
+			Optional<Category> categoryOptional = categoryRepository.findById(newCategoryID);
+			if (categoryOptional.isPresent()) {
+				Category newCategory = categoryOptional.get();
+				existingProduct.setCategory(newCategory);
+				productRepository.save(existingProduct);
+			} else {
+				throw new IllegalArgumentException("Category not found");
+			}
+		} else {
+			throw new IllegalArgumentException("Product not found");
+		}
 	}
 	
+
 	@Override
 	public void categoryInsert(Category category) {
 		categoryRepository.save(category);
@@ -114,33 +130,40 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public long productReportCount(ProductReport productReport) {
-		Long productReprotCount = null;
-		productReprotCount = (Long) productReportRepository.ReportCount();
-		if(productReprotCount == null) productReprotCount = 0L;
-		return productReprotCount;
-		
-	}
+	public Map<Long, Long> productReportCount() {
+		List<Object[]> results = productReportRepository.ReportCount();
 	
-	@Override
-	public long categoryCount(Product product) {
-		Long categoryCount = null;
-		categoryCount = (Long) productRepository.findcategoryCount();
-		if(categoryCount == null) categoryCount = 0L;
-		return categoryCount;
+		Map<Long, Long> productReportCount = new HashMap<>();
+		for (Object[] result : results) {
+			Long productId = ((Number) result[0]).longValue();
+			Long count = ((Number) result[1]).longValue();
+			productReportCount.put(productId, count);
+		}
+		
+		return productReportCount;
 	}
+	//카테고리 등록 횟수 표시
+	public Map<String, Long> CategoryCounts() {
+        List<Object[]> results = productRepository.countProductsByCategory();
 
+        Map<String, Long> categoryCounts = new HashMap<>();
+        for (Object[] result : results) {
+            String categoryId = (String) result[0];
+            Long count = ((Number) result[1]).longValue();
+            categoryCounts.put(categoryId, count);
+        }
+
+        return categoryCounts;
+    }
+
+	@Transactional
 	@Override
-	public void categoryChange(Product product) {
-		Optional<Product> categoryOptional = productRepository.findById(product.getProductID());
-		Product changeCategory =  categoryOptional.get();
-		
-		changeCategory.setCategory(product.getCategory());
-		
-		productRepository.save(changeCategory);
+	public void productDelete(Long productID , List<Long> productIds) {
+		//신고된 내용 삭제
+		productReportRepository.deleteByProductIds(productIds);
+		productRepository.deleteById(productID);
 		
 	}
-
 
 
 

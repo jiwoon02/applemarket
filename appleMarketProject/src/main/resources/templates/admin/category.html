@@ -50,8 +50,7 @@
 	            			<tr class = "text-center" th:each = "category : ${categoryList}" th:object = "${category}">
 	            				<td th:text="*{categoryID}"></td>
 	            				<td th:text="*{categoryName}"></td>
-	            				<td th:text="${Count} == null ? 0 : ${Count}"></td>
-	            				
+	            				<td th:text="${Count[category.categoryID]} != null ? ${Count[category.categoryID]} : 0 "></td>
 	            				<td>
 	            				<button type="button" class="btn btn-primary btn-sm deleteBtn" th:data-id="*{categoryID}">삭제</button>
 	            				</td>
