@@ -57,4 +57,10 @@ public class CommunityServiceImpl implements CommunityService {
     public Page<CommunityPost> getPostsByLocationID(Long locationID, Pageable pageable) {
         return communityPostRepository.findByLocation_LocationID(locationID, pageable);
     }
+
+    @Override
+    public Page<CommunityPost> searchPostsByUserNameOrTitle(String query, Pageable pageable) {
+        // 사용자 이름이나 커뮤니티 제목에 따라 검색
+        return communityPostRepository.findByUserNo_UserNameContainingOrCommunityTitleContaining(query, query, pageable);
+    }
 }

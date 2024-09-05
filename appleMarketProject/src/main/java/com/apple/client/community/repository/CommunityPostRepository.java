@@ -19,4 +19,7 @@ public interface CommunityPostRepository extends JpaRepository<CommunityPost, Lo
     
     // 특정 사용자(userNo)의 게시글을 모두 찾기
     List<CommunityPost> findByUserNo(User userNo);
+    
+    //userName이나 communityTitle을 검색 (Pageable을 사용하여 페이징 처리)
+    Page<CommunityPost> findByUserNo_UserNameContainingOrCommunityTitleContaining(String userName, String communityTitle, Pageable pageable);
 }

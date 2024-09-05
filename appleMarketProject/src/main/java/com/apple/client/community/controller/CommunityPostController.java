@@ -1,14 +1,12 @@
 package com.apple.client.community.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.HashMap;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -45,42 +43,58 @@ public class CommunityPostController {
     // 게시글 리스트 페이지를 반환
     @GetMapping("/communityPostList")
     public String showCommunityPostListPage(@CookieValue(value = "JWT", required = false) String token, Model model) {
+        Pageable pageable = PageRequest.of(0, 10);
+        
         if (token != null && !token.isEmpty()) {
             Long userNo = userService.getUserNo(token);
             Long locationID = userService.getLocationIDByUserNo(userNo);
-            Page<CommunityPost> page = communityService.getPostsByLocationID(locationID, PageRequest.of(0, 10, Sort.by("communityPostID").descending()));
-            List<CommunityPost> posts = page.getContent();  // Page 객체에서 List<CommunityPost> 가져오기
-            model.addAttribute("posts", posts);
+            Page<CommunityPost> posts = communityService.getPostsByLocationID(locationID, pageable);
+            model.addAttribute("posts", posts.getContent());
         } else {
-            Page<CommunityPost> page = communityService.findAllPosts(PageRequest.of(0, 10, Sort.by("communityPostID").descending()));
-            List<CommunityPost> posts = page.getContent();  // Page 객체에서 List<CommunityPost> 가져오기
-            model.addAttribute("posts", posts);
+            Page<CommunityPost> posts = communityService.findAllPosts(pageable);
+            model.addAttribute("posts", posts.getContent());
         }
         return "community/communityPostList";
+    }
+
+    // 검색 기능 추가
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam("query") String query, 
+                              @RequestParam(defaultValue = "0") int page, 
+                              @RequestParam(defaultValue = "10") int size,
+                              Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CommunityPost> posts = communityService.searchPostsByUserNameOrTitle(query, pageable);
+
+        model.addAttribute("posts", posts.getContent());
+        model.addAttribute("currentPage", posts.getNumber());
+        model.addAttribute("totalPages", posts.getTotalPages());
+        model.addAttribute("query", query);
+
+        return "community/communityPostList";  // 검색된 게시글을 보여줄 페이지
     }
 
     // 무한 스크롤로 게시글 데이터를 제공하는 API
     @GetMapping("/api/communityPostList")
     @ResponseBody
-    public Map<String, Object> getCommunityPosts(@RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "10") int size,
+    public Map<String, Object> getCommunityPosts(@RequestParam(defaultValue = "0") int offset,
+                                                 @RequestParam(defaultValue = "10") int limit,
                                                  @CookieValue(value = "JWT", required = false) String token) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("communityPostID").descending());
-        Page<CommunityPost> postPage;
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<CommunityPost> posts;
 
         if (token != null && !token.isEmpty()) {
             Long userNo = userService.getUserNo(token);
             Long locationID = userService.getLocationIDByUserNo(userNo);
-            postPage = communityService.getPostsByLocationID(locationID, pageable);
+            posts = communityService.getPostsByLocationID(locationID, pageable);
         } else {
-            postPage = communityService.findAllPosts(pageable);
+            posts = communityService.findAllPosts(pageable);
         }
 
-        List<CommunityPost> posts = postPage.getContent();  // Page 객체에서 List<CommunityPost> 가져오기
         Map<String, Object> response = new HashMap<>();
-        response.put("content", posts);
-        response.put("currentPage", page);
-        response.put("pageSize", size);
+        response.put("content", posts.getContent());
+        response.put("offset", offset);
+        response.put("limit", limit);
 
         return response;
     }
