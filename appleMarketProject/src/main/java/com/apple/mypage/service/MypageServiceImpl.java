@@ -21,6 +21,7 @@ import com.apple.mypage.repository.MypageRepository;
 import com.apple.mypage.repository.WithdrawRepository;
 import com.apple.order.domain.Order;
 import com.apple.order.repository.OrderRepository;
+import com.apple.product.domain.OrderProductDTO;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
@@ -93,25 +94,13 @@ public class MypageServiceImpl implements MypageService {
     */
     
     @Override
-    public List<Product> getBuyItemsByUserNo(Long userNo) {
+    public List<OrderProductDTO> getBuyItemsByUserNo(Long userNo) {
         // 해당 userNo로 Order 목록을 가져옴
         // 해당 userNo로 apple_order 목록을 가져옴
-        List<Order> orders = mypageRepository.findByUserUserNo(userNo);
+        List<OrderProductDTO> orders = mypageRepository.findOrderProductInfoByUserNo(userNo);
         
         // 각 주문에서 productID를 사용하여 Product 목록을 반환
-        return orders.stream()
-                     .map(Order::getProduct)
-                     .collect(Collectors.toList());
-    }
-    
-    @Override
-    public List<Product> getItemsExcludingOrders(Long userNo) {
-        return mypageRepository.findItemsExcludingOrders(userNo);
-    }
-    
-    @Override
-    public List<Product> getSoldItems(Long userNo) {
-        return mypageRepository.findSoldItems(userNo);
+        return orders;
     }
     
     // userNo로 전체 상품 목록을 가져오는 메서드
@@ -124,11 +113,6 @@ public class MypageServiceImpl implements MypageService {
     public void deleteBuyItem(Long userNo, Long productID) {
         mypageRepository.deleteOrderByUserNoAndProductId(userNo, productID);
     }
-    
-//    @Override
-//    public List<String> getItemStatusByUserNo(Long userNo) {
-//        return mypageRepository.findItemStatusByUserNo(userNo);
-//    }
 
     @Override
     public void deleteSellItem(Long userNo, Long productID) {

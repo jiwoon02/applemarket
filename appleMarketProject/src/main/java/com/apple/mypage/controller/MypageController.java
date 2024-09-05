@@ -19,6 +19,7 @@ import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
 import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.service.MypageService;
+import com.apple.product.domain.OrderProductDTO;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
@@ -69,47 +70,19 @@ public class MypageController {
     	
     	return "mypage/mypage"; // 반환할 뷰의 이름
     }
-
-    
-    @GetMapping("/mypage")
-    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-
-        return "mypage/mypage"; // 반환할 뷰의 이름
-    }
-    
-    //판매상품
-    @GetMapping("/sell")
-    public String getItemsExcludingOrders(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	model.addAttribute("userNo", userNo);
-    	
-        List<Product> items = mypageService.getItemsExcludingOrders(userNo);
-        model.addAttribute("items", items);
-        return "mypage/mypageSellItem"; // 반환할 뷰의 이름
-    }
     
 	@GetMapping("/buy")
 	public String getBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
 		Long userNo = mypageService.getUserNo(token);
 		model.addAttribute("userNo", userNo);
 		
-	    List<Product> items = mypageService.getBuyItemsByUserNo(userNo);
+	    List<OrderProductDTO> items = mypageService.getBuyItemsByUserNo(userNo);
 	    model.addAttribute("items", items);
 
 	    return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
 	}
     
-    @GetMapping("sold")
-    public String getSoldItems(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	model.addAttribute("userNo", userNo);
-    	
-        List<Product> items = mypageService.getSoldItems(userNo);
-        model.addAttribute("items", items);
-        
-        return "mypage/mypageSellItem"; // 반환할 뷰의 이름
-    }
-    
+	//판매상품
     @GetMapping("sellAll")
     public String getAllItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
     	Long userNo = mypageService.getUserNo(token);
@@ -123,26 +96,6 @@ public class MypageController {
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
-    // 특정 상품을 삭제하는 메서드
-    @PostMapping("/delete/buy")
-    public String deleteBuyItem(@CookieValue(value="JWT", required=false) String token, @RequestParam("productIds[]") List<Long> productID, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	for (Long product : productID) {
-            mypageService.deleteBuyItem(userNo, product);
-        }
-
-        return "redirect:/mypage/buy" + userNo; // 반환할 뷰의 이름
-    }
-    
-    // 특정 상품을 삭제하는 메서드
-    @PostMapping("/delete/sell{userNo}")
-    public String deleteSellItem(@PathVariable Long userNo, @RequestParam("productIds[]") List<Long> productID, Model model) {
-        for (Long product : productID) {
-            mypageService.deleteSellItem(userNo, product);
-        }
-
-        return "redirect:/mypage/sellAll" + userNo; // 삭제 후 전체 목록으로 리다이렉트
-    }
     
     // 리뷰 작성 페이지를 보여주는 메서드 추가
     @GetMapping("/addReview/{productName}/{shopId}/{productID}/{userNo}")
