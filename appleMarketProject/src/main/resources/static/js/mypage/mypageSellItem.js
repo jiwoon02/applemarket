@@ -1,61 +1,47 @@
-$(function() {
-	$("#fullChk").on("click", function() {
-		if ($("#fullChk").prop("checked")) {
-			$(".sellChk").prop("checked", true);
-		} else {
-			$(".sellChk").prop("checked", false);
-		}
-	});
+document.addEventListener('DOMContentLoaded', function () {
 	
-	var url = location.href; // 현재 URL 가져오기
-    var userNo = getUserNoFromUrl(); // URL에서 userNo를 가져옴
-
-    // URL에 따라 select 태그 값 설정
-    if (url.includes('/mypage/sell' + userNo)) {
-        $('#itemState').val('selling');
-		$(".productState").html("판매중");
-    } else if (url.includes('/mypage/sold' + userNo)) {
-        $('#itemState').val('selled');
-		$(".productState").html("판매완료");
-    } else if (url.includes('/mypage/sellAll' + userNo)) {
-        $('#itemState').val('full');
-    }
-
-	$('#itemState').change(function() {
-	    var userNo = getUserNoFromUrl(); // URL에서 userNo를 가져옴
-	    var selectedState = $(this).val();
-	    console.log(selectedState);
-		
-	    if (selectedState === 'selling') {
-	        location.href = '/mypage/sell' + userNo;
-			$("#selling").prop("selected", true);
-	    } else if (selectedState === 'selled') {
-	        location.href = '/mypage/sold' + userNo;
-			$("#selled").prop("selected", true);
-	    } else {
-	        location.href = '/mypage/sellAll' + userNo;
-			$("#full").prop("selected", true);
-	    }
-	});
+	//tr에 링크 추가
+	var rows = document.querySelectorAll('.trSellItem');
+    rows.forEach(function(row) {
+        // 각 tr 요소에 클릭 이벤트 추가
+        row.addEventListener('click', function() {
+            // 해당 row의 데이터에서 productID 값을 가져옴
+            var productId = this.querySelector('td:first-child').innerText;
+            // 페이지 이동
+            window.location.href = '/product/' + productId;
+        });
+    });
 	
-	$("#deleteBtn").on("click", function(e) {
-		// 선택된 항목 삭제 버튼 클릭 시
-		e.preventDefault();
-		
-        if ($(".sellChk:checked").length > 0) {
-            if (confirm("선택한 항목을 삭제하시겠습니까?")) {
-                $("#deleteForm").submit();
+    const itemStateSelect = document.getElementById('itemState');
+    
+    itemStateSelect.addEventListener('change', function () {
+        const selectedState = this.value; // 선택된 옵션 값 (full, selling, selled)
+        const rows = document.querySelectorAll('tbody tr.trSellItem'); // 모든 상품 행을 선택
+
+        rows.forEach(row => {
+            const status = row.querySelector('td:last-child').textContent.trim(); // 상품 상태를 가져옴
+
+            if (selectedState === '전체') {
+                // 전체를 선택하면 모든 항목을 보여줌
+                row.style.display = '';
+            } else if (status === selectedState) {
+                // 선택된 상태와 일치하는 상품만 보여줌
+                row.style.display = '';
+            } else {
+                // 일치하지 않는 상품은 숨김
+                row.style.display = 'none';
             }
+        });
+
+        // 표시된 상품이 없을 경우 "판매내역이 존재하지 않습니다." 메시지 처리
+        const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+        const emptyMessageRow = document.querySelector('.emptyTbl');
+        
+        if (visibleRows.length === 0) {
+            emptyMessageRow.style.display = '';
         } else {
-            alert("삭제할 항목을 선택하세요.");
+            emptyMessageRow.style.display = 'none';
         }
     });
-})
+});
 
-function getUserNoFromUrl() {
-    var url = window.location.pathname; // 현재 URL 경로를 가져옴
-    var segments = url.split('/'); // URL을 '/'로 분리
-    var lastSegment = segments.pop(); // 마지막 부분을 가져옴
-    var userNo = lastSegment.replace(/\D/g, ''); // 숫자가 아닌 문자를 제거하여 userNo만 추출
-    return userNo;
-}

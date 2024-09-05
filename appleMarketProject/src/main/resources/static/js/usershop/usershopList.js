@@ -27,17 +27,6 @@ $(function() {
 		$(".divModifyContent").css("display", "none");
 		$(".divModifyBtn").css("display", "none");
 		
-		/*console.log($(".divModifyContent").html());
-		$(".introText").val($(".divModifyContent").html());*/
-		
-		/*var currentNickname = $(".divShopName2").text();
-		$(".divShopName2").text("");  // 텍스트를 지우기
-		$(".divShopName2").append(
-	        '<form name="nickname" class="nicknameForm" id="nickname">' +
-	        '<input type="text" class="nicknameInput" name="shopName" value="' + currentNickname + '" />' +
-	        '</form>'
-	    );*/
-		
 		$(".divShopName2").css("display", "none");
 		$("#nickname").css("display", "block");
 		
@@ -111,16 +100,20 @@ $(function() {
 		$(".reviewStar5").attr("src", "../images/usershop/star.png");
 	}
 	
-	/*document.querySelectorAll('.profileImg').forEach(function(imgElement) {
-	    const userNo = imgElement.getAttribute('data-userNo');
-	    
-	    fetch(`/usershop/getShopImg/${userNo}`)
-	        .then(response => response.text())
-	        .then(shopImgName => {
-	            imgElement.src = `/usershop/view/${shopImgName}`;
-	        })
-	        .catch(error => console.error('Error fetching shop image:', error));
-	});*/
+	$(".divItems").on("click", ".divItem", function() {
+	    var productId = $(this).data("product-id");
+	    location.href = "/product/" + productId;
+	});
+	
+	$(".shopPage").on("click", function() {
+		var userNo = $(".userImg").val();	
+		location.href="/usershop/list" + userNo
+	});
+	
+	$(".itemBtn").on("click", function() {
+		var productId = $("#productId").val();	
+		location.href = "/product/" + productId;
+	});
 
 });
 

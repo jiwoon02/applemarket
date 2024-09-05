@@ -122,11 +122,15 @@ $(function() {
 	    location.href = "/product/" + productId;
 	});
 	
-	/*$(".profileImg2").on("click", function() {
-		
-		location.href="/usershop/list" + 
-	})*/
+	$(".shopPage").on("click", function() {
+		var userNo = $(".userImg").val();	
+		location.href="/usershop/list" + userNo
+	});
 	
+	$(".itemBtn").on("click", function() {
+		var productId = $("#productId").val();	
+		location.href = "/product/" + productId;
+	});
 });
 
 function showItems() {

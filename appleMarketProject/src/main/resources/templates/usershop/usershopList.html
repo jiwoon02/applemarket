@@ -61,7 +61,7 @@
                 
                 <div class="divComplain">
                     <img class="img" src="../images/usershop/complain.png" alt="신고하기">
-                    <a href="">신고하기</a>
+                    <a href="#">신고하기</a>
                 </div>
             </div>
         </div>   
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="divItems">
-				    <div th:each="item : ${usershopItemList}" class="divItem">
+				    <div th:each="item : ${usershopItemList}" th:data-product-id="${item.productID}" class="divItem">
 				        <div class="divItemImg">
 				            <!-- 여기서 productImageId를 사용 
 				            <img th:src="@{'../images/usershop/' + ${item.productImageId}}" class="itemImg" alt="상품이미지">-->
@@ -192,7 +192,8 @@
                     <div class="divUserComment">
 	                    <div th:each="review : ${itemReviewList}" class="divUserOne">
 	                        <div class="divUserOne">
-	                            <img th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}" class="profileImg">
+	                            <img th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}" class="profileImg shopPage">
+	                            <input type="hidden" th:value="${review.user.userNo}" class="userImg" />
 	                            <div class="DivUserInfo">
 	                                <div class="userInfo">
 	                                    <div th:text="${review.user.userNickname}" class="shopName">사용자명</div>
@@ -205,6 +206,7 @@
 	                                    </div>
 	                                    <div class="divItemBtn">
 	                                         <button th:text="${review.product.productName}" class="itemBtn">상품명</button>
+	                                         <input type="hidden" th:value="${review.product.productID}" id="productId" />
 										</div>
 	                                </div>
 	                                <div class="divReview" th:text="${review.reviewContent}">

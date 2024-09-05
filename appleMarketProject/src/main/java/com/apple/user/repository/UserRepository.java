@@ -5,6 +5,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.user.domain.User;
 
@@ -33,5 +37,10 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     //아아디 기준 찾기
 	Optional<User> findByUserID(String userID);
+	
+	@Transactional
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.userNo = :userNo")
+    void deleteByUserNo(@Param("userNo") Long userNo);
 	
 }

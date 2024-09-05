@@ -51,8 +51,9 @@
                 </tr>
             </tbody>
         </table>
-    
-        <!-- 반복문시작 -->
+    	<div id="blank">
+    	</div>
+    	<!--
         <table class="tbl_col">
             <colgroup>
                 <col style="width:15%;">
@@ -72,22 +73,18 @@
                 </tr>
             </thead>
             <tbody>
-        <!-- 반복구문시작 -->
                 <tr th:each="item : ${items}">
                     <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}" class="order_date">주문일</td>
                     <td th:text="${item.productName}" class="tal">상품명</td>
                     <td th:text="${item.productPrice}+'원'">결제금액</td>
                     <td>주문완료</td>
                 </tr>
-        <!-- 반복구문끝 -->
             </tbody>
-            <!-- 데이터없음시작 -->
             <tr class="emptyTbl" th:if="${#lists.isEmpty(items)}">
                 <td colspan="4" class="empty">주문내역이 존재하지 않습니다.</td>
             </tr>
-            <!-- 데이터없음끝 -->
         </table>
-        <!-- 반복문끝 -->
+        -->
     </div>
 </th:block>
 

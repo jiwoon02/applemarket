@@ -49,4 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("UPDATE Product p SET p.productStatus = :status WHERE p.productID = :productID")
     void updateProductStatus(@Param("productID") Long productID, @Param("status") String status);
 
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }

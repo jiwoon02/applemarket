@@ -3,8 +3,13 @@ package com.apple.user.domain;
 import java.util.Date;
 import java.util.List;
 
+import com.apple.admin.domain.ProductReport;
+import com.apple.client.community.domain.CommunityPost;
+import com.apple.client.communityComment.domain.CommunityComment;
 import com.apple.location.domain.Location;
+import com.apple.mypage.domain.Mypage;
 import com.apple.product.domain.Product;
+import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
 
 import jakarta.persistence.CascadeType;
@@ -108,10 +113,26 @@ public class User{
         this.userEditDate = new Date(); // 수정일을 현재 시간으로 설정
     }
     
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Usershop usershop;
 	
 	// Test_user 엔티티는 여러 개의 Test_item 엔티티를 가질 수 있음
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private ProductReport productReport;
+	
+    @OneToMany(mappedBy = "userNo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<CommunityComment> communityComment;
+	
+	@OneToMany(mappedBy = "userNo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<CommunityPost> communityPost; 
+	
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private Mypage mypage;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<ItemReview> review;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Product> items;
+	
 }

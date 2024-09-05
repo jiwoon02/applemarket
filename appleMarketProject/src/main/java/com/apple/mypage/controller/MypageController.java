@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.apple.jwt.JwtUtil;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
+import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.service.MypageService;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
@@ -27,6 +28,8 @@ import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
 import com.apple.usershop.service.UsershopService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/mypage")
 public class MypageController {
 	
-    @Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = @Autowired)
     private MypageService mypageService;
     
     @Setter(onMethod_ = @Autowired)
@@ -51,7 +54,7 @@ public class MypageController {
     private UserRepository userRepository;
     
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;  // JwtUtil을 주입
     
     //마이페이지
 //    @GetMapping("{userNo}")
@@ -63,18 +66,14 @@ public class MypageController {
     
     @GetMapping("")
     public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
     	
-    	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-    	model.addAttribute("items", items);
-	 
     	return "mypage/mypage"; // 반환할 뷰의 이름
     }
+
     
     @GetMapping("/mypage")
     public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-        model.addAttribute("items", items);
+
         return "mypage/mypage"; // 반환할 뷰의 이름
     }
     
@@ -117,10 +116,10 @@ public class MypageController {
     	model.addAttribute("userNo", userNo);
     	
         List<Product> items = mypageService.getAllItemsByUserNo(userNo);
-        List<String> itemStatuses = mypageService.getItemStatusByUserNo(userNo); // 각 상품의 상태 가져오기
+
         
         model.addAttribute("items", items);
-        model.addAttribute("itemStatuses", itemStatuses); // 상태를 모델에 추가
+        
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
@@ -224,5 +223,55 @@ public class MypageController {
         return "redirect:/mypage"; // 수정 완료 후 마이페이지로 리다이렉트
     }
     
+    @GetMapping("/withdraw")
+    public String withdrawPage() {
+    	return "mypage/mypageWithdraw";
+    }
+    
+    @GetMapping("/withdrawNote")
+    public String withdrawNotePage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawNote";
+    }
+    
+    @GetMapping("/withdrawComment")
+    public String withdrawCommentPage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawComment";
+    }
+    
+    // User 객체를 가져오는 메서드
+    public User getUser(@CookieValue(value="JWT", required=false) String token) {
+        if (token != null) {
+            String userID = jwtUtil.getUserID(token);
+            Optional<User> userOptional = userRepository.findByUserID(userID);
+        
+            return userOptional.orElse(null);
+        }
+        return null;
+    }
+    
+    @PostMapping("/userDelete")
+    public String deleteUser(@CookieValue(value="JWT", required=false) String token, @RequestParam("reason") String reason, HttpServletResponse response) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	// WithdrawDTO에 탈퇴 사유를 설정
+        WithdrawDTO withdrawDTO = new WithdrawDTO();
+        withdrawDTO.setUserNo(userNo);
+        withdrawDTO.setReason(reason);
+
+        mypageService.deleteUser(withdrawDTO);
+        
+        // 로그아웃 처리: JWT 쿠키 삭제
+        Cookie jwtCookie = new Cookie("JWT", null); // 쿠키 값을 null로 설정
+        jwtCookie.setMaxAge(0); // 쿠키 만료 시간 설정(즉시 만료)
+        jwtCookie.setPath("/"); // 쿠키의 경로 설정
+        response.addCookie(jwtCookie); // 응답에 쿠키 추가
+        return "redirect:/"; // 사용자 목록 페이지로 리다이렉트
+    }
 }
+    
+
 
