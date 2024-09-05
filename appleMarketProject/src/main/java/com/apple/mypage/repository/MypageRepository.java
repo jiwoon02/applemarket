@@ -52,4 +52,7 @@ public interface MypageRepository extends JpaRepository<Order, String> {
 
     @Query("SELECT i FROM Product i WHERE i.productID = :productID")
     Optional<Product> findItemByProductId(@Param("productID") Long productID);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }

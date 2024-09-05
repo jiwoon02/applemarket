@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.apple.jwt.JwtUtil;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
 import com.apple.mypage.dto.WithdrawDTO;
@@ -28,6 +28,8 @@ import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
 import com.apple.usershop.service.UsershopService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,6 +52,9 @@ public class MypageController {
     
     @Setter(onMethod_ = @Autowired)
     private UserRepository userRepository;
+    
+    @Autowired
+    private JwtUtil jwtUtil;  // JwtUtil을 주입
     
     //마이페이지
 //    @GetMapping("{userNo}")
@@ -236,8 +241,19 @@ public class MypageController {
     	return "mypage/mypageWithdrawComment";
     }
     
+    // User 객체를 가져오는 메서드
+    public User getUser(@CookieValue(value="JWT", required=false) String token) {
+        if (token != null) {
+            String userID = jwtUtil.getUserID(token);
+            Optional<User> userOptional = userRepository.findByUserID(userID);
+        
+            return userOptional.orElse(null);
+        }
+        return null;
+    }
+    
     @PostMapping("/userDelete")
-    public String deleteUser(@CookieValue(value="JWT", required=false) String token, @RequestParam("reason") String reason) {
+    public String deleteUser(@CookieValue(value="JWT", required=false) String token, @RequestParam("reason") String reason, HttpServletResponse response) {
     	Long userNo = mypageService.getUserNo(token);
     	
     	// WithdrawDTO에 탈퇴 사유를 설정
@@ -246,7 +262,13 @@ public class MypageController {
         withdrawDTO.setReason(reason);
 
         mypageService.deleteUser(withdrawDTO);
-        return "redirect:/mypage"; // 사용자 목록 페이지로 리다이렉트
+        
+        // 로그아웃 처리: JWT 쿠키 삭제
+        Cookie jwtCookie = new Cookie("JWT", null); // 쿠키 값을 null로 설정
+        jwtCookie.setMaxAge(0); // 쿠키 만료 시간 설정(즉시 만료)
+        jwtCookie.setPath("/"); // 쿠키의 경로 설정
+        response.addCookie(jwtCookie); // 응답에 쿠키 추가
+        return "redirect:/"; // 사용자 목록 페이지로 리다이렉트
     }
 }
     

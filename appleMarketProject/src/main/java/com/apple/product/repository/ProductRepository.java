@@ -37,4 +37,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     // userNo를 기준으로 productId의 개수를 가져오는 메서드
     Long countByUser_UserNo(Long userNo);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }

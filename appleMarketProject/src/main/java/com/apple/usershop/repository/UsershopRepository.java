@@ -15,4 +15,7 @@ public interface UsershopRepository extends JpaRepository<Usershop, Long>{
     
     // 특정 shopId가 존재하는지 확인하는 메서드
     boolean existsByShopId(Long shopId);
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }
