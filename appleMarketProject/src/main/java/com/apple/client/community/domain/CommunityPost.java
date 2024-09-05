@@ -43,7 +43,7 @@ public class CommunityPost {
 	// 위치 ID
 	@ManyToOne
 	@JoinColumn(name = "location_id", nullable = false)
-	private Location locationID;  // Location 객체를 외래 키로 매핑
+	private Location location;  // Location 객체를 외래 키로 매핑
 
 	// 게시글 제목
 	@Column(name = "Community_Title", length = 1000, nullable = false)

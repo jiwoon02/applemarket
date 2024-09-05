@@ -20,7 +20,13 @@ public interface CommunityService {
 
     // 게시글 삭제
     void deletePost(Long postId);
-    
-    // 게시글 전체 조회 (페이징 처리)
+
+    // 게시글 전체 조회 (Pageable을 사용하여 페이징 처리)
     Page<CommunityPost> findAllPosts(Pageable pageable);
+
+    // 특정 locationID에 따른 게시글 조회 (Pageable을 사용하여 페이징 처리)
+    Page<CommunityPost> getPostsByLocationID(Long locationID, Pageable pageable);
+
+    //이름이나 제목으로 검색 (Pageable을 사용하여 페이징 처리)
+	Page<CommunityPost> searchPostsByUserNameOrTitle(String query, Pageable pageable);
 }
