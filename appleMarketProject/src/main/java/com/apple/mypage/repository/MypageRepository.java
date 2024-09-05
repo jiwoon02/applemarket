@@ -32,23 +32,11 @@ public interface MypageRepository extends JpaRepository<Order, String> {
     @Query("SELECT i FROM Product i WHERE i.user.userNo = :userNo")
     List<Product> findAllItemsByUserNo(@Param("userNo") Long userNo);
     
-    // 최근 3개월 동안 구매한 상품을 찾는 메서드
-    /*
-    @Query("SELECT o.item FROM Test_order o WHERE o.user.userNo = :userNo AND o.orderRegDate >= :threeMonthsAgo")
-    List<Product> findRecentBuyItemsByUserNo(@Param("userNo") Long userNo, @Param("threeMonthsAgo") LocalDateTime threeMonthsAgo);
-	*/
-    
     @Transactional
     @Modifying
     @Query("DELETE FROM Order o WHERE o.product.productID = :productID AND o.user.userNo = :userNo")
     void deleteOrderByUserNoAndProductId(@Param("userNo") Long userNo, @Param("productID") Long productID);
     
-    // 판매 상태를 가져오는 쿼리
-
-    @Query("SELECT CASE WHEN EXISTS (SELECT o FROM Test_order o WHERE o.item.productID = i.productID) THEN '판매 완료' ELSE 'selling' END " +
-           "FROM Product i WHERE i.user.userNo = :userNo")
-    List<String> findItemStatusByUserNo(@Param("userNo") Long userNo);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Product i WHERE i.productID = :productID AND i.user.userNo = :userNo")

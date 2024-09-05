@@ -21,7 +21,7 @@ public interface MypageService {
     
     public void deleteBuyItem(Long userNo, Long productID);
     
-    public List<String> getItemStatusByUserNo(Long userNo);
+//    public List<String> getItemStatusByUserNo(Long userNo);
     
     public void deleteSellItem(Long userNo, Long productID);
     

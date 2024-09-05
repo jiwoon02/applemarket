@@ -95,7 +95,6 @@ public class MypageServiceImpl implements MypageService {
     @Override
     public List<Product> getBuyItemsByUserNo(Long userNo) {
         // 해당 userNo로 Order 목록을 가져옴
-        // 해당 userNo로 Test_order 목록을 가져옴
         // 해당 userNo로 apple_order 목록을 가져옴
         List<Order> orders = mypageRepository.findByUserUserNo(userNo);
         
@@ -126,10 +125,10 @@ public class MypageServiceImpl implements MypageService {
         mypageRepository.deleteOrderByUserNoAndProductId(userNo, productID);
     }
     
-    @Override
-    public List<String> getItemStatusByUserNo(Long userNo) {
-        return mypageRepository.findItemStatusByUserNo(userNo);
-    }
+//    @Override
+//    public List<String> getItemStatusByUserNo(Long userNo) {
+//        return mypageRepository.findItemStatusByUserNo(userNo);
+//    }
 
     @Override
     public void deleteSellItem(Long userNo, Long productID) {
