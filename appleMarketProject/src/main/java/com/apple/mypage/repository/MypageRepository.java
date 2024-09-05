@@ -28,8 +28,8 @@ public interface MypageRepository extends JpaRepository<Order, String> {
     @Query("SELECT i FROM Product i WHERE i.user.userNo = :userNo AND i.productID IN (SELECT o.product.productID FROM Order o)")
     List<Product> findSoldItems(@Param("userNo") Long userNo);
     
-    // userNo로 전체 상품을 가져오는 메서드 (모든 상품 조회)
-    @Query("SELECT i FROM Product i WHERE i.user.userNo = :userNo")
+    // userNo로 전체 상품을 가져오는 메서드 (모든 상품 조회) 내림차순으로 가져옴
+    @Query("SELECT i FROM Product i WHERE i.user.userNo = :userNo ORDER BY i.productID DESC")
     List<Product> findAllItemsByUserNo(@Param("userNo") Long userNo);
     
     @Transactional
