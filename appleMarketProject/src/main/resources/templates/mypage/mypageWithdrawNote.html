@@ -68,7 +68,7 @@
             </div>
             <form id="withdrawNoteForm" method="post" th:action="@{/mypage/userDelete}">
             <div class="divWithdrawBtn">
-                <button class="wdCancelBtn">취소하기</button>
+                <button type="button" class="wdCancelBtn">취소하기</button>
                 <button type="submit" class="wdSubmitBtn">탈퇴하기</button>
                 <input type="hidden" id="selectedReason" name="reason" />
                 <input type="hidden" th:value="${userNo}" name="userNo" />

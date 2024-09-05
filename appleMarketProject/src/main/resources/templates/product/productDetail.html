@@ -145,7 +145,7 @@
 
 				<div class="ms-3 seller-subinfo">
 					<p class="seller-name mb-0">
-						<a href="#" th:text="*{user.userNickname}">판매자 이름</a>
+						<a th:href="@{/usershop/list{userNo}(userNo=${detail.user.userNo})}" th:text="*{user.userNickname}">판매자 이름</a>
 					</p>
 					<th:block th:if="${detail.user != null}">
 						<p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
