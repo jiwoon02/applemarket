@@ -59,7 +59,7 @@ public class Product {
     @Column(name = "product_name", length = 50, nullable = false)
     private String productName;
 
-    @Column(name = "product_description", length = 1000)
+    @Column(name = "product_description", length = 1000, nullable = false)
     private String productDescription;
 
     @Column(name = "product_status")

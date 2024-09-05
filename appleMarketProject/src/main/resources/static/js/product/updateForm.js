@@ -12,21 +12,40 @@ function deleteFile(obj) {
 
 
 function addFile(obj) {
-    for (const file of obj.files) {
-        updateFileArr.push(file);
-        filesArr.push(file.name);
-		console.log(file.name);
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const imgWrapper = $('<div>').addClass('img-wrapper').attr('id', 'file-' + file.name.replace(/\./g, '\\.'));
-            const img = $('<img>').attr('src', e.target.result).addClass('img-thumbnail');
-            const deleteBtn = $('<a>').text('삭제').attr('onclick', 'deleteFile(this)').data('filename', file.name).addClass('deleteBtn');
-            imgWrapper.append(img).append(deleteBtn);
-            $('.imagePreview').append(imgWrapper);
-        };
-        reader.readAsDataURL(file);
+    var maxFileCnt = 3;   // 첨부파일 최대 개수
+    var attFileCnt = filesArr.length;    // 기존 추가된 첨부파일 개수
+    var remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
+    var curFileCnt = obj.files.length;  // 현재 선택된 첨부파일 개수
+
+    // 첨부파일 개수 확인
+    if (curFileCnt > remainFileCnt) {
+        alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+        obj.value = ""; // 추가된 파일 초기화
+        return;
     }
-    obj.value = "";
+
+        for (const file of obj.files) {
+            if (!validation(file)) {
+                obj.value = ""; // 검증 실패 시 파일 입력 초기화
+                return;
+            }
+            updateFileArr.push(file);
+            filesArr.push(file.name);
+            console.log(file.name);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgWrapper = $('<div>').addClass('img-wrapper').attr('id', 'file-' + file.name.replace(/\./g, '\\.'));
+                const img = $('<img>').attr('src', e.target.result).addClass('img-thumbnail');
+                const deleteBtn = $('<a>').text('삭제').attr('onclick', 'deleteFile(this)').data('filename', file.name).addClass('deleteBtn');
+                imgWrapper.append(img).append(deleteBtn);
+                $('.imagePreview').append(imgWrapper);
+            };
+            reader.readAsDataURL(file);
+        }
+        obj.value = "";
+
+
+
 }
 
 $("#productUpdateBtn").on("click", function() {
