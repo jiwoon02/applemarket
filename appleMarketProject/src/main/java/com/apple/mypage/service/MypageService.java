@@ -9,7 +9,7 @@ import com.apple.user.domain.User;
 
 public interface MypageService {
 	
-	public List<Product> getRecentBuyItemsByUserNo(Long userNo);
+	//public List<Product> getRecentBuyItemsByUserNo(Long userNo);
 	
 	public List<Product> getBuyItemsByUserNo(Long userNo);
 	
