@@ -452,7 +452,7 @@ td ul li a {
     line-height: 40px; /* 텍스트 세로 가운데 정렬 */
 }
 
-#userPasswd, #userPasswdChk, .userName, .userNickname, .userPhoneNumber {
+.userName, .userNickname, .userPhoneNumber {
     width: 500px;
     height: 30px;
     float: right;
@@ -475,7 +475,7 @@ td ul li a {
     float: right;
 }
 
-.userId {
+.readOnly {
 	width: 504px;
     height: 34px;
     float: right;
@@ -557,4 +557,8 @@ td ul li a {
 
 .pwdSubmitBtn:hover {
     background-color: #27ae60;
+}
+
+#blank{
+	height:200px;
 }

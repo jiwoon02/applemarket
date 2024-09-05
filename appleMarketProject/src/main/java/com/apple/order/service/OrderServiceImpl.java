@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.apple.product.domain.Product;
+import com.apple.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,24 +19,22 @@ import lombok.RequiredArgsConstructor;
 public class OrderServiceImpl implements OrderService {
 
 	private final OrderRepository orderRepository;
-	
-//	@Override
-//	public List<Order> orderList(Order order) {
-//		List<Order> orderList = null;
-//		orderList = (List<Order>)orderRepository.findAll();
-//		return orderList;
-//	}
-	
+	private final ProductRepository productRepository;
+
 	@Override
 	public List<Order> orderList() {
 		List<Order> orderList = null;
 		orderList = (List<Order>)orderRepository.orderList();
 		return orderList;
 	}
-
+	
+	//주문완료시 상품 상태변경 추가
 	@Override
 	public void orderInsert(Order order) {
 		orderRepository.save(order);
+
+		// 2. 주문이 성공적으로 저장된 후, 해당 상품 상태를 "판매 완료"로 변경
+		productRepository.updateProductStatus(order.getProduct().getProductID(), "판매 완료");
 	}
 
 	@Override
@@ -48,5 +48,6 @@ public class OrderServiceImpl implements OrderService {
             throw new NoSuchElementException("No order found with ID: " + orderID);
         }
 	}
+	
 
 }

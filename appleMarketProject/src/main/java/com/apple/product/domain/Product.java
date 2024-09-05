@@ -59,8 +59,11 @@ public class Product {
     @Column(name = "product_name", length = 50, nullable = false)
     private String productName;
 
-    @Column(name = "product_description", length = 1000, nullable = false)
+    @Column(name = "product_description", length = 1000)
     private String productDescription;
+
+    @Column(name = "product_status")
+    private String productStatus = "판매 중";
 
     @CreationTimestamp
     @Column(name = "product_reg_date", nullable = false)

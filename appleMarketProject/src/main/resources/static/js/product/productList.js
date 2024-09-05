@@ -4,7 +4,7 @@ $(".page-item a").on("click", function(e){
 	$("#page").val($(this).data("number"));
 	$("#searchForm").attr({
 		"method":"get",
-		"action":"/product/productList"
+		"action":"/"
 	});
 	$("#searchForm").submit();
 });

@@ -90,11 +90,11 @@
                         </td>
                         <td class="tdItemName">
                             <!-- <img th:src="@{'../images/usershop/' + ${item.productImageId}}" alt="상품이미지" class="itemImg"> -->
-                            <div th:text="${item.productName}" class="itemName"
-                            th:attr="data-shop-id=${item.user.usershop.shopId}, data-product-name=${item.productName}">상품명</div>
+                            <div id="itemName" th:text="${item.productName}"></div>
+                            <div id="shopId" th:text="${item.user.usershop.shopId}" hidden="true"></div>
                         </td>
-                        <td th:text="${item.productPrice}">17,000원</td>
-                        <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}">상품 등록일</td>
+                        <td th:text="${item.productPrice}"></td>
+                        <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></td>
                         <td><button type="button" class="reviewBtn">작성하기</button></td>
                     </tr>
                 </tbody>

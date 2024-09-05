@@ -68,6 +68,7 @@ public class MypageController {
     	return "mypage/mypage"; // 반환할 뷰의 이름
     }
 
+    
     @GetMapping("/mypage")
     public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
         List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
@@ -185,16 +186,19 @@ public class MypageController {
     }
     
     // 비밀번호 확인 페이지로 이동
-    @GetMapping("/userPasswordCheck{userNo}")
-    public String checkPasswordForm(@PathVariable Long userNo, Model model) {
+    @GetMapping("/userPasswordCheck")
+    public String checkPasswordForm(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
         PasswordCheckDTO passwordCheckDTO = new PasswordCheckDTO();
         passwordCheckDTO.setUserNo(userNo);
         model.addAttribute("passwordCheckDTO", passwordCheckDTO);
         return "mypage/mypageUserPasswordCheck"; // 비밀번호 확인 페이지로 이동
     }
     
-    @PostMapping("/modifyInfo{userNo}")
-    public String checkPassword(@ModelAttribute PasswordCheckDTO passwordCheckDTO, @PathVariable Long userNo, Model model) {
+    @PostMapping("/modifyInfo")
+    public String checkPassword(@ModelAttribute PasswordCheckDTO passwordCheckDTO, @CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
         boolean isPasswordCorrect = mypageService.checkPassword(passwordCheckDTO.getUserNo(), passwordCheckDTO.getUserPwd());
         
         if (isPasswordCorrect) {
@@ -210,10 +214,12 @@ public class MypageController {
         }
     }
 
-    @PostMapping("/updateUserInfo/{userNo}") 
-    public String updateUserInfo(@ModelAttribute("user") User updatedUser, @PathVariable Long userNo, Model model) {
-        mypageService.updateUserInfo(userNo, updatedUser);
-        return "redirect:/mypage/" + userNo; // 수정 완료 후 마이페이지로 리다이렉트
+    @PostMapping("/updateUserInfo") 
+    public String updateUserInfo(@ModelAttribute("user") User updatedUser, @CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	mypageService.updateUserInfo(userNo, updatedUser);
+        return "redirect:/mypage"; // 수정 완료 후 마이페이지로 리다이렉트
     }
     
     @GetMapping("/withdraw")
@@ -249,3 +255,5 @@ public class MypageController {
     }
 }
     
+}
+

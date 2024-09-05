@@ -62,7 +62,7 @@ public class SecurityConfig{
 		http
         	.authorizeHttpRequests((auth) -> auth
 
-        			.requestMatchers("/product/insertForm","/product/updateForm", "/user/locationForm", "/community/communityInserForm").hasAuthority("USER")
+        			.requestMatchers("/product/insertForm","/product/updateForm", "/user/locationForm", "/community/communityInserForm","/mypage/**").hasAuthority("USER")
         			.requestMatchers("/user/loginForm").not().hasAuthority("USER")
         			.anyRequest().permitAll());
 		//JWTFilter 등록
