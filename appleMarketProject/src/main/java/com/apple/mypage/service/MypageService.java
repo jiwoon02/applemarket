@@ -4,24 +4,17 @@ import java.util.List;
 
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.WithdrawDTO;
+import com.apple.product.domain.OrderProductDTO;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 
 public interface MypageService {
 	
-	//public List<Product> getRecentBuyItemsByUserNo(Long userNo);
-	
-	public List<Product> getBuyItemsByUserNo(Long userNo);
-	
-	public List<Product> getItemsExcludingOrders(Long userNo);
-	
-    public List<Product> getSoldItems(Long userNo);
+	public List<OrderProductDTO> getBuyItemsByUserNo(Long userNo);
 	
     public List<Product> getAllItemsByUserNo(Long userNo);
     
     public void deleteBuyItem(Long userNo, Long productID);
-    
-//    public List<String> getItemStatusByUserNo(Long userNo);
     
     public void deleteSellItem(Long userNo, Long productID);
     
