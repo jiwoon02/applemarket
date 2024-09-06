@@ -12,22 +12,22 @@
 
 <body>
     <th:block layout:fragment="content">
-  
             <div class="text-center">
                 <h3>상품 관리</h3>                
             </div>
-			<div th:each="product : ${productList}" th:object="${product}" class="productList" th:data-no = "*{productID}" >
-				<div id="productImage" th:text="*{productImages}">
-					대표 상품 이미지
+            <th:block th:each="product : ${productList}"  th:object="${product}">
+				<div  class="productList" th:data-no = "*{productID}" >
+					<div id="productImage" th:text="*{productImages}">
+						대표 상품 이미지
+					</div>
+					<ul >
+		          		<li class="productfont" id="productTitle" th:text="'제목 : ' + *{productName}">제목</li>
+		          		<li class="productfont" id="productPrice" th:text="'가격 : ' + *{productPrice}">가격:</li>
+		          		<li class="productfont" id="productDate" th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">작성날자</li>
+		          		<li class="productfont" id="productCategory" th:text="'카테고리 : ' + *{category.categoryName}">카테고리</li>
+		          		<li class="productfont" id="productReportCnt" th:text="${reportCount[product.productID]} != null ? '신고 횟수: ' + ${reportCount[product.productID]} : '신고 횟수: ' +  0">신고횟수 : 0</li>
+					</ul>
 				</div>
-				<ul >
-	          		<li class="productfont" id="productTitle" th:text="'제목 : ' + *{productName}">제목</li>
-	          		<li class="productfont" id="productPrice" th:text="'가격 : ' + *{productPrice}">가격:</li>
-	          		<li class="productfont" id="productDate" th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">작성날자</li>
-	          		<li class="productfont" id="productCategory" th:text="'카테고리 : ' + *{category.categoryName}">카테고리</li>
-	          		<li class="productfont" id="productReportCnt" th:text="'신고횟수 : ' + ${reportCount[productId] != null ? reportCount[product_id] : 0}">신고횟수 : 0</li>
-				</ul>
-			</div>
     </th:block>
 
     <th:block layout:fragment="script">

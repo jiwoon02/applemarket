@@ -22,10 +22,14 @@ public interface AdminService {
 	public List<Category> categoryList(Category category);
 	public List<User> userList(User user);
 	public List<Product> productList(Product product);
-	//public Map<Long, Long> productReportCount(ProductReport productReport);
+	public List<ProductReport> productReportDetail(ProductReport product);
+	public Map<Long, Long> productReportCount();
+	public Map<String, Long> CategoryCounts();
+	public void productDelete(Long productID , List<Long> productIds);
 	public void userUpdate(User user);
 	public void categoryInsert(Category category);
 	public void categoryDelete(Category category);
+	public void categoryChange(Long productID, String newCategoryID); 
 	public Product productDetail(Product product);
 	public List<ProductReport> productReportDetail();
 	//public List<ProductReport> productReportDetail(ProductReport product);
@@ -33,3 +37,4 @@ public interface AdminService {
 //	public UserDetails loadAdminByAdminName(String AdminName) throws UsernameNotFoundException;
 	
 }
+

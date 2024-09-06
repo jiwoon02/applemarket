@@ -52,4 +52,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     // userNo를 기준으로 Usershop 삭제
     void deleteByUser_UserNo(Long userNo);
+    @Query("SELECT p.category.categoryID AS categoryID, COUNT(p) AS count " +
+            "FROM Product p GROUP BY p.category.categoryID")
+     List<Object[]> countProductsByCategory();
+     
 }

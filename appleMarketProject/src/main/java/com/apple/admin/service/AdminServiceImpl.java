@@ -1,5 +1,6 @@
 package com.apple.admin.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.admin.domain.Admin;
 import com.apple.admin.domain.ProductReport;
@@ -73,14 +75,26 @@ public class AdminServiceImpl implements AdminService {
 		productList = (List<Product>) productRepository.findAll();
 		return productList;
 	}
-/* 이거 필요없어요.. productServiceImpl.getReportCountByProductID() 이거가 조회수 찾는거고 따로 조회기능 구현하시면 될것같아요.
 	@Override
-	public Map<Long, Long> productReportCount(ProductReport productReport) {
-		Map<Long, Long> productReportCount = null;
-		productReportCount = (Map<Long, Long>) productReportRepository.ReportConut();
-		return productReportCount;
+	public void categoryChange(Long productID, String newCategoryID) {
+		Optional<Product> productOptional = productRepository.findById(productID);
+		if (productOptional.isPresent()) {
+			Product existingProduct = productOptional.get();
+			
+			// Find the new category
+			Optional<Category> categoryOptional = categoryRepository.findById(newCategoryID);
+			if (categoryOptional.isPresent()) {
+				Category newCategory = categoryOptional.get();
+				existingProduct.setCategory(newCategory);
+				productRepository.save(existingProduct);
+			} else {
+				throw new IllegalArgumentException("Category not found");
+			}
+		} else {
+			throw new IllegalArgumentException("Product not found");
+		}
 	}
-*/
+	
 
 	@Override
 	public void categoryInsert(Category category) {
@@ -108,7 +122,6 @@ public class AdminServiceImpl implements AdminService {
 		Product detail = productOptional.get();
 		return detail;
 	}
-/*
 	@Override
 	public List<ProductReport> productReportDetail(ProductReport productReport) {
 		 List <ProductReport> ProductReportList = null;
@@ -116,7 +129,6 @@ public class AdminServiceImpl implements AdminService {
 		//ProductReportList = (List<ProductReport>) productReportRepository.findByProduct();
 		return ProductReportList;
 	}
-*/
 	@Override
 	public List<ProductReport> productReportDetail(){
 		List<ProductReport> productReportList = productReportRepository.findAll();
@@ -132,6 +144,42 @@ public class AdminServiceImpl implements AdminService {
     public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
 		this.productServiceImpl = productServiceImpl;
 	}
+	public Map<Long, Long> productReportCount() {
+		List<Object[]> results = productReportRepository.ReportCount();
+	
+		Map<Long, Long> productReportCount = new HashMap<>();
+		for (Object[] result : results) {
+			Long productId = ((Number) result[0]).longValue();
+			Long count = ((Number) result[1]).longValue();
+			productReportCount.put(productId, count);
+		}
+		
+		return productReportCount;
+	}
+	//카테고리 등록 횟수 표시
+	public Map<String, Long> CategoryCounts() {
+        List<Object[]> results = productRepository.countProductsByCategory();
+
+        Map<String, Long> categoryCounts = new HashMap<>();
+        for (Object[] result : results) {
+            String categoryId = (String) result[0];
+            Long count = ((Number) result[1]).longValue();
+            categoryCounts.put(categoryId, count);
+        }
+
+        return categoryCounts;
+    }
+
+	@Transactional
+	@Override
+	public void productDelete(Long productID , List<Long> productIds) {
+		//신고된 내용 삭제
+		productReportRepository.deleteByProductIds(productIds);
+		productRepository.deleteById(productID);
+		
+	}
+
+
 
 
 //	@Override
