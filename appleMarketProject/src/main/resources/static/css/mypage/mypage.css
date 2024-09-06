@@ -463,9 +463,9 @@ td ul li a {
     float: right;
 }
 
-.userEmail1, .userEmail2, .emailSelect {
+.userEmail1, .userEmail2 {
     height: 30px;
-    width: 157px;
+    width: 237px;
 }
 
 .userBirth{
@@ -476,7 +476,7 @@ td ul li a {
 }
 
 .readOnly {
-	width: 504px;
+	width: 503px;
     height: 34px;
     float: right;
     padding-left: 10px;
