@@ -186,8 +186,8 @@ public class MypageServiceImpl implements MypageService {
 		Optional<User> optionalUser = userRepository.findByUserNo(userNo);
 		User existingUser = optionalUser.get();
         if (existingUser != null) {
-        	String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPwd());
-        	existingUser.setUserPwd(encryptedPassword);  // 비밀번호 수정
+        	//String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPwd());
+        	//existingUser.setUserPwd(encryptedPassword);  // 비밀번호 수정
             existingUser.setUserName(updatedUser.getUserName());  // 이름 수정
             existingUser.setUserNickname(updatedUser.getUserNickname());  // 닉네임 수정
             existingUser.setUserPhone(updatedUser.getUserPhone());  // 전화번호 수정

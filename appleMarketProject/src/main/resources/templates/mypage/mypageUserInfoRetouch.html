@@ -54,7 +54,7 @@
         </table>
 
         <div class="divUserInfoRetouch">
-            <form th:action="@{/mypage/updateUserInfo}" th:object="${user}" method="post">
+            <form id="update-info" th:action="@{/mypage/updateUserInfo}" th:object="${user}" method="post">
                 <div class="divTitle"> 
                     나의 정보수정
                 </div>
@@ -62,11 +62,13 @@
                     아이디
                     <input type="text" class="readOnly" readonly="readonly" th:value="${user.userID}">
                 </div>
+                <!-- 
                 <div class="divUserRetouch">
                     비밀번호
                     <input type="password" id="userPasswd" th:field="*{userPwd}" placeholder="비밀번호">
                     <span class="password-toggle" onclick="togglePassword()">👁️</span>
                 </div>
+                !-->
                 <div class="divUserRetouch">
                     이름
                     <input type="text" class="readOnly" th:field="*{userName}" readonly="readonly">
@@ -102,7 +104,7 @@
                             <!-- <option value="" selected="">직접 입력</option> -->
                         </select>
                     </div>
-                    <input type="hidden" th:field="*{userEmail}" id="userEmail">
+                    <input type="hidden" name="userEmail" th:field="*{userEmail}" id="userEmail">
                 </div>
                 <div class="divUserRetouch">
                     생년월일
