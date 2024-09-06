@@ -16,7 +16,6 @@ $(function() {
     });
 });
 
-/*
 document.addEventListener('DOMContentLoaded', function () {
 	//tr에 링크 추가
 	var rows = document.querySelectorAll('.trSellItem');
@@ -31,4 +30,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 	
 });
-*/
