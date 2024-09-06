@@ -1,14 +1,20 @@
-import { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 import { SendBirdProvider } from '@sendbird/uikit-react';
-import GroupChannel from '@sendbird/uikit-react/GroupChannel';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import MyChannelList from './MyChannelList.js';
 import ChannelSelector from './ChannelSelector.js';
+import GroupChannel from '@sendbird/uikit-react/GroupChannel';  // GroupChannel 임포트
 import '@sendbird/uikit-react/dist/index.css';
 import './App.css';
 
 const App = () => {
-  const [state, setState] = useState({});
-  const [currentChannelUrl, setCurrentChannelUrl] = useState('');
-
+  const [channelData, setChannelData] = useState({
+    appId: '',
+    buyerId: '',
+    buyerNickname: '',
+  });
+  const [currentChannelUrl, setCurrentChannelUrl] = useState('');  // 채널 URL 상태 관리
+  const { appId, buyerId, buyerNickname } = channelData;
   const myColorSet = {
     '--sendbird-light-primary-500': '#9D091E',
     '--sendbird-light-primary-400': '#BF0711',
@@ -17,45 +23,48 @@ const App = () => {
     '--sendbird-light-primary-100': '#FDAAAA',
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const productID = urlParams.get('productID');
-    if (productID) {
-      fetch(`/chatroom/chatdata?productID=${productID}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Fetched data:', data);
-          setState(data);
-        })
-        .catch(error => console.error('Error fetching data:', error));
-    }
-  }, []);
-
-  const { appId, buyerId, buyerNickname, sellerId } = state;
-
-  if (!appId || !buyerId || !buyerNickname || !sellerId) {
-    return <p>Loading...</p>;
-  }
+  const handleChannelSelected = (channelUrl) => {
+    setCurrentChannelUrl(channelUrl);
+  };
 
   return (
     <SendBirdProvider
-      appId={appId}
-      userId={buyerId}
-      nickname={buyerNickname}
+      appId={appId} 
+      userId={buyerId} 
+      nickname={buyerNickname}  
       colorSet={myColorSet}
     >
-      {console.log('SendbirdProvider Props:', { appId, buyerId, buyerNickname })}
+      <Router>
+        <div className='app-container'>
+          <Routes>
+            <Route 
+              path="/chatroom/chatroom" 
+              element={
+                <ChannelSelector 
+                  setChannelData={setChannelData} 
+                  onChannelSelected={handleChannelSelected} 
+                />
+              } 
+            />
+            <Route 
+              path="/chatroom/chatroomList" 
+              element={
+                <MyChannelList 
+                  setChannelData={setChannelData} 
+                  onChannelSelected={handleChannelSelected} 
+                />
+              } 
+            />
+          </Routes>
 
-      <div className='app-container'>
-        {buyerId && sellerId && (
-          <ChannelSelector 
-            buyerId={buyerId}
-            sellerId={sellerId}
-            onChannelSelected={(channelUrl) => setCurrentChannelUrl(channelUrl)}
-          />
-        )}
-        {currentChannelUrl && <GroupChannel channelUrl={currentChannelUrl} />}
-      </div>
+          {currentChannelUrl && (
+            <>
+              {console.log('currentChannelUrl:', currentChannelUrl)} 
+              <GroupChannel channelUrl={currentChannelUrl} />
+            </>
+          )}
+        </div>
+      </Router>
     </SendBirdProvider>
   );
 };

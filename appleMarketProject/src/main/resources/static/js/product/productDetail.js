@@ -17,6 +17,6 @@ $("#buyBtn").on("click", function(){
 $("#chatBtn").on("click", function(){
 	//chatroom/chatroom(채팅 페이지)으로 이동
 	//선택한 productID를 함께 전달
-	let productID = $("input[name='productID']").val();
+	let productID = $("#productID").val();
 	locationProcess("/chatroom/chatroom?productID="+productID);
 });

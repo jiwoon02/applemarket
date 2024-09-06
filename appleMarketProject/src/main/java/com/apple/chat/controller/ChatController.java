@@ -51,6 +51,22 @@ public class ChatController {
 		return chatMap;
 	}
 	
+	//본인의 ID, 닉네임을 JSON 형태로 전송
+	@GetMapping("/chatdataList")
+	@ResponseBody
+	public Map<String, String> chatdataList( @CookieValue(value="JWT", required=false) String token ) throws Exception{
+		
+		Long userNo = userService.getUserNo(token);		// 현재 로그인한 사용자의 userNo 가져오기
+		String userID = userService.getUserIDByUserNo(userNo);	//userNo로 현재 로그인한 사용자(=구매자)ID 가져오기
+		String userNickname = userService.getUserNicknameByUserNo(userNo);	//userNo로 현재 로그인한 사용자(=구매자)ID 가져오기
+		
+		Map<String, String> chatMap = new HashMap<>();	//JSON 데이터 전달을 위한 MAP 생성
+		chatMap.put("appId", appId);
+		chatMap.put("buyerId", userID);	
+		chatMap.put("buyerNickname", userNickname);
+		return chatMap;
+	}
+	
 	//상품 상세페이지에서 채팅하기 버튼 클릭 시 채팅 페이지로 이동
 	@GetMapping("/chatroom")
 	public String chatroom(@RequestParam Long productID, Model model) {
