@@ -11,99 +11,98 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-        <form id="deleteForm" method="post"> <!--  th:action="@{/mypage/delete/buy{userNo}(userNo=${userNo})}" -->
-        	<input type="hidden" id="userNoHide" th:value="${userNo}" />
-            <table class="tbl_mypage">
-                <colgroup>
-                    <col style="width:25%;">
-                    <col style="width:25%;">
-                    <col style="width:25%;">
-                    <col style="width:25%;">
-                </colgroup>
-                <thead>
-                    <tr class="mainMenu">
-                        <th scope="row">판매 관리</th>
-                        <th scope="row">구매 관리</th>
-                        <th scope="row">정보 관리</th>
-                        <th scope="row">회원 관리</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="menuList">
-                        <td>
-                            <ul>
-                                <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><a href="/mypage/buy" class="underline">구매 상품</a></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                               	<li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- 반복문시작 -->
-            <table class="tbl_col">
-                <colgroup>
-                    <col style="width:5%;">
-                    <col>
-                    <col style="width:12%;">
-                    <col style="width:12%;">
-                    <col style="width:12%;">
-                </colgroup>
-                <thead>
-                    <tr class="trSellItem">
-                        <th colspan="4" class="title">
-                            구매 상품 (
-                            <span th:text="${items != null ? items.size() : 0}" class="itemCnt"></span>
-                            )
-                        </th>
-                        <th class="title">
-                            <button type="submit" class="deleteBtn" id="deleteSelectedBtn">선택 삭제</button>
-                        </th>
-                    </tr>
-                    <tr class="trSellItem">
-                        <th scope="col"><input type="checkbox" class="chkBox" id="fullChk"></th>
-                        <th scope="col">상품명</th>
-                        <th scope="col">가격</th>
-                        <th scope="col">상품 등록일</th>
-                        <th scope="col">리뷰 작성</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 반복구문시작 -->
-                    <tr th:each="item : ${items}" class="trSellItem">
-                        <td class="tdChkbox">
-                            <input type="checkbox" class="buyChk" name="productIds[]" th:value="${item.productID}">
-                        </td>
-                        <td class="tdItemName">
-                            <!-- <img th:src="@{'../images/usershop/' + ${item.productImageId}}" alt="상품이미지" class="itemImg"> -->
-                            <div id="itemName" th:text="${item.productName}"></div>
-                            <div id="shopId" th:text="${item.user.usershop.shopId}" hidden="true"></div>
-                        </td>
-                        <td th:text="${item.productPrice}"></td>
-                        <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></td>
-                        <td><button type="button" class="reviewBtn">작성하기</button></td>
-                    </tr>
-                </tbody>
-                <!-- items의 크기가 0일 때 emptyTbl 표시 -->
-                <tr class="emptyTbl" th:if="${#lists.isEmpty(items)}">
-                    <td colspan="5" class="empty">구매내역이 존재하지 않습니다.</td>
+       	<input type="hidden" id="userNoHide" th:value="${userNo}" />
+                   <table class="tbl_mypage">
+            <colgroup>
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+            </colgroup>
+            <thead>
+                <tr class="mainMenu">
+                    <th scope="row">판매 관리</th>
+                    <th scope="row">주문 내역</th>
+                    <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
+                    <th scope="row">회원 관리</th>
                 </tr>
-            </table>
-        </form>
+            </thead>
+            <tbody>
+                <tr class="menuList">
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+           <!-- 반복문시작 -->
+           <table class="tbl_col">
+               <colgroup>
+                   <col style="width:20%;">
+                   <col>
+                   <col style="width:15%;">
+                   <col style="width:15%;">
+                   <col style="width:15%;">
+               </colgroup>
+               <thead>
+                   <tr class="trSellItem">
+                       <th colspan="4" class="title">
+                           구매 상품 (
+                           <span th:text="${items != null ? items.size() : 0}" class="itemCnt"></span>
+                           )
+                       </th>
+                       <th class="title">
+                           
+                       </th>
+                   </tr>
+                   <tr class="trSellItem">
+                       <th scope="col">주문번호</th>
+                       <th scope="col">상품명</th>
+                       <th scope="col">가격</th>
+                       <th scope="col">구매일</th>
+                       <th scope="col">리뷰 작성</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <!-- 반복구문시작 -->
+                   <tr th:each="item : ${items}" class="trSellItem">
+                       <td th:text="${item.orderId}"></td>
+                       <td th:text="${item.productName}"></td>
+                       <td th:text="${item.productPrice}"></td>
+                       <td th:text="${#temporals.format(item.orderRegDate, 'yyyy-MM-dd')}"></td>
+                       <td><button type="button" class="reviewBtn">작성하기</button></td>
+                   </tr>
+               </tbody>
+               <!-- items의 크기가 0일 때 emptyTbl 표시 -->
+               <tr class="emptyTbl" th:if="${#lists.isEmpty(items)}">
+                   <td colspan="5" class="empty">구매내역이 존재하지 않습니다.</td>
+               </tr>
+           </table>
     </div>
 </th:block>
 

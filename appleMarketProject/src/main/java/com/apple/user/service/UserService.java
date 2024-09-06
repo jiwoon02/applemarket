@@ -32,4 +32,14 @@ public interface UserService{
 	
 	//토큰으로 userNo를 얻어옴
 	public Long getUserNo(String token);
+	
+	// User의 LocationID를 가져오는 메서드
+	public Long getLocationIDByUserNo(Long userNo);
+
+	boolean isUserNicknameAvailableMypage(String userNickname, String userId);
+
+	boolean isUserPhoneAvailableMyPage(String userPhone, String userID);
+
+	boolean isUserEmailAvailableMyPage(String userEmail, String userID);
+
 }

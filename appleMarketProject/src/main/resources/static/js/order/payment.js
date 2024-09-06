@@ -49,7 +49,7 @@ async function sendOrderDetails(paymentId) {
     product: {
       productID: $("#productID").val(),
       productName: $("#productName").text(),
-      productPrice: parseInt($("#productPrice").text()),
+      productPrice: parseInt($("#productPrice").text())
     },
 	productImages: {
 		productImageID: $("#productImageID").val()
@@ -70,7 +70,7 @@ async function sendOrderDetails(paymentId) {
     if (response.ok) {
       console.log('Order submitted successfully');
 	  alert("주문이 완료되었습니다. 주문 내역 페이지로 이동합니다.");
-      window.location.href = "/order/orderList"; // 주문 목록 페이지로 이동
+      window.location.href = "/mypage/buy"; // 주문 목록 페이지로 이동
     } 
 	else {
 		const errorMessage = await response.text(); // 서버에서 반환된 에러 메시지 확인

@@ -11,18 +11,20 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-        <table class="tbl_mypage">
+                <table class="tbl_mypage">
             <colgroup>
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
             </colgroup>
             <thead>
                 <tr class="mainMenu">
                     <th scope="row">판매 관리</th>
-                    <th scope="row">구매 관리</th>
+                    <th scope="row">주문 내역</th>
                     <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
                     <th scope="row">회원 관리</th>
                 </tr>
             </thead>
@@ -30,22 +32,26 @@
                 <tr class="menuList">
                     <td>
                         <ul>
-                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
                             <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
                         </ul>
                     </td>
@@ -66,16 +72,35 @@
                 <p>법령에서 일정기간 정보 보관을 규정하거나 서비스 운영상 반드시 필요한 경우, 개인정보처리방침에 공개한 내용과 같이 일정한 기간동안 개인정보를 보관 후 파기합니다.</p>
                 <p>회원 탈퇴는 신중히 결정해 주세요. 더 나은 서비스를 제공하기 위해 노력하겠습니다.</p>
             </div>
+            <form id="withdrawNoteForm" method="post" th:action="@{/mypage/userDelete}">
             <div class="divWithdrawBtn">
-                <button class="wdCancelBtn">취소하기</button>
-                <button class="wdSubmitBtn">탈퇴하기</button>
+                <button type="button" class="wdCancelBtn">취소하기</button>
+                <button type="submit" class="wdSubmitBtn">탈퇴하기</button>
+                <input type="hidden" id="selectedReason" name="reason" />
+                <input type="hidden" th:value="${userNo}" name="userNo" />
             </div>
+            </form>
         </div>
     </div>
 </th:block>
 
 <th:block layout:fragment="script">
 	<script src="/js/jquery-3.7.1.min.js"></script>
-	
+	<script src="/js/mypage/mypageWithdraw.js"></script>
+	<script>
+        // URL에서 쿼리 파라미터 값 가져오기
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 페이지가 로드되면 쿼리 파라미터로 받은 reason 값을 처리
+        window.onload = function() {
+            const reason = getQueryParam('reason');  // URL에서 reason 쿼리 파라미터 값 가져오기
+            if (reason) {
+                document.getElementById('selectedReason').value = reason;  // 숨겨진 필드에 값 저장
+            }
+        };
+    </script>
 </th:block>
 </html>

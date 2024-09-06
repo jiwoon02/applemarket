@@ -1,10 +1,12 @@
 package com.apple.product.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.apple.product.domain.Product;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -37,9 +39,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     // userNo를 기준으로 productId의 개수를 가져오는 메서드
     Long countByUser_UserNo(Long userNo);
+
     
     @Query("SELECT p.category.categoryID AS categoryID, COUNT(p) AS count " +
             "FROM Product p GROUP BY p.category.categoryID")
      List<Object[]> countProductsByCategory();
      
+    @Query("SELECT COUNT(p) FROM Product p GROUP BY p.category")
+	public Long findcategoryCount();
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Product p SET p.productStatus = :status WHERE p.productID = :productID")
+    void updateProductStatus(@Param("productID") Long productID, @Param("status") String status);
+
+    
+    // userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }

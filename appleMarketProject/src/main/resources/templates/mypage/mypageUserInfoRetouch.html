@@ -7,22 +7,25 @@
 
 <th:block layout:fragment="css">
     <link rel="stylesheet" href="/css/mypage/mypage.css" />
+    <link rel="stylesheet" href="/css/mypage/mypageInfo.css" />
 </th:block>
 
 <th:block layout:fragment="content">
     <div class="mypage">
         <table class="tbl_mypage">
             <colgroup>
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
             </colgroup>
             <thead>
                 <tr class="mainMenu">
                     <th scope="row">판매 관리</th>
-                    <th scope="row">구매 관리</th>
+                    <th scope="row">주문 내역</th>
                     <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
                     <th scope="row">회원 관리</th>
                 </tr>
             </thead>
@@ -30,17 +33,22 @@
                 <tr class="menuList">
                     <td>
                         <ul>
-                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
                         </ul>
                     </td>
                     <td>
@@ -53,61 +61,46 @@
         </table>
 
         <div class="divUserInfoRetouch">
-            <form th:action="@{/mypage/updateUserInfo/{userNo}(userNo=${user.userNo})}" th:object="${user}" method="post">
+            <form id="update-info" th:action="@{/mypage/updateUserInfo}" th:object="${user}" method="post">
                 <div class="divTitle"> 
                     나의 정보수정
                 </div>
                 <div class="divUserRetouch">
                     아이디
-                    <input type="text" class="userId" readonly="readonly" th:value="${user.userID}">
+                    <input type="text" class="readOnly" readonly="readonly" th:value="${user.userID}">
                 </div>
+                <!-- 
                 <div class="divUserRetouch">
                     비밀번호
                     <input type="password" id="userPasswd" th:field="*{userPwd}" placeholder="비밀번호">
+                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
                 </div>
-                <div class="divUserRetouch">
-                    비밀번호 확인
-                    <input type="password" id="userPasswdChk" placeholder="비밀번호 확인">
-                </div>
+                !-->
                 <div class="divUserRetouch">
                     이름
-                    <input type="text" th:field="*{userName}" class="userName">
+                    <input type="text" class="readOnly" th:field="*{userName}" readonly="readonly">
                 </div>
                 <div class="divUserRetouch">
                     닉네임
-                    <input type="text" th:field="*{userNickname}" class="userNickname">
+                    <input type="text" th:field="*{userNickname}" class="updateInput" id="userNickname">
                 </div>
                 <div class="divUserRetouch">
                     전화번호
-                    <input type="text" th:field="*{userPhone}" class="userPhoneNumber">
+                    <input type="text" th:field="*{userPhone}" class="updateInput" id="userPhoneNumber">
                 </div>
                 <div class="divUserRetouch">
                     이메일
                     <div class="divEmail">
+                    	<input id="currentEmail" th:value="${user.userEmail}" hidden="hidden">
                         <input type="text" id="userEmail1" class="userEmail1">
                         <span>@</span>
                         <input type="text" id="userEmail2" class="userEmail2">
-                        <select class="emailSelect">
-                            <option value="">이메일 선택</option>
-                            <option value="gmail.com">gmail.com</option>
-                            <option value="naver.com">naver.com</option>
-                            <option value="daum.net">daum.net</option>
-                            <option value="hanmail.net">hanmail.net</option>
-                            <option value="nate.com">nate.com</option>
-                            <option value="lycos.co.kr">lycos.co.kr</option>
-                            <option value="hotmail.com">hotmail.com</option>
-                            <option value="outlook.com">outlook.com</option>
-                            <option value="korea.com">korea.com</option>
-                            <option value="yahoo.co.kr">yahoo.co.kr</option>
-                            <option value="dreamwiz.com">dreamwiz.com</option>
-                            <!-- <option value="" selected="">직접 입력</option> -->
-                        </select>
                     </div>
-                    <input type="hidden" th:field="*{userEmail}" id="userEmail">
+                    <input type="hidden" name="userEmail" th:field="*{userEmail}" id="userEmail">
                 </div>
                 <div class="divUserRetouch">
                     생년월일
-                    <input type="date" th:field="*{userBirth}" class="userBirth">
+                    <input type="date" class="readOnly" th:field="*{userBirth}" readonly="readonly">
                 </div>
                 <div class="divUserBtn">
                     <button type="submit" class="userBtn">수정하기</button>

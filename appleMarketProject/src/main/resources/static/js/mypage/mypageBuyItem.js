@@ -1,25 +1,4 @@
 $(function() {
-	$("#fullChk").on("click", function() {
-		if ($("#fullChk").prop("checked")) {
-			$(".buyChk").prop("checked", true);
-		} else {
-			$(".buyChk").prop("checked", false);
-		}
-	});
-	
-	$("#deleteSelectedBtn").on("click", function(e) {
-		// 선택된 항목 삭제 버튼 클릭 시
-		e.preventDefault();
-		
-        if ($(".buyChk:checked").length > 0) {
-            if (confirm("선택한 항목을 삭제하시겠습니까?")) {
-                $("#deleteForm").submit();
-            }
-        } else {
-            alert("삭제할 항목을 선택하세요.");
-        }
-    });
-	
 	// 리뷰 작성 버튼 클릭 시 이벤트 처리
     $(".reviewBtn").on("click", function() {
         // 클릭한 버튼에 해당하는 상품의 데이터를 가져오기
@@ -35,4 +14,19 @@ $(function() {
         // 페이지 이동
         location.href = reviewUrl;
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+	//tr에 링크 추가
+	var rows = document.querySelectorAll('.trSellItem');
+    rows.forEach(function(row) {
+        // 각 tr 요소에 클릭 이벤트 추가
+        row.addEventListener('click', function() {
+            // 해당 row의 데이터에서 productID 값을 가져옴
+            var orderId = this.querySelector('td:first-child').innerText;
+            // 페이지 이동
+            window.location.href = '/order/' + orderId;
+        });
+    });
+	
 });

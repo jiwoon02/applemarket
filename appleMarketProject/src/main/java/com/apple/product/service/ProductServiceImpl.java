@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.apple.admin.domain.ProductReport;
+import com.apple.admin.repository.ProductReportRepository;
 import com.apple.location.repository.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final JwtUtil jwtutil;
+    private final ProductReportRepository productReportRepository;
 
     /*
         @Override
@@ -219,6 +222,7 @@ public class ProductServiceImpl implements ProductService {
         updateProduct.setPostPrice(product.getPostPrice());
         updateProduct.setCategory(product.getCategory());
         updateProduct.setProductDescription(product.getProductDescription());
+        updateProduct.setProductStatus(product.getProductStatus());
 
         productRepository.save(updateProduct);
     }
@@ -246,5 +250,32 @@ public class ProductServiceImpl implements ProductService {
         // 상품 폴더 삭제
         fileUtil.deleteProductFolder(productID);
     }
+
+    //신고횟수 증가처리 메소드
+    @Override
+    public Long getReportCountByProductID(Long productID) {
+        Product product = getProduct(productID);
+        return productReportRepository.countByProduct(product);
+    }
+
+    @Override
+    public void reportProduct(Long productID, String reportContent, User user) {
+        // 상품 조회
+        Product product = getProduct(productID);
+
+        // 신고 객체 생성 및 데이터 설정
+        ProductReport report = new ProductReport();
+        report.setProduct(product);
+        report.setReportContent(reportContent);
+        report.setUser(user);  // User 객체 설정
+
+        // 신고 저장
+        productReportRepository.save(report);
+
+        // 신고 횟수 조회 및 로그 출력
+        Long currentReportCount = getReportCountByProductID(productID);
+        log.info("현재 신고 횟수 : {}", currentReportCount);
+    }
+
 
 }

@@ -80,8 +80,6 @@ textarea {
 .img-thumbnail{
 	width:100px;
 	height:100px;
-	margin-right:20px;
-	
 }
 
 .imagePreview{
@@ -99,12 +97,25 @@ textarea {
     text-decoration: none;
     width: 100px;
     height:130px;
+    align-content: center;
+    align-items: center;
 }
 
 
+
 .deleteBtn{
+    width: 35px;
+    height: 25px;
+    border: 1px solid red;
+    border-radius: 5px;
 	color:red;
+    font-size: 12px;
 	text-align:center;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    text-decoration: none;
+    margin-top: 8px;
 }
 
 .submit-btn {

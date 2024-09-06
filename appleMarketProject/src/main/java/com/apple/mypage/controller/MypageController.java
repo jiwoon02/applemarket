@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.apple.jwt.JwtUtil;
 import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.PasswordCheckDTO;
+import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.service.MypageService;
+import com.apple.product.domain.OrderProductDTO;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
@@ -27,6 +30,8 @@ import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
 import com.apple.usershop.service.UsershopService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/mypage")
 public class MypageController {
 	
-    @Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = @Autowired)
     private MypageService mypageService;
     
     @Setter(onMethod_ = @Autowired)
@@ -51,8 +56,10 @@ public class MypageController {
     private UserRepository userRepository;
     
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;  // JwtUtil을 주입
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     //마이페이지
 //    @GetMapping("{userNo}")
 //    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
@@ -63,30 +70,8 @@ public class MypageController {
     
     @GetMapping("")
     public String getRecentBuyItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
     	
-    	List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-    	model.addAttribute("items", items);
-	 
     	return "mypage/mypage"; // 반환할 뷰의 이름
-    }
-    
-    @GetMapping("/mypage")
-    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
-        List<Product> items = mypageService.getRecentBuyItemsByUserNo(userNo);
-        model.addAttribute("items", items);
-        return "mypage/mypage"; // 반환할 뷰의 이름
-    }
-    
-    //판매상품
-    @GetMapping("/sell")
-    public String getItemsExcludingOrders(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	model.addAttribute("userNo", userNo);
-    	
-        List<Product> items = mypageService.getItemsExcludingOrders(userNo);
-        model.addAttribute("items", items);
-        return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
 	@GetMapping("/buy")
@@ -94,56 +79,26 @@ public class MypageController {
 		Long userNo = mypageService.getUserNo(token);
 		model.addAttribute("userNo", userNo);
 		
-	    List<Product> items = mypageService.getBuyItemsByUserNo(userNo);
+	    List<OrderProductDTO> items = mypageService.getBuyItemsByUserNo(userNo);
 	    model.addAttribute("items", items);
 
 	    return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
 	}
     
-    @GetMapping("sold")
-    public String getSoldItems(@CookieValue(value="JWT", required=false) String token, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	model.addAttribute("userNo", userNo);
-    	
-        List<Product> items = mypageService.getSoldItems(userNo);
-        model.addAttribute("items", items);
-        
-        return "mypage/mypageSellItem"; // 반환할 뷰의 이름
-    }
-    
+	//판매상품
     @GetMapping("sellAll")
     public String getAllItemsByUserNo(@CookieValue(value="JWT", required=false) String token, Model model) {
     	Long userNo = mypageService.getUserNo(token);
     	model.addAttribute("userNo", userNo);
     	
         List<Product> items = mypageService.getAllItemsByUserNo(userNo);
-        List<String> itemStatuses = mypageService.getItemStatusByUserNo(userNo); // 각 상품의 상태 가져오기
+
         
         model.addAttribute("items", items);
-        model.addAttribute("itemStatuses", itemStatuses); // 상태를 모델에 추가
+        
         return "mypage/mypageSellItem"; // 반환할 뷰의 이름
     }
     
-    // 특정 상품을 삭제하는 메서드
-    @PostMapping("/delete/buy")
-    public String deleteBuyItem(@CookieValue(value="JWT", required=false) String token, @RequestParam("productIds[]") List<Long> productID, Model model) {
-    	Long userNo = mypageService.getUserNo(token);
-    	for (Long product : productID) {
-            mypageService.deleteBuyItem(userNo, product);
-        }
-
-        return "redirect:/mypage/buy" + userNo; // 반환할 뷰의 이름
-    }
-    
-    // 특정 상품을 삭제하는 메서드
-    @PostMapping("/delete/sell{userNo}")
-    public String deleteSellItem(@PathVariable Long userNo, @RequestParam("productIds[]") List<Long> productID, Model model) {
-        for (Long product : productID) {
-            mypageService.deleteSellItem(userNo, product);
-        }
-
-        return "redirect:/mypage/sellAll" + userNo; // 삭제 후 전체 목록으로 리다이렉트
-    }
     
     // 리뷰 작성 페이지를 보여주는 메서드 추가
     @GetMapping("/addReview/{productName}/{shopId}/{productID}/{userNo}")
@@ -188,16 +143,19 @@ public class MypageController {
     }
     
     // 비밀번호 확인 페이지로 이동
-    @GetMapping("/userPasswordCheck{userNo}")
-    public String checkPasswordForm(@PathVariable Long userNo, Model model) {
+    @GetMapping("/userPasswordCheck")
+    public String checkPasswordForm(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
         PasswordCheckDTO passwordCheckDTO = new PasswordCheckDTO();
         passwordCheckDTO.setUserNo(userNo);
         model.addAttribute("passwordCheckDTO", passwordCheckDTO);
         return "mypage/mypageUserPasswordCheck"; // 비밀번호 확인 페이지로 이동
     }
     
-    @PostMapping("/modifyInfo{userNo}")
-    public String checkPassword(@ModelAttribute PasswordCheckDTO passwordCheckDTO, @PathVariable Long userNo, Model model) {
+    @PostMapping("/modifyInfo")
+    public String checkPassword(@ModelAttribute PasswordCheckDTO passwordCheckDTO, @CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
         boolean isPasswordCorrect = mypageService.checkPassword(passwordCheckDTO.getUserNo(), passwordCheckDTO.getUserPwd());
         
         if (isPasswordCorrect) {
@@ -213,9 +171,98 @@ public class MypageController {
         }
     }
 
-    @PostMapping("/updateUserInfo/{userNo}") 
-    public String updateUserInfo(@ModelAttribute("user") User updatedUser, @PathVariable Long userNo, Model model) {
-        mypageService.updateUserInfo(userNo, updatedUser);
-        return "redirect:/mypage/" + userNo; // 수정 완료 후 마이페이지로 리다이렉트
+    @PostMapping("/updateUserInfo") 
+    public String updateUserInfo(@ModelAttribute("user") User updatedUser, @CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	mypageService.updateUserInfo(userNo, updatedUser);
+        return "redirect:/mypage"; // 수정 완료 후 마이페이지로 리다이렉트
+    }
+    
+	//비밀번호 변경 페이지
+    @GetMapping("/userPasswordUpdate")
+    public String userPasswordUpdate(Model model){
+    	model.addAttribute("user", new User());
+        return "mypage/mypageUserPasswordUpdate";
+    }
+    
+    @PostMapping("/updatePassword")
+    public String updatePassword(@CookieValue(value="JWT", required=false) String token,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 Model model) {
+        Long userNo = mypageService.getUserNo(token);
+        Optional<User> optionalUser = userRepository.findByUserNo(userNo);
+        
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            
+            // 현재 비밀번호가 일치하는지 확인
+            if (!passwordEncoder.matches(currentPassword, user.getUserPwd())) {
+                model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+                return "mypage/mypageUserPasswordUpdate";  // 다시 비밀번호 변경 페이지로 이동
+            }
+            
+            // 새로운 비밀번호 설정
+            user.setUserPwd(passwordEncoder.encode(newPassword));
+            userRepository.save(user); // 비밀번호 변경 후 저장
+            
+            return "redirect:/mypage";  // 성공적으로 변경 후 마이페이지로 리다이렉트
+        }
+        
+        model.addAttribute("errorMessage", "사용자를 찾을 수 없습니다.");
+        return "mypage/mypageUserPasswordUpdate";
+    }
+    
+    @GetMapping("/withdraw")
+    public String withdrawPage() {
+    	return "mypage/mypageWithdraw";
+    }
+    
+    @GetMapping("/withdrawNote")
+    public String withdrawNotePage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawNote";
+    }
+    
+    @GetMapping("/withdrawComment")
+    public String withdrawCommentPage(@CookieValue(value="JWT", required=false) String token, Model model) {
+    	Long userNo = mypageService.getUserNo(token);
+    	model.addAttribute("userNo", userNo);
+    	return "mypage/mypageWithdrawComment";
+    }
+    
+    // User 객체를 가져오는 메서드
+    public User getUser(@CookieValue(value="JWT", required=false) String token) {
+        if (token != null) {
+            String userID = jwtUtil.getUserID(token);
+            Optional<User> userOptional = userRepository.findByUserID(userID);
+        
+            return userOptional.orElse(null);
+        }
+        return null;
+    }
+    
+    @PostMapping("/userDelete")
+    public String deleteUser(@CookieValue(value="JWT", required=false) String token, @RequestParam("reason") String reason, HttpServletResponse response) {
+    	Long userNo = mypageService.getUserNo(token);
+    	
+    	// WithdrawDTO에 탈퇴 사유를 설정
+        WithdrawDTO withdrawDTO = new WithdrawDTO();
+        withdrawDTO.setUserNo(userNo);
+        withdrawDTO.setReason(reason);
+
+        mypageService.deleteUser(withdrawDTO);
+        
+        // 로그아웃 처리: JWT 쿠키 삭제
+        Cookie jwtCookie = new Cookie("JWT", null); // 쿠키 값을 null로 설정
+        jwtCookie.setMaxAge(0); // 쿠키 만료 시간 설정(즉시 만료)
+        jwtCookie.setPath("/"); // 쿠키의 경로 설정
+        response.addCookie(jwtCookie); // 응답에 쿠키 추가
+        return "redirect:/"; // 사용자 목록 페이지로 리다이렉트
     }
 }
+    
+
+

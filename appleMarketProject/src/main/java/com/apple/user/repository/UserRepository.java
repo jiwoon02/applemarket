@@ -5,6 +5,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.user.domain.User;
 
@@ -22,6 +26,15 @@ public interface UserRepository extends JpaRepository<User, Long>{
     // 특정 닉네임이 이미 존재하는지 확인하는 메서드
     boolean existsByUserNicknameIgnoreCase(String userNickname);
     
+    // 마이페이지에서 현재 사용자의 ID를 제외하고 전화번호 중복 체크
+    boolean existsByUserPhoneAndUserIDNot(String userPhone, String userID);
+    
+    // 마이페이지에서 현재 사용자의 ID를 제외하고 닉네임 중복 체크
+    boolean existsByUserNicknameIgnoreCaseAndUserIDNot(String userNickname, String userID);
+    
+    // 마이페이지에서 현재 사용자의 ID를 제외하고 이메일 중복 체크
+    boolean existsByUserEmailIgnoreCaseAndUserIDNot(String userEmail, String userID);
+    
     //userNo를 기준으로 찾기
   	Optional<User> findByUserNo(Long userNo);
   	
@@ -33,5 +46,10 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     //아아디 기준 찾기
 	Optional<User> findByUserID(String userID);
+	
+	@Transactional
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.userNo = :userNo")
+    void deleteByUserNo(@Param("userNo") Long userNo);
 	
 }

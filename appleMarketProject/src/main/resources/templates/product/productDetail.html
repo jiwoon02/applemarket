@@ -1,92 +1,159 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{template/client/layout/layout}">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{template/client/layout/layout}">
 
+<!-- CSS 부분 -->
 <th:block layout:fragment="css">
-	<link rel="stylesheet" href="/css/product/productDetail.css" />
+	<link rel="stylesheet" href="/css/product/productDetail.css"/>
+	<style>
+		#reportPopup {
+			display: none;
+		}
+
+		h2 {
+			margin-top: 20px;
+		}
+
+		.popup {
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 1000;  /* 팝업을 모든 요소 위로 올림 */
+		}
+
+		.popup-content {
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 5px;
+			text-align: center;
+			width: 800px;
+			height: 500px;
+		}
+
+		.s-form {
+			margin-top: 40px;
+			margin-bottom: 40px;
+			height: 280px;
+		}
+
+		.s-form option {
+			padding: 10px;
+			font-size: 18px;
+			line-height: 1.5;
+			border-top: 1px solid gainsboro;
+			border-bottom: 1px solid gainsboro;
+		}
+
+		.s-form option:first-child {
+			border-top: none;
+		}
+
+	</style>
 </th:block>
 
+<!-- Content 부분 -->
 <th:block layout:fragment="content">
-	<div th:object="${detail}" class="deatilContainer">
 
+	<div th:object="${detail}" class="deatilContainer">
 		<div id="productDetailpageContainer mt-5">
 			<div class="row productDetailContainer">
 				<form id="dataForm" name="dataForm">
-					<input type="hidden" name="productID" th:field="*{productID}" />
+					<input type="hidden" name="productID" th:field="*{productID}"/>
 					<input type="hidden" th:field="*{productName}" th:value="${productName}"/>
 					<input type="hidden" th:field="*{productPrice}" th:value="${productPrice}"/>
 					<input type="hidden" th:field="*{postPrice}" th:value="${postPrice}"/>
 				</form>
 
-				<div class="detail-right" th:if="${currentUserID != null and detail.user.userID == currentUserID}">
-					<ul>
-						<li class="nav-item dropdown option">
-						<a class="nav-link dropdown-toggle" id="detail-option" href="#"
-							data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
-							<ul class="dropdown-menu dropMenu">
-								<li><a class="dropdown-item" id="productUpdateFormBtn">수정</a></li>
-								<li><a class="dropdown-item" id="productDeleteBtn">삭제</a></li>
-							</ul>
-						</li>
-					</ul>
+				<div>
+					<div class="text-start detail-left">
+						<img height="18px"/><a class="category-link" href="/">홈</a>
+						<span class="category-link"> > </span>
+						<a class="category-link" href="/" th:text="${detail.category.categoryName}" th:href="@{'/?category=' + ${detail.category.categoryID}}"> </a>
+					</div>
+					<div class="detail-right" th:if="${currentUserID != null and detail.user.userID == currentUserID}">
+						<ul>
+							<li class="nav-item dropdown option">
+								<a class="nav-link dropdown-toggle" id="detail-option" href="#"
+								   data-bs-toggle="dropdown" aria-expanded="false">옵션</a>
+								<ul class="dropdown-menu dropMenu">
+									<li><a class="dropdown-item" id="productUpdateFormBtn">수정</a></li>
+									<li><a class="dropdown-item" id="productDeleteBtn">삭제</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</div>
 
-
-				<!-- 상품 사진, 이름, 가격,  -->
+				<!-- 상품 사진, 이름, 가격 -->
 				<div class="col-md-6">
 					<div class="product-image">
 						<img th:if="${not #lists.isEmpty(detail.productImages)}"
-							th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
-							class="img-fluid productListImage" />
+							 th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
+							 class="img-fluid productListImage"/>
+						<div class="sold-out-overlay" th:if="${detail.productStatus == '판매 완료'}">
+							판매 완료
+						</div>
 					</div>
 				</div>
-			
-			
-			<div class="col-md-6">
-				<div class="product-info">
-					<div class="product-subinfo d-flex justify-content-end">
-						<label>조회수 </label>
-						<p class="product" th:text=" *{productVisitCount}"></p>
-						<!-- 배송비 단위 표시 추가 -->
-					</div>
-					<h1 class="product-name" th:text="*{productName}"></h1>
-					<p class="product-price" th:text="'₩ ' + *{productPrice}"></p>
-					<!-- 가격 단위 표시 추가 -->
-					<div class="product-subinfo">
-						<label>배송비 </label>
-						<p class="postPrice" th:text="'₩ ' + *{postPrice}"></p>
-						<!-- 배송비 단위 표시 추가 -->
-					</div>
 
-					<span class="text-end reportBtn"><a href="#">신고하기</a></span>
-					<div class="actions">
+				<div class="col-md-6">
+					<div class="product-info">
+						<div class="product-subinfo d-flex justify-content-end">
+							<label>조회수</label>
+							<p class="product" th:text=" *{productVisitCount}"></p>
+						</div>
+						<h1 class="product-name" th:text="*{productName}"></h1>
+						<p class="product-price" th:text="*{productPrice} + ' 원'"></p>
+						<hr />
+						<div class="product-subinfo flex-column">
+							<label>배송비 </label>
+							<p class="postPrice text-start" th:text="*{postPrice} + ' 원'"></p>
+						</div>
 
-						<button class="btn btn-dark">찜하기</button>
-						<button class="btn btn-dark">채팅하기</button>
-						<button class="btn btn-dark buyBtn">구매하기</button>
+						<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 
+						<div class="actions">
+							<button id="WishBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">찜하기</button>
+							<button id="ChatBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">채팅하기</button>
+							<button id="BuyBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">구매하기</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-</div>
-<!-- 판매자 정보  -->
-<div class="seller-container">
-    <div class="seller-info mt-5 d-flex align-items-center">
-        <img src="https://via.placeholder.com/50" alt="Seller Image" class="rounded-circle">
-        <div class="ms-3 seller-subinfo">
-            <p class="seller-name mb-0">
-                <a th:href="@{'/usershop/list' + ${detail.user.userNo}}" th:text="*{user.userNickname}">판매자 이름</a>
-            </p>
-            <th:block th:if="${detail.user != null}">
-                <p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
-                <p th:if="${detail.user.location == null}" class="mb-0">동네를 설정해주세요.</p>
-            </th:block>
-        </div>
-    </div>
-</div>
-                         
+
+		<!-- 판매자 정보  -->
+		<div class="seller-container">
+			<div class="seller-info mt-5 d-flex align-items-center">
+				<th:block th:if="${not #lists.isEmpty(detail.user.usershop.shopImgName)}">
+
+					<img th:src="@{'/usershop/view/' + ${detail.user.usershop.shopImgName}}"
+						 class="img-fluid"/>
+				</th:block>
+
+				<th:block th:if="${#lists.isEmpty(detail.user.usershop.shopImgName)}">
+					<img src="/images/shop-icon.png" class="img-fluid"/>
+				</th:block>
+
+
+				<div class="ms-3 seller-subinfo">
+					<p class="seller-name mb-0">
+						<a th:href="@{/usershop/list{userNo}(userNo=${detail.user.userNo})}" th:text="*{user.userNickname}">판매자 이름</a>
+					</p>
+					<th:block th:if="${detail.user != null}">
+						<p th:if="${detail.user.location != null}" th:text="${detail.user.location.locationName}" class="mb-0">판매자 주소</p>
+						<p th:if="${detail.user.location == null}" class="mb-0">동네를 설정해주세요.</p>
+					</th:block>
+				</div>
+			</div>
+		</div>
 
 		<div class="product-script-container">
 			<div th:if="${#lists.size(detail.productImages)==2}" class="image-box">
@@ -94,28 +161,97 @@
 						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
 						class="img-fluid productListImage" />
 				<img
-					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
-					class="img-fluid productListImage" />
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
+						class="img-fluid productListImage" />
 			</div>
 			<div th:if="${#lists.size(detail.productImages)==3}" class="image-box">
 				<img
 						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[0].filename}}"
 						class="img-fluid productListImage" />
 				<img
-					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
-					class="img-fluid productListImage" />
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[1].filename}}"
+						class="img-fluid productListImage" />
 				<img
-					th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[2].filename}}"
-					class="img-fluid productListImage" />
+						th:src="@{'/product/view/' + ${detail.productID} + '/' + ${detail.productImages[2].filename}}"
+						class="img-fluid productListImage" />
 			</div>
 			<div class="product-script" th:text="*{productDescription}">상품
 				설명이 들어가는 영역</div>
 
 		</div>
 	</div>
+	</div>
+	</div>
+	<!-- 신고하기 팝업 -->
+	<div id="reportPopup" class="popup">
+		<div class="popup-content">
+			<h2>게시글을 신고하는 이유를 선택해주세요.</h2>
+			<form id="reportForm" name="reportForm">
+				<input type="hidden" name="productID" value="${detail.productID}">
+				<input type="hidden" name="userNo" th:value="${detail.user.userNo}"/>
+			<select class="s-form form-select" size="6" name="reportContent">
+				<option>거래 금지 물품이에요</option>
+				<option>중고거래 게시글이 아니에요</option>
+				<option>전문 판매업자 같아요</option>
+				<option>거래 중 분쟁이 발생했어요</option>
+				<option>사기인 것 같아요</option>
+				<option>기타 부적절한 행위가 있어요</option>
+			</select>
+			</form>
+			<button id="reportConfirmBtn" class="btn btn-primary">확인</button>
+			<button type="button" id="reportCancelBtn" class="btn btn-secondary">취소</button>
+		</div>
+	</div>
+
 </th:block>
 
+<!-- JavaScript 부분 -->
 <th:block layout:fragment="script">
 	<script src="/js/product/productDetail.js"></script>
+	<script>
+		$(document).ready(function() {
+			// 신고하기 버튼 클릭 시 팝업을 보여줌
+			$('.reportBtn a').on('click', function(event) {
+				event.preventDefault();  // 기본 동작 방지
+				console.log("신고하기 버튼이 클릭되었습니다.");
+				$('#reportPopup').css('display', 'flex');  // 팝업을 보이게 함
+			});
+
+			// 팝업 내 확인 버튼 클릭 시 팝업 닫기
+			$('#reportConfirmBtn').on('click', function() {
+				console.log("팝업에서 확인 버튼이 클릭되었습니다.");
+				var userNo = $('[name=userNo]').val();
+				var productID = $('[name=productID]').val();  // 상품 ID 가져오기
+				var reportContent = $('[name=reportContent]').val();  // 신고 내용 가져오기
+				console.log("유저번호==>" + userNo);
+				console.log("제품아이디==>" + productID);
+				$.ajax({
+					url: '/product/productReportInsert',  // 서버에 요청을 보낼 URL
+					type: 'POST',
+					data: {
+						productID: productID,
+						reportContent: reportContent,
+						userNo : userNo
+					},
+					success: function (response) {
+						alert('신고해주신 내용은 검토한 뒤에 조치하겠습니다.');
+						$('#reportPopup').css('display', 'none');  // 팝업을 닫음
+						// 필요한 경우 신고 후 추가 작업을 여기서 처리
+					},
+					error: function (error) {
+						alert('신고 처리 중 오류가 발생했습니다.');
+					}
+				});
+
+				$('#reportPopup').css('display', 'none');  // 팝업을 다시 숨김
+
+			});
+
+			$('#reportCancelBtn').on('click', function (){
+				$('#reportPopup').css('display', 'none');
+			});
+		});
+	</script>
 </th:block>
+
 </html>

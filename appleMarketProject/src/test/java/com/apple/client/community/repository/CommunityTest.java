@@ -31,7 +31,7 @@ public class CommunityTest {
             post.setCommunityTitle("테스트 제목 " + i);
             post.setCommunityContent("이것은 테스트 내용입니다. 게시글 번호: " + i);
             post.setUserNo(user);
-            post.setLocationID(location);
+            post.setLocation(location);
             post.setCommunityRegDate(LocalDateTime.now());
             post.setCommunityCount(0); // 초기 조회수 설정
 

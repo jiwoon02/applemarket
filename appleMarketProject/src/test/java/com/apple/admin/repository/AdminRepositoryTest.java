@@ -1,5 +1,6 @@
 package com.apple.admin.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,7 @@ public class AdminRepositoryTest {
 //	}
 //	
 	//신고내용 입력
+	/*
 	@Test
 	public void productReprotdtailInsert() {
 		ProductReport productReport = new ProductReport();
@@ -76,6 +78,8 @@ public class AdminRepositoryTest {
 		productReport.setReportContent("대충 신고하는 내용 중복");
 		productReportRepository.save(productReport);
 	}
+	*/
+
 //	@Test
 //	public void adminListTest() {
 //		List<Admin> adminList = (List<Admin>) adminRepository.findAll();
@@ -101,5 +105,5 @@ public class AdminRepositoryTest {
 //	}
 //	
 	
-	
+
 }

@@ -1,0 +1,15 @@
+#userPasswd {
+    width: 500px;
+    height: 30px;
+    float: right;
+    padding-left: 10px;
+    padding-right: 30px; /* 오른쪽에 아이콘 공간 확보 */
+    box-sizing: border-box; /* 전체 크기 맞추기 */
+}
+
+.password-toggle {
+    cursor: pointer;
+    font-size: 18px;
+    top: 5px;
+    right: 10px;
+}

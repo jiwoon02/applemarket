@@ -20,5 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 	
 	//주문 내역 상세조회
 	public Order findByOrderID(String orderID);
-
+	
+	// userNo를 기준으로 Usershop 삭제
+    void deleteByUser_UserNo(Long userNo);
 }
