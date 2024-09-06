@@ -52,4 +52,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     // userNo를 기준으로 Usershop 삭제
     void deleteByUser_UserNo(Long userNo);
+    
+    @Query("SELECT p.user.userNo FROM Product p WHERE p.productID = :productID")
+    Long findUserNoByProductID(@Param("productID") Long productID);
 }

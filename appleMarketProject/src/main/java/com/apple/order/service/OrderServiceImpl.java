@@ -1,11 +1,16 @@
 package com.apple.order.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +25,10 @@ public class OrderServiceImpl implements OrderService {
 
 	private final OrderRepository orderRepository;
 	private final ProductRepository productRepository;
-
+	
+	@Autowired
+    private JavaMailSender mailSender;
+	
 	@Override
 	public List<Order> orderList() {
 		List<Order> orderList = null;
@@ -49,5 +57,21 @@ public class OrderServiceImpl implements OrderService {
         }
 	}
 	
+	@Override
+	public void sendEmail(String to, String productName, String buyuserNickname, String buyuserPhone, String postAddress, String requestText) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("물품 판매 안내");
+        
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("물품명: ").append(productName).append("\n");
+        emailContent.append("구매자 닉네임: ").append(buyuserNickname).append("\n");
+        emailContent.append("구매자 연락처: ").append(buyuserPhone).append("\n");
+        emailContent.append("배송지: ").append(postAddress).append("\n");
+        emailContent.append("요청사항: ").append(requestText).append("\n");
+        message.setText(emailContent.toString());  // email 본문 설정
+        
+        mailSender.send(message);
+    }
 
 }
