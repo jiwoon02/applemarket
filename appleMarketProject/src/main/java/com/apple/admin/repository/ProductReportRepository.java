@@ -12,17 +12,18 @@ import com.apple.admin.domain.ProductReport;
 import com.apple.product.domain.Product;
 
 public interface ProductReportRepository extends JpaRepository<ProductReport, Long>{
+
+
 	
 	
-	@Query("SELECT r.productID.productID as productID, COUNT(r) AS count FROM ProductReport r GROUP BY r.productID.productID")
+	@Query("SELECT r.product.productID as productID, COUNT(r) AS count FROM ProductReport r GROUP BY r.product.productID")
 	List<Object[]> ReportCount();
 	
 	
 	@Modifying
-    @Query("DELETE FROM ProductReport pr WHERE pr.productID.productID IN :productIds")
+    @Query("DELETE FROM ProductReport pr WHERE pr.product.productID IN :productIds")
 	void deleteByProductIds(List<Long> productIds);
 	
-	List<ProductReport> findByProductID(Product product);
 	
 	
 
@@ -34,11 +35,6 @@ public interface ProductReportRepository extends JpaRepository<ProductReport, Lo
 
 	Long countByProduct(Product product);
 
-	/*
-	@Query("SELECT r.productID, COUNT(r) FROM ProductReport r GROUP BY productID")
-	public Map<Long, Long> ReportConut();
-	public List<ProductReport> findByProductID(Product product);
-	*/
 
 	// userNo를 기준으로 Usershop 삭제
     void deleteByUser_UserNo(Long userNo);

@@ -46,6 +46,15 @@ public class ProductReport {
 	@ColumnDefault(value = "sysdate")
 	private LocalDateTime productReportRegDate;
 
+	 @Override
+	    public String toString() {
+	        return "ProductReport{" +
+	                "productReportID=" + productReportID +
+	                ", reportContent='" + reportContent + '\'' +
+	                ", productID=" + (product != null ? product.getProductID() : null) +
+	                ", userID=" + (user != null ? user.getUserNo() : null) +
+	                '}';
+	    }
 
 	
 }

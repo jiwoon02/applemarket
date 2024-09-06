@@ -28,14 +28,11 @@ $("#deleteBtn").on("click", function() {
 			data: JSON.stringify([productID]),
 			success: function(response) {
 				alert('상품이 삭제되었습니다.');
-				
 			},
 			error: function(xhr, status, error) {
 				alert('상품 삭제에 실패했습니다.');
 			}
 		})
-		setTimeout(function() {
-		locationProcess("../product");
-		}, 500);
 	}
+	
 })
