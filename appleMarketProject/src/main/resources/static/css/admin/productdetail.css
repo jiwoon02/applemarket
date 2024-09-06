@@ -1,0 +1,69 @@
+#productDetail {
+	background-color: rgb(196,196,196);
+	width: 1024px;
+	height: 220px;
+	margin-bottom: 10px;
+}
+
+#productImage {
+	float: left;
+	width: 252px;
+	height: 218px;
+}
+
+.productfont {
+	margin-left: 30px;
+	width: 300px;
+	display: block;
+	margin-bottom: 40px;
+	float: left;
+}
+
+.productText {
+	
+	height: 220px;
+}
+
+#deleteBtn { 
+	float: right;
+}
+
+
+#categoryContainer{
+	
+	border-radius: 12px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding: 10px 10px 10px 10px;
+	background-color: rgb(237,242,245);
+	
+}
+
+#reportContainer{
+	background-color: rgb(246,246,246);
+	margin: auto;
+	width: 80%;
+	height: 220px;
+}
+
+
+#reportinfo{
+	width: 100%;
+	display: inline-block;
+}
+
+#reportinfo:first-child{
+	float: left;
+}
+
+#reportdate{
+	float: right;
+}
+#reportContent{
+	width: 95%;
+	margin-left: 10px;
+	overflow: scroll;
+	display: inline-block;
+	border: 1px solid;
+	height: 150px;
+}

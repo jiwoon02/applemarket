@@ -6,7 +6,7 @@
     <title>상품 상세 관리</title>
    <!-- 
     -->
-    <link type="text/css" rel="stylesheet" href="/css/admin.css" />
+    <link type="text/css" rel="stylesheet" href="/css/admin/productdetail.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" >
 </head>
 
@@ -16,32 +16,36 @@
   			<form name = "deleteForm" id = "deleteForm">
 	  			<input id="productID" type="hidden" th:value="*{productID}">
   			</form>
-  			<button type="button" id="deleteBtn">상품 삭제</button>
-  			<a>이미지</a>
-  			<a th:text="'제목 : ' + *{productName}">제목</a>
-  			<a th:text="'가격 : ' + *{productPrice}">제목</a>
-  			<a th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</a>
-  			<a th:text="'내용 : ' + *{productDescription}">제목</a>
-  			<a th:text="'현재 카테고리 : ' + ${detail.category.categoryName}"></a>
-  				<form id="changeCategoryForm">
-				    <input type="hidden" id="productID" name="productID" th:value="${detail.productID}" />
-				    <select id="categoryID" name="categoryID">
-				        <th:block th:each="category : ${categoryList}" th:object="${category}">
-				            <option th:value="*{categoryID}" th:text="*{categoryName}"></option>
-				        </th:block>
-				    </select>
-				    <button type="button" id="categoryChangeButton">카테고리 변경</button>
-				</form>
+  			<div id ="categoryContainer">
+	  			<div id = "categoryContent" th:text="'현재 카테고리 : ' + ${detail.category.categoryName}"></div>
+	  				<form id="changeCategoryForm">
+					    <input type="hidden" id="productID" name="productID" th:value="${detail.productID}" />
+					    <select id="categoryID" name="categoryID">
+					        <th:block th:each="category : ${categoryList}" th:object="${category}">
+					            <option th:value="*{categoryID}" th:text="*{categoryName}"></option>
+					        </th:block>
+					    </select>
+					    <button type="button" id="categoryChangeButton">카테고리 변경</button>
+		  				<button type="button" id="deleteBtn">상품 삭제</button>
+					</form>
+  			</div>
+  			<div id="productDetail"  >
+	  			<a id="productImage">이미지</a>
+	  			<p class = "productfont" th:text="'제목 : ' + *{productName}">제목</p>
+	  			<p class = "productfont" th:text="'가격 : ' + *{productPrice}">제목</p>
+	  			<p class = "productfont" th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</p>
+	  			<p class = "productfont" th:text="'내용 : ' + *{productDescription}">제목</p>
+  			</div>
 
   		</div>
-		<div th:each ="report : ${reportDetail}" th:objcet = "${report}">
-			<a th:text="'신고내용' + *{report.reportContent}"></a>
-			<a th:text="'신고인' + *{report.User.userID}"></a>
-			<a th:text="'신고날짜' + *{#temporals.format(report.productReportRegDate, 'yy년MM월dd일')}"></a>
+  		<br/>
+		<div id="reportContainer" th:each ="report : ${reportDetail}" th:objcet = "${report}">
+			<div id="reportinfo">
+				<a th:text="'신고인 : ' + *{report.User.userID}"></a>
+				<a id="reportdate" th:text="'신고날짜 : ' + *{#temporals.format(report.productReportRegDate, 'yy년MM월dd일')}"></a>
+			</div>
+			<div id="reportContent" th:text="*{report.reportContent}"></div>
 		</div>
-  		<div>
-  			상품 신고 내용
-  		</div>
   	
     </th:block>
 
