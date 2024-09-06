@@ -31,4 +31,5 @@ public interface MypageService {
 	Long getUserNo(String token);
 	
 	public void deleteUser(WithdrawDTO withdrawDTO);
+
 }

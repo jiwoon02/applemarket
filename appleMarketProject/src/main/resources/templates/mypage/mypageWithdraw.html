@@ -11,18 +11,20 @@
 
 <th:block layout:fragment="content">
     <div class="mypage">
-        <table class="tbl_mypage">
+                <table class="tbl_mypage">
             <colgroup>
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
-                <col style="width:25%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
             </colgroup>
             <thead>
                 <tr class="mainMenu">
                     <th scope="row">판매 관리</th>
                     <th scope="row">주문 내역</th>
                     <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
                     <th scope="row">회원 관리</th>
                 </tr>
             </thead>
@@ -45,7 +47,11 @@
                     </td>
                     <td>
                         <ul>
-                            
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
                             <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
                         </ul>
                     </td>

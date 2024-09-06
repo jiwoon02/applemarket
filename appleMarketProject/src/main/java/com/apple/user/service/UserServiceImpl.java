@@ -98,7 +98,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUserPhone(userPhone);
     }
 
-    
     // 주어진 이메일이 사용 가능한지 확인하는 메서드
     @Override
     public boolean isUserEmailAvailable(String userEmail) { 
@@ -109,6 +108,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserNicknameAvailable(String userNickname) {
         return userRepository.existsByUserNicknameIgnoreCase(userNickname);
+    }
+    
+    @Override
+    // 마이페이지에서 주어진 전화번호가 사용 가능한지 확인하는 메서드
+    public boolean isUserPhoneAvailableMyPage(String userPhone, String userID) {
+        return userRepository.existsByUserPhoneAndUserIDNot(userPhone, userID);
+    }
+    
+    // 마이페이지에서 주어진 닉네임이 사용 가능한지 확인하는 메서드
+    @Override
+    public boolean isUserNicknameAvailableMypage(String userNickname, String userId) {
+        return userRepository.existsByUserNicknameIgnoreCaseAndUserIDNot(userNickname, userId);
+    }
+    
+    @Override
+    // 마이페이지에서 주어진 이메일이 사용 가능한지 확인하는 메서드
+    public boolean isUserEmailAvailableMyPage(String userEmail, String userID) {
+        return userRepository.existsByUserEmailIgnoreCaseAndUserIDNot(userEmail, userID);
     }
 
 	@Override
@@ -229,8 +246,14 @@ public class UserServiceImpl implements UserService {
 		
 		return null;
 	}
-
-    	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+	
+	//쿠키에서 아이디 추출
+	public String getUserID(String token) {
+		String userID = jwtUtil.getUserID(token);
+		return userID;
+	}
+	
+   //쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
    @Override
    public Long getUserNo(String token) {
       String userID = jwtUtil.getUserID(token);

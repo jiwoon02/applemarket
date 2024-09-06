@@ -165,14 +165,38 @@ public class UserController {
     public boolean checkEmail(@RequestParam("userEmail") String userEmail) {
         return userService.isUserEmailAvailable(userEmail);
     }
-
+    
     // AJAX 요청을 처리하여 특정 닉네임의 중복 여부를 확인
     @GetMapping("/checkNickname")
     @ResponseBody
     public boolean checkNickname(@RequestParam("userNickname") String userNickname) {
         return userService.isUserNicknameAvailable(userNickname);
     }
-
+    
+    // AJAX 요청을 처리하여 마이페이지 전화번호의 중복 여부를 확인
+    @GetMapping("/checkPhoneMyPage")
+    @ResponseBody
+    public boolean checkPhoneMyPage(@RequestParam("userPhone") String userPhone, @CookieValue(value = "JWT", required = false) String token) {
+    	String userID = jwtUtil.getUserID(token);
+        return userService.isUserPhoneAvailableMyPage(userPhone, userID);
+    }
+    
+    // AJAX 요청을 처리하여 마이페이지 닉네임의 중복 여부를 확인
+    @GetMapping("/checkNicknameMyPage")
+    @ResponseBody
+    public boolean checkNicknameMyPage(@RequestParam("userNickname") String userNickname, @CookieValue(value = "JWT", required = false) String token) {
+    	String userID = jwtUtil.getUserID(token);
+        return userService.isUserNicknameAvailableMypage(userNickname, userID);
+    }
+    
+    // 이메일 중복 확인 API 현재 사용자의 ID를 제외하고
+    @GetMapping("/checkEmailMyPage")
+    @ResponseBody
+    public boolean checkEmailDuplicate(@RequestParam("userEmail") String userEmail, @CookieValue(value = "JWT", required = false) String token) {
+    	String userID = jwtUtil.getUserID(token);
+        return userService.isUserEmailAvailableMyPage(userEmail, userID);
+    }
+    
     //locationForm 이동 (동네설정하기 화면)
     @GetMapping("/user/locationForm")
     public String locationForm() {
