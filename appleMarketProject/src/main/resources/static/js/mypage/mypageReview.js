@@ -36,17 +36,26 @@ $(function() {
     // 제출 버튼 클릭 이벤트 핸들러
     $(".submitBtn").on("click", function(event) {
         event.preventDefault(); // 기본 제출 동작 방지
-        if (confirm("리뷰 작성을 완료하시겠습니까?")) {
+        
+		if ($("#starRating").val() == 0) {
+			alert("별점을 입력해 주세요");
+			return;
+		}
+		
+		if ($.trim($(".commentWrite").val()) == "") {
+	        alert("후기를 작성해 주세요.");
+	        return;
+	    }
+		
+		if (confirm("리뷰 작성을 완료하시겠습니까?")) {
             $("#reviewForm").submit(); // 확인 시 폼 제출
         }
+		
     });
 
     // 취소 버튼 클릭 이벤트 핸들러
     $('.cancelBtn').on('click', function() {
-        $('#reviewForm')[0].reset(); // 폼 초기화
-        // 초기화 후 별 이미지 및 리뷰 항목 배경색도 초기화
-        $(".starImg2 img").attr("src", "/images/usershop/star2.png");
-        $(".comment2").css("background-color", "rgb(246, 246, 246)");
+        history.back();
     });
 	
 	// 별점 평균값에 따른 이미지
@@ -87,5 +96,28 @@ $(function() {
 	    $(".reviewStar4").attr("src", "/images/usershop/star.png");
 	    $(".reviewStar5").attr("src", "/images/usershop/star.png");
 	}
-
+	
+	console.log($("#reviewNo").val());
+	
+	if ($("#reviewNo").val() != "") {
+		// '삭제하기' 버튼 생성
+	    var deleteBtn = $('<button/>', {
+	        type: 'submit',
+	        class: 'deleteBtn',
+	        text: '삭제하기'
+	    });
+		
+		$('.cancelBtn').after(deleteBtn);
+		$(".commentWrite").val($("#reviewContent").val());
+		$(".submitBtn").html("수정완료");
+		
+		$('#reviewForm').attr('action', "/mypage/updateReview");
+	} else {
+		$('#reviewForm').attr('action', "/mypage/addReview");
+	}
+	
+	$(".deleteBtn").on("click", function() {
+		confirm("해당 리뷰를 삭제 하시겠습니까?")
+		$('#reviewForm').attr('action', "/mypage/deleteReview");
+	})
 });

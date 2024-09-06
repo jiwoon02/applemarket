@@ -25,6 +25,7 @@ import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
 import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
+import com.apple.usershop.domain.WishList;
 import com.apple.usershop.service.UsershopService;
 
 import lombok.RequiredArgsConstructor;
@@ -105,6 +106,10 @@ public class UsershopController {
             model.addAttribute("sumSelectReview3", sumSelectReview3);
             model.addAttribute("sumSelectReview4", sumSelectReview4);
             model.addAttribute("sumSelectReview5", sumSelectReview5);
+            
+            // userNo로 위시리스트를 가져오기
+            List<WishList> wishList =  usershopService.getWishListByUserNo(userNo);
+            model.addAttribute("wishList", wishList);
         } else {
         	return "/user/loginForm";
         }
@@ -205,7 +210,6 @@ public class UsershopController {
         	return "/user/loginForm";
         }
     }
-
 
     // 이미지 파일을 보여줌
     @ResponseBody

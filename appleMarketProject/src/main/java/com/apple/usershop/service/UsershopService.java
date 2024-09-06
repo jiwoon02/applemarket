@@ -6,6 +6,7 @@ import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
+import com.apple.usershop.domain.WishList;
 
 public interface UsershopService {
 	public List<Usershop> usershop(Usershop usershop);
@@ -48,4 +49,6 @@ public interface UsershopService {
     public long sumSelectReview5ByShopId(Long shopId);
     
     public Usershop createUsershop(User user);
+    
+    public List<WishList> getWishListByUserNo(Long userNo);
 }
