@@ -15,7 +15,6 @@
             <div class="text-center">
                 <h3>상품 관리</h3>                
             </div>
-<<<<<<< HEAD
             <th:block th:each="product : ${productList}"  th:object="${product}">
 				<div  class="productList" th:data-no = "*{productID}" >
 					<div id="productImage" th:text="*{productImages}">
@@ -28,13 +27,8 @@
 		          		<li class="productfont" id="productCategory" th:text="'카테고리 : ' + *{category.categoryName}">카테고리</li>
 		          		<li class="productfont" id="productReportCnt" th:text="${reportCount[product.productID]} != null ? '신고 횟수: ' + ${reportCount[product.productID]} : '신고 횟수: ' +  0">신고횟수 : 0</li>
 					</ul>
-=======
-			<div th:each="product : ${productList}" th:object="${product}" class="productList" th:data-no = "*{productID}" >
-				<div id="productImage" th:text="*{productImages}">
-					대표 상품 이미지
->>>>>>> b3f0491cec9751fe5025a29a9c0d165174707c44
 				</div>
-    </th:block>
+    		</th:block>
 
     <th:block layout:fragment="script">
         	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

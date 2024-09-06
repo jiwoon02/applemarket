@@ -16,27 +16,6 @@
   			<form name = "deleteForm" id = "deleteForm">
 	  			<input id="productID" type="hidden" th:value="*{productID}">
   			</form>
-  			<button type="button" id="deleteBtn">상품 삭제</button>
-  			<a>이미지</a>
-  			<a th:text="'제목 : ' + *{productName}">제목</a>
-  			<a th:text="'가격 : ' + *{productPrice}">제목</a>
-  			<a th:text="'등록일 : ' + *{#temporals.format(productRegDate, 'yy년MM월dd일')}">제목</a>
-<<<<<<< HEAD
-  			<a th:text="'내용 : ' + *{productDescription}">제목</a>
-  			<a th:text="'현재 카테고리 : ' + ${detail.category.categoryName}"></a>
-  				<form id="changeCategoryForm">
-				    <input type="hidden" id="productID" name="productID" th:value="${detail.productID}" />
-				    <select id="categoryID" name="categoryID">
-				        <th:block th:each="category : ${categoryList}" th:object="${category}">
-				            <option th:value="*{categoryID}" th:text="*{categoryName}"></option>
-				        </th:block>
-				    </select>
-				    <button type="button" id="categoryChangeButton">카테고리 변경</button>
-				</form>
-
-=======
-  			<a th:text="'카테고리 : ' + *{category.categoryName}">제목</a>
->>>>>>> b3f0491cec9751fe5025a29a9c0d165174707c44
   			<div id ="categoryContainer">
 	  			<div id = "categoryContent" th:text="'현재 카테고리 : ' + ${detail.category.categoryName}"></div>
 	  				<form id="changeCategoryForm">

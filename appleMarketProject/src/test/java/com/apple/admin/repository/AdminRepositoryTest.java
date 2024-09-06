@@ -64,7 +64,6 @@ public class AdminRepositoryTest {
 //	}
 //	
 	//신고내용 입력
-	/*
 	@Test
 	public void productReprotdtailInsert() {
 		ProductReport productReport = new ProductReport();
@@ -72,13 +71,13 @@ public class AdminRepositoryTest {
 		User user = new User();
 		
 		user.setUserNo(1L);
-		product.setProductID(11L);
+		product.setProductID(14L);
 		productReport.setUser(user);
-		productReport.setProductID(product);
-		productReport.setReportContent("대충 신고하는 내용 중복");
+		productReport.setProduct(product);
+		productReport.setReportContent("신고 내용");
 		productReportRepository.save(productReport);
 	}
-	*/
+
 
 //	@Test
 //	public void adminListTest() {
