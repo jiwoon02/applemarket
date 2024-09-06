@@ -40,7 +40,9 @@ public class AdminController {
 		List<Category> list = adminService.categoryList(category);
 		Map<String, Long> categoryCount = adminService.CategoryCounts();
 		
+        Map<String, Long> categoryCount = adminService.CategoryCounts();
 		model.addAttribute("categoryList", list);
+        model.addAttribute("Count", categoryCount);
 		
 		return "/admin/category";
 	}
@@ -64,9 +66,7 @@ public class AdminController {
 		List<Product> list = adminService.productList(product);
 		//디버그
 //		System.out.println("list : " + list);
-		
-		
-		Map<Long, Long> reportCount = adminService.productReportCount();
+        Map<Long, Long> reportCount = adminService.productReportCount();
 		//디버그
 		System.out.println("id : " + reportCount.values());
 		model.addAttribute("reportCount", reportCount);
@@ -75,6 +75,9 @@ public class AdminController {
 		return "/admin/product";
 	}
 	
+		
+		return "/admin/product";
+	}
 	@GetMapping("/product/{productID}")
 	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport,Category category, Model model) {
 		product.setProductID(productID);
@@ -121,16 +124,6 @@ public class AdminController {
 		return "redirect:/admin/success/product";
 	}
 	
-	@GetMapping("/product/{productID}")
-	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport, Model model) {
-		product.setProductID(productID);
-		Product detail = adminService.productDetail(product);
-		List<ProductReport> Reportdetail = adminService.productReportDetail();
-		model.addAttribute("detail", detail);
-		model.addAttribute("reportDetail", Reportdetail);
-		return "/admin/productDetail";
-	}
-
     @Autowired
     public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
 		this.productServiceImpl = productServiceImpl;

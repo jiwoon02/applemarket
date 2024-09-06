@@ -1,5 +1,4 @@
 $(function() {
-	
 	// 리뷰 작성 버튼 클릭 시 이벤트 처리
     $(".reviewBtn").on("click", function() {
         // 클릭한 버튼에 해당하는 상품의 데이터를 가져오기
@@ -18,7 +17,6 @@ $(function() {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-	
 	//tr에 링크 추가
 	var rows = document.querySelectorAll('.trSellItem');
     rows.forEach(function(row) {
@@ -30,4 +28,5 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/order/' + orderId;
         });
     });
+	
 });

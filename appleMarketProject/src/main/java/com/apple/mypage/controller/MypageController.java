@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -57,6 +58,8 @@ public class MypageController {
     @Autowired
     private JwtUtil jwtUtil;  // JwtUtil을 주입
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     //마이페이지
 //    @GetMapping("{userNo}")
 //    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
@@ -174,6 +177,41 @@ public class MypageController {
     	
     	mypageService.updateUserInfo(userNo, updatedUser);
         return "redirect:/mypage"; // 수정 완료 후 마이페이지로 리다이렉트
+    }
+    
+	//비밀번호 변경 페이지
+    @GetMapping("/userPasswordUpdate")
+    public String userPasswordUpdate(Model model){
+    	model.addAttribute("user", new User());
+        return "mypage/mypageUserPasswordUpdate";
+    }
+    
+    @PostMapping("/updatePassword")
+    public String updatePassword(@CookieValue(value="JWT", required=false) String token,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 Model model) {
+        Long userNo = mypageService.getUserNo(token);
+        Optional<User> optionalUser = userRepository.findByUserNo(userNo);
+        
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            
+            // 현재 비밀번호가 일치하는지 확인
+            if (!passwordEncoder.matches(currentPassword, user.getUserPwd())) {
+                model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+                return "mypage/mypageUserPasswordUpdate";  // 다시 비밀번호 변경 페이지로 이동
+            }
+            
+            // 새로운 비밀번호 설정
+            user.setUserPwd(passwordEncoder.encode(newPassword));
+            userRepository.save(user); // 비밀번호 변경 후 저장
+            
+            return "redirect:/mypage";  // 성공적으로 변경 후 마이페이지로 리다이렉트
+        }
+        
+        model.addAttribute("errorMessage", "사용자를 찾을 수 없습니다.");
+        return "mypage/mypageUserPasswordUpdate";
     }
     
     @GetMapping("/withdraw")
