@@ -452,7 +452,7 @@ td ul li a {
     line-height: 40px; /* 텍스트 세로 가운데 정렬 */
 }
 
-.userName, .userNickname, .userPhoneNumber {
+.updateInput {
     width: 500px;
     height: 30px;
     float: right;
