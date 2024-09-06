@@ -22,7 +22,7 @@
             <thead>
                 <tr class="mainMenu">
                     <th scope="row">판매 관리</th>
-                    <th scope="row">구매 관리</th>
+                    <th scope="row">주문 내역</th>
                     <th scope="row">정보 관리</th>
                     <th scope="row">회원 관리</th>
                 </tr>
@@ -36,7 +36,7 @@
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
                         </ul>
                     </td>
                     <td>
@@ -56,11 +56,11 @@
         <!-- 반복문시작 -->
         <table class="tbl_col">
             <colgroup>
-                <col style="width:5%;">
+                <col style="width:15%;">
                 <col>
-                <col style="width:12%;">
-                <col style="width:12%;">
-                <col style="width:12%;">
+                <col style="width:15%;">
+                <col style="width:15%;">
+                <col style="width:15%;">
             </colgroup>
             <thead>
                 <tr class="trSellItem">
@@ -71,17 +71,16 @@
                     </th>
                     <th class="title">
                         <select name="itemState" id="itemState">
-                            <option value="full" id="full">전체</option>
-						    <option value="selling" id="selling">판매중</option>
-						    <option value="selled" id="selled">판매완료</option>
+                            <option value="전체" id="full">전체</option>
+						    <option value="판매 중" id="selling">판매 중</option>
+						    <option value="판매 완료" id="selled">판매 완료</option>
                         </select>
                     </th>
                     <th class="title">
-                        <button class="deleteBtn">선택 삭제</button>
                     </th>
                 </tr>
                 <tr class="trSellItem">
-                    <th scope="col"><input type="checkbox" class="chkBox" id="fullChk"></th>
+                    <th scope="col">상품번호</th>
                     <th scope="col">상품명</th>
                     <th scope="col">가격</th>
                     <th scope="col">상품 등록일</th>
@@ -91,18 +90,13 @@
             <tbody>
         <!-- 반복구문시작 -->
                 <tr th:each="item, iterStat : ${items}" class="trSellItem">
-                    <td class="tdChkbox">
-                    	<input type="checkbox" class="sellChk" id="chk" name="productIds[]" th:value="${item.productID}">
-                    </td>
-                    <td class="tdItemName">
-                        <!-- <img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" alt="상품이미지" class="itemImg"> -->
-                        <div th:text="${item.productName}" class="itemName">상품명</div>
-                    </td>
+                    <td th:text="${item.productID}"></td>
+                    <td th:text="${item.productName}" class="itemName"></td>
                     <td th:text="${item.productPrice}+'원'"></td>
-                    <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}">상품 등록일</td>
-                    <td class="productState" th:text="${itemStatuses != null ? (itemStatuses[iterStat.index] == 'selling' ? '판매중' : '판매완료') : '알 수 없음'}"></td>
+                    <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${item.productStatus}"></td>
                 </tr>
-                
+               
                 <tr th:each="item : ${items}" id="trHide" style="display:none;">
                 	<!-- <td><input type="hidden" id="userNoHide" th:value ="${userNo}" /></td>  이거 뭐지?-->
                 </tr> 

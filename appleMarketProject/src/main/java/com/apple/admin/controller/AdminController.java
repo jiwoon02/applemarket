@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.apple.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,11 @@ public class AdminController {
 
 	//카테고리 관리 페이지로 이동을 위한 매핑
 	@GetMapping("category")
-	public String categoryList(Category category,Product product, Model model) {
+	public String categoryList(Category category, Model model) {
 		List<Category> list = adminService.categoryList(category);
 		Map<String, Long> categoryCount = adminService.CategoryCounts();
 		
 		model.addAttribute("categoryList", list);
-		model.addAttribute("Count", categoryCount);
 		
 		return "/admin/category";
 	}
@@ -71,7 +71,7 @@ public class AdminController {
 		System.out.println("id : " + reportCount.values());
 		model.addAttribute("reportCount", reportCount);
 		model.addAttribute("productList", list);
-		
+
 		return "/admin/product";
 	}
 	
@@ -121,6 +121,20 @@ public class AdminController {
 		return "redirect:/admin/success/product";
 	}
 	
+	@GetMapping("/product/{productID}")
+	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport, Model model) {
+		product.setProductID(productID);
+		Product detail = adminService.productDetail(product);
+		List<ProductReport> Reportdetail = adminService.productReportDetail();
+		model.addAttribute("detail", detail);
+		model.addAttribute("reportDetail", Reportdetail);
+		return "/admin/productDetail";
+	}
+
+    @Autowired
+    public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
+		this.productServiceImpl = productServiceImpl;
+	}
 //	테스트용 매핑 
 //	@GetMapping("product/1")
 //	public String proudctDetail(Model modle) {

@@ -21,7 +21,7 @@
             <thead>
                 <tr class="mainMenu">
                     <th scope="row">판매 관리</th>
-                    <th scope="row">구매 관리</th>
+                    <th scope="row">주문 내역</th>
                     <th scope="row">정보 관리</th>
                     <th scope="row">회원 관리</th>
                 </tr>
@@ -30,17 +30,17 @@
                 <tr class="menuList">
                     <td>
                         <ul>
-                            <li><a href="/mypage/sellAll1" class="underline">판매 상품</a></li>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/buy1" class="underline">구매 상품</a></li>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            <li><a href="/mypage/userPasswordCheck1" class="underline">나의 정보 수정</a></li>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
                         </ul>
                     </td>
                     <td>
@@ -53,29 +53,32 @@
             </tbody>
         </table>
 
-        <div class="divWithdrawComment">
-            <div class="divTitle">
-                회원 탈퇴
-            </div>
-            <div class="divCommentTitle">
-                <div class="commentTitle">
-                    탈퇴 사유를 남겨주시면<br>
-                    서비스 개선에 힘쓰겠습니다.
-                </div>
-                <div class="divWithdrawText">
-                    <textarea class="withdrawText" placeholder="탈퇴 사유를 작성해 주세요."></textarea>
-                </div>
-                <div class="divWithdrawBtn">
-                    <button class="wdCancelBtn">취소하기</button>
-                    <button class="wdSubmitBtn">계속하기</button>
-                </div>
-            </div>
-        </div>
+		<form id="withdrawForm" method="post" th:action="@{/mypage/userDelete}">
+	        <div class="divWithdrawComment">
+	            <div class="divTitle">
+	                회원 탈퇴
+	            </div>
+	            <div class="divCommentTitle">
+	                <div class="commentTitle">
+	                    탈퇴 사유를 남겨주시면<br>
+	                    서비스 개선에 힘쓰겠습니다.
+	                </div>
+	                <div class="divWithdrawText">
+	                    <textarea class="withdrawText" name="reason" placeholder="탈퇴 사유를 작성해 주세요."></textarea>
+	                </div>
+	                <div class="divWithdrawBtn">
+	                    <button type="button" class="wdCancelBtn">취소하기</button>
+	                    <button type="submit" class="wdSubmitBtn">계속하기</button>
+	                </div>
+	                <input type="hidden" th:value="${userNo}" name="userNo" />
+	            </div>
+	        </div>
+        </form>
     </div>
 </th:block>
 
 <th:block layout:fragment="script">
 	<script src="/js/jquery-3.7.1.min.js"></script>
-	
+	<script src="/js/mypage/mypageWithdraw.js"></script>
 </th:block>
 </html>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.apple.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,7 +42,8 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Setter (onMethod_ = @Autowired)
 	private ProductReportRepository productReportRepository;
-	
+	private ProductServiceImpl productServiceImpl;
+
 //	@Setter (onMethod_ = @Autowired)
 //	private BCryptPasswordEncoder passwordEncoder;
 
@@ -73,7 +75,7 @@ public class AdminServiceImpl implements AdminService {
 		productList = (List<Product>) productRepository.findAll();
 		return productList;
 	}
-	
+
 	@Override
 	public void categoryChange(Long productID, String newCategoryID) {
 		Optional<Product> productOptional = productRepository.findById(productID);
@@ -121,14 +123,15 @@ public class AdminServiceImpl implements AdminService {
 		Product detail = productOptional.get();
 		return detail;
 	}
-
+/*
 	@Override
 	public List<ProductReport> productReportDetail(ProductReport productReport) {
 		 List <ProductReport> ProductReportList = null;
-		ProductReportList = (List<ProductReport>) productReportRepository.findByProductID(productReport.getProductID());
+		 ProductReportList = (List<ProductReport>) productReportRepository.findAll();
+		//ProductReportList = (List<ProductReport>) productReportRepository.findByProduct();
 		return ProductReportList;
 	}
-
+*/
 	@Override
 	public Map<Long, Long> productReportCount() {
 		List<Object[]> results = productReportRepository.ReportCount();
@@ -166,6 +169,22 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 
+
+
+	public List<ProductReport> productReportDetail(){
+		List<ProductReport> productReportList = productReportRepository.findAll();
+
+		for(ProductReport productReport : productReportList){
+			Long productID = productReport.getProduct().getProductID();
+			Long reportCount = productServiceImpl.getReportCountByProductID(productID);
+		}
+
+		return productReportList;
+}
+    @Autowired
+    public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
+		this.productServiceImpl = productServiceImpl;
+	}
 
 
 //	@Override

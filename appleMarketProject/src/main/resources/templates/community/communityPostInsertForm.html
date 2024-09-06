@@ -3,42 +3,63 @@
       layout:decorate="~{template/client/layout/layout}">
     
     <th:block layout:fragment="css">
-    	<link rel="stylesheet" href="/css/community/communityPostInsert.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+            }
+            .custom-width {
+                width: 1000px; /* 가로 길이 1000px로 고정 */
+            }
+        </style>
     </th:block>
+    
     <th:block layout:fragment="content">
-        <div class="text-center"><h3>커뮤니티 게시글 입력</h3></div>
-        
-        <div class="container">
-            <form id="communityInsertForm" th:object="${communityPost}" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <label class="colformlabel">제목</label>
-                    <div class="col-sm">
-                        <input type="text" class="formcontrol" th:field="*{communityTitle}" />
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <label class="sm-2 colformlabel">내용</label>
-                    <div class="col-sm">
-                        <textarea class="formcontrol boardtextarea" rows="8" th:field="*{communityContent}"></textarea>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="sm-2 colformlabel">이미지</label>
-                    <div class="col-sm">
-                        <input type="file" class="formcontrol" th:field="*{communityImage}" />
-                    </div>
-                </div>                
-            </form>
-            
-            <div class="textend">
-                <input type="button" value="저장" id="communityInsertBtn" class="btn-primary btn-sm" />
-                <input type="button" value="취소" id="communityCancelBtn" class="btn-primary btn-sm" />
-                <input type="button" value="목록" id="communityListBtn" class="btn-primary btn-sm" />
+        <div class="custom-width mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold">커뮤니티 게시글 입력</h3>
             </div>
-        </div>                        
-    </th:block>        
+
+            <!-- Form -->
+            <form id="communityInsertForm" th:object="${communityPost}" method="post" enctype="multipart/form-data">
+                <!-- Title Input -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">제목</label>
+                    <div>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               th:field="*{communityTitle}" placeholder="제목을 입력해 주세요" />
+                    </div>
+                </div>
+
+                <!-- Content Textarea -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">내용</label>
+                    <div>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                  rows="8" th:field="*{communityContent}" placeholder="내용을 입력해 주세요"></textarea>
+                    </div>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">이미지</label>
+                    <div>
+                        <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               th:field="*{communityImage}" />
+                    </div>
+                </div>
+            </form>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 mt-6">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="communityInsertBtn">저장</button>
+                <button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        id="communityListBtn">목록</button>
+            </div>
+        </div>
+    </th:block>
     
     <th:block layout:fragment="script">
         <script src="/js/community/communityInsertForm.js"></script>

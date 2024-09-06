@@ -31,6 +31,8 @@ public interface AdminService {
 	public void categoryDelete(Category category);
 	public void categoryChange(Long productID, String newCategoryID); 
 	public Product productDetail(Product product);
+	public List<ProductReport> productReportDetail();
+	//public List<ProductReport> productReportDetail(ProductReport product);
 //	public boolean validateAdmin(String adminName, String adminpasswd);
 //	public UserDetails loadAdminByAdminName(String AdminName) throws UsernameNotFoundException;
 	

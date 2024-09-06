@@ -46,8 +46,21 @@ public class CommunityServiceImpl implements CommunityService {
         communityPostRepository.deleteById(postId);
     }
 
+    // 전체 게시글 조회 (Pageable 사용)
     @Override
     public Page<CommunityPost> findAllPosts(Pageable pageable) {
         return communityPostRepository.findAll(pageable);
+    }
+
+    // 특정 locationID에 따른 게시글 조회 (Pageable 사용)
+    @Override
+    public Page<CommunityPost> getPostsByLocationID(Long locationID, Pageable pageable) {
+        return communityPostRepository.findByLocation_LocationID(locationID, pageable);
+    }
+
+    @Override
+    public Page<CommunityPost> searchPostsByUserNameOrTitle(String query, Pageable pageable) {
+        // 사용자 이름이나 커뮤니티 제목에 따라 검색
+        return communityPostRepository.findByUserNo_UserNameContainingOrCommunityTitleContaining(query, query, pageable);
     }
 }

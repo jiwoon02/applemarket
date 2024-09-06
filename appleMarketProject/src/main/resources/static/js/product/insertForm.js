@@ -11,6 +11,7 @@ function addFile(obj) {
     // 첨부파일 개수 확인
     if (curFileCnt > remainFileCnt) {
         alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+        obj.value = "";
         return;
     } 
 
@@ -90,7 +91,7 @@ $("#productInsertBtn").on("click", function(){
         contentType: false,
         success: function(data) {
             alert('상품이 등록되었습니다.');
-            location.href = '/product/productList';
+            location.href = '/';
         },
         error: function(xhr, status, error) {
             alert('상품 등록 중 오류가 발생했습니다.');
@@ -106,7 +107,7 @@ $("#productCancelBtn").on("click", function(){
 });
 
 $("#productListBtn").on("clcik", function(){
-	location.href="/product/productList";
+	location.href="/";
 })
 
 

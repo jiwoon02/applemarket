@@ -62,6 +62,9 @@ public class Product {
     @Column(name = "product_description", length = 1000, nullable = false)
     private String productDescription;
 
+    @Column(name = "product_status")
+    private String productStatus = "판매 중";
+
     @CreationTimestamp
     @Column(name = "product_reg_date", nullable = false)
     @ColumnDefault(value="sysdate")
@@ -86,4 +89,5 @@ public class Product {
 
     @Transient
     private List<String> deletedImageFilenames; // 삭제할 파일 이름 리스트
+
 }

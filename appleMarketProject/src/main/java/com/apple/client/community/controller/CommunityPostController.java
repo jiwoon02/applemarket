@@ -1,24 +1,27 @@
 package com.apple.client.community.controller;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.HashMap;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apple.client.communityComment.service.CommunityCommentService;
 import com.apple.client.community.domain.CommunityPost;
 import com.apple.client.community.service.CommunityService;
+import com.apple.user.service.UserService;
 
 @Controller
 @RequestMapping("/community")
@@ -26,26 +29,74 @@ public class CommunityPostController {
 
     private final CommunityService communityService;
     private final CommunityCommentService communityCommentService;
+    private final UserService userService;
 
     // 생성자를 통해 서비스 주입
-    public CommunityPostController(CommunityService communityService, CommunityCommentService communityCommentService) {
+    public CommunityPostController(CommunityService communityService, 
+                                   CommunityCommentService communityCommentService, 
+                                   UserService userService) {
         this.communityService = communityService;
         this.communityCommentService = communityCommentService;
+        this.userService = userService;
     }
 
     // 게시글 리스트 페이지를 반환
     @GetMapping("/communityPostList")
-    public String showCommunityPostListPage(Model model) {
+    public String showCommunityPostListPage(@CookieValue(value = "JWT", required = false) String token, Model model) {
+        Pageable pageable = PageRequest.of(0, 10);
+        
+        if (token != null && !token.isEmpty()) {
+            Long userNo = userService.getUserNo(token);
+            Long locationID = userService.getLocationIDByUserNo(userNo);
+            Page<CommunityPost> posts = communityService.getPostsByLocationID(locationID, pageable);
+            model.addAttribute("posts", posts.getContent());
+        } else {
+            Page<CommunityPost> posts = communityService.findAllPosts(pageable);
+            model.addAttribute("posts", posts.getContent());
+        }
         return "community/communityPostList";
     }
 
-    // 무한 스크롤용 게시글 리스트 API
+    // 검색 기능 추가
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam("query") String query, 
+                              @RequestParam(defaultValue = "0") int page, 
+                              @RequestParam(defaultValue = "10") int size,
+                              Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CommunityPost> posts = communityService.searchPostsByUserNameOrTitle(query, pageable);
+
+        model.addAttribute("posts", posts.getContent());
+        model.addAttribute("currentPage", posts.getNumber());
+        model.addAttribute("totalPages", posts.getTotalPages());
+        model.addAttribute("query", query);
+
+        return "community/communityPostList";  // 검색된 게시글을 보여줄 페이지
+    }
+
+    // 무한 스크롤로 게시글 데이터를 제공하는 API
     @GetMapping("/api/communityPostList")
-    public ResponseEntity<Page<CommunityPost>> getAllCommunityPostsApi(@RequestParam(defaultValue = "0") int page, 
-                                                                       @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("communityPostID").ascending());
-        Page<CommunityPost> posts = communityService.findAllPosts(pageable);
-        return ResponseEntity.ok(posts);
+    @ResponseBody
+    public Map<String, Object> getCommunityPosts(@RequestParam(defaultValue = "0") int offset,
+                                                 @RequestParam(defaultValue = "10") int limit,
+                                                 @CookieValue(value = "JWT", required = false) String token) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<CommunityPost> posts;
+
+        if (token != null && !token.isEmpty()) {
+            Long userNo = userService.getUserNo(token);
+            Long locationID = userService.getLocationIDByUserNo(userNo);
+            posts = communityService.getPostsByLocationID(locationID, pageable);
+        } else {
+            posts = communityService.findAllPosts(pageable);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", posts.getContent());
+        response.put("offset", offset);
+        response.put("limit", limit);
+
+        return response;
     }
 
     // 게시글 상세 페이지로 이동 및 조회수 증가
@@ -77,7 +128,7 @@ public class CommunityPostController {
     @PostMapping("/posts")
     public String createCommunityPost(@ModelAttribute CommunityPost post) {
         communityService.createPost(post);
-        return "redirect:/community/communityPostList?locationID=" + post.getLocationID(); // 생성 후 목록으로 리다이렉트
+        return "redirect:/community/communityPostList?locationID=" + post.getLocation(); // 생성 후 목록으로 리다이렉트
     }
 
     // 게시글 수정/삭제 폼으로 이동

@@ -15,7 +15,7 @@
     
     	<div>
     		<form id="dataForm" th:each = "category : ${categoryList}" th:object = "${category}">
-    			<input type="hidden" name="*{categoryID" th:value="*{categoryID}" />
+    			<input type="hidden" name="categoryID" th:value="*{categoryID}"/>
     		</form>
     	</div>
         <div class="container">
@@ -44,15 +44,16 @@
             			</tr>
             		</thead>
             		<tbody>
-            				<tr th:if = "${#lists.size(categoryList)==0}">
-            					<td colspan="4" class="text-center"> 카테고리를 등록해 주세요</td>
-            				</tr>
 	            			<tr class = "text-center" th:each = "category : ${categoryList}" th:object = "${category}">
 	            				<td th:text="*{categoryID}"></td>
 	            				<td th:text="*{categoryName}"></td>
+<<<<<<< HEAD
 	            				<td th:text="${Count[category.categoryID]} != null ? ${Count[category.categoryID]} : 0 "></td>
+=======
+	            				<td>0</td>
+>>>>>>> b3f0491cec9751fe5025a29a9c0d165174707c44
 	            				<td>
-	            				<button type="button" class="btn btn-primary btn-sm deleteBtn" th:data-id="*{categoryID}">삭제</button>
+	            				<button type="button" class="btn btn-primary btn-sm" id="deleteBtn" >삭제</button>
 	            				</td>
 	            			</tr>
             		</tbody>

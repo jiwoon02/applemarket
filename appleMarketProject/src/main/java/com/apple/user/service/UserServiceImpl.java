@@ -205,6 +205,17 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("유효하지 않은 유저 아이디 / 위치 아이디 ==>" + userID + " / " + locationID);
         }
     }
+    
+    //위치 ID 를 가져오는 메서드
+    @Override
+    public Long getLocationIDByUserNo(Long userNo) {
+        Optional<User> optionalUser = userRepository.findById(userNo);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user.getLocation().getLocationID(); // Location 엔티티에서 LocationID를 가져옴
+        }
+        return null; // 사용자가 없거나 Location이 없을 경우
+    }
 
 	//쿠키에서 아이디 추출해서 해당 유저 정보 가져오기
 	public User getUser(@CookieValue(value="JWT", required=false) String token) {

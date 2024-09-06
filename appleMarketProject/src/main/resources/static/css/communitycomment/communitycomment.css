@@ -1,110 +1,36 @@
-/* 댓글 영역 전체 스타일 */
-#commentForm {
-    margin-bottom: 20px;
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* 전체 컨테이너 가로 고정값 1000px */
+.comment-container {
+    width: 1000px !important; /* 가로 길이 */
+    margin: 0 auto;
 }
 
-/* 댓글 입력 폼 레이블과 필드 스타일 */
-#commentForm .col-formlabel { 
-    font-weight: bold;
-    font-size: 16px;
-}
-
-#commentForm .form-control { 
+/* 댓글 입력 텍스트 영역 고정값 800px, 높이 고정값 100px */
+.comment-textarea {
+    width: 800px !important;
+    height: 100px !important; /* 적절한 높이로 조정 */
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: none;
-    border: 1px solid #ced4da;
+    resize: none; /* 사용자가 크기 조절 못하게 설정 */
 }
 
-/* 댓글 입력 버튼 스타일 */
-#commentInsertBtn {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-    font-weight: bold;
-    margin-top: 4px;
-    padding: 8px 12px;
-    border-radius: 5px;
+/* 버튼을 오른쪽 아래에 고정 */
+.fixed-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px; /* 입력칸과 버튼 간의 간격 */
+    margin-bottom: 10px;
 }
 
-#commentInsertBtn:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-}
-
-/* 댓글 리스트 스타일 */
-#commentList {
+/* 댓글 리스트 영역도 1000px로 고정 */
+.comment-list {
+    width: 1000px;
     margin-top: 20px;
 }
 
-/* 개별 댓글 카드 스타일 */
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-}
-
-.cardheader { 
-    background-color: #e9ecef;
-    padding: 10px 15px;
-    border-radius: 10px 10px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.cardheader .name { 
-    font-weight: bold;
-    font-size: 16px;
-    color: #333;
-}
-
-.cardheader .date { 
-    font-size: 14px;
-    color: #888;
-}
-
-.cardbody {
+/* 댓글 리스트의 텍스트 박스 스타일 */
+.comment-list .bg-gray-100 {
+    width: 100%;
     padding: 15px;
-    font-size: 16px;
-    color: #444;
-    background-color: #ffffff;
-    border-radius: 0 0 10px 10px;
-}
-
-.cardbody .cardtext {
-    margin-bottom: 0;
-}
-
-/* 수정/삭제 버튼 스타일 */
-.cardheader .btn-sm { 
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-left: 5px;
-}
-
-.cardheader .btn-sm[data-btn="upBtn"] { 
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #fff;
-}
-
-.cardheader .btn-sm[data-btn="upBtn"]:hover { 
-    background-color: #e0a800;
-    border-color: #d39e00;
-}
-
-.cardheader .btn-sm[data-btn="delBtn"] {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-}
-
-.cardheader .btn-sm[data-btn="delBtn"]:hover { 
-    background-color: #c82333;
-    border-color: #bd2130;
+    border-radius: 8px;
 }
