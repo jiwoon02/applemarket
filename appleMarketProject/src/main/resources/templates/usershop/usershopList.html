@@ -107,9 +107,9 @@
                     <div class="itemTitle">
                         
                         <div class="itemSort">
-                            <button class="sortBtn">최신순</button>
-                            <button class="sortBtn">저가순</button>
-                            <button class="sortBtn">고가순</button>
+                            <button id="sortNewest" class="sortBtn">최신순</button>
+                            <button id="sortLowestPrice" class="sortBtn">저가순</button>
+                            <button id="sortHighestPrice" class="sortBtn">고가순</button>
                         </div>
                     </div>
                 </div>
@@ -118,9 +118,12 @@
 				        <div class="divItemImg">
 				            <img th:src="@{'/product/view/' + ${item.productID} + '/' + ${item.productImages[0].filename}}"
 								class="itemImg" alt="상품이미지">
+							<div class="sold-out-overlay" th:if="${item.productStatus == '판매 완료'}">
+							판매 완료
+							</div>
 				        </div>
 				        <div class="divItemName">
-				            <div class="itemTitle" th:text="${item.productName}"></div>
+				            <div class="itemTitle productName" th:text="${item.productName}"></div>
 				            <div class="divPrice">
 				                <div class="itemPrice" th:text="${item.productPrice} + '원'"></div>
 				                <div class="itemTime" th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></div>
@@ -200,7 +203,15 @@
                     <div class="divUserComment">
 	                    <div th:each="review : ${itemReviewList}" class="divUserOne">
 	                        <div class="divUserOne">
-	                            <img th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}" class="profileImg shopPage">
+	                        
+	                            <th:block th:if="${#lists.isEmpty(usershop.shopImgName)}">
+									<img src="/images/shop-icon.png" class="profileImg2 shopPage"/>
+								</th:block>
+								
+								<th:block th:if="${not #lists.isEmpty(usershop.shopImgName)}">
+									<img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" class="profileImg2 shopPage"/>
+								</th:block>
+								
 	                            <input type="hidden" th:value="${review.user.userNo}" class="userImg" />
 	                            <div class="DivUserInfo">
 	                                <div class="userInfo">

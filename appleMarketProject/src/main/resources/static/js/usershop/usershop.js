@@ -130,13 +130,24 @@ $(function() {
 		location.href = "/product/" + productId;
 	});
 	
-	$('.itemTitle').each(function() {
+	$('.productName').each(function() {
         var text = $(this).text();
         var textLength = text.length;
 
         // 텍스트 길이가 5보다 크면 5글자만 추출하고 ...을 붙임
         if (textLength > 5) {
             var truncatedText = text.substring(0, 5) + '...';
+            $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
+        }
+    });
+	
+	$('.itemBtn').each(function() {
+        var text = $(this).text();
+        var textLength = text.length;
+
+        // 텍스트 길이가 10보다 크면 10글자만 추출하고 ...을 붙임
+        if (textLength > 10) {
+            var truncatedText = text.substring(0, 10) + '...';
             $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
         }
     });

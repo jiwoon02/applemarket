@@ -56,10 +56,16 @@
 		    <div class="divTitle">
 		        리뷰 작성
 		    </div>
-		    <form action="/mypage/addReview" method="post" id="reviewForm">
+		    <form method="post" id="reviewForm">
 		        <div class="divReviewInfo">
 		            <div class="divUserImg">
-		                <img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" alt="상점이미지">
+		                <th:block th:if="${#lists.isEmpty(usershop.shopImgName)}">
+							<img src="/images/shop-icon.png" class="profileImg"/>
+						</th:block>
+						
+						<th:block th:if="${not #lists.isEmpty(usershop.shopImgName)}">
+							<img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" class="profileImg"/>
+						</th:block>
 		            </div>
 		            <div class="userInfo2">
 		                <div class="shopName2" th:text="${userNickname}">사용자명</div>
@@ -127,6 +133,8 @@
 				    <input type="hidden" id="selectReview3" name="selectReview3" value=0>
 				    <input type="hidden" id="selectReview4" name="selectReview4" value=0>
 				    <input type="hidden" id="selectReview5" name="selectReview5" value=0>
+				    <input type="hidden" th:value="${review != null ? review.reviewNo : ''}" id="reviewNo" name="reviewNo"/>
+    				<input type="hidden" th:value="${review != null ? review.reviewContent : ''}" id="reviewContent" />
 		        </div>
 		
 		        <div class="divCommentWrite">
