@@ -131,8 +131,6 @@ public class AdminServiceImpl implements AdminService {
 		return ProductReportList;
 	}
 	@Override
-<<<<<<< HEAD
-=======
 	public List<ProductReport> productReportDetail(){
 		List<ProductReport> productReportList = productReportRepository.findAll();
 
@@ -147,7 +145,7 @@ public class AdminServiceImpl implements AdminService {
     public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
 		this.productServiceImpl = productServiceImpl;
 	}
->>>>>>> d9ac99ceca49a839c64be02de23666a336f8af26
+
 	public Map<Long, Long> productReportCount() {
 		List<Object[]> results = productReportRepository.ReportCount();
 	
@@ -185,25 +183,10 @@ public class AdminServiceImpl implements AdminService {
 
 
 
-<<<<<<< HEAD
 
-	public List<ProductReport> productReportDetail(){
-		List<ProductReport> productReportList = productReportRepository.findAll();
 
-		for(ProductReport productReport : productReportList){
-			Long productID = productReport.getProduct().getProductID();
-			Long reportCount = productServiceImpl.getReportCountByProductID(productID);
-		}
-
-		return productReportList;
-}
-    @Autowired
-    public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
-		this.productServiceImpl = productServiceImpl;
-	}
-
-=======
->>>>>>> d9ac99ceca49a839c64be02de23666a336f8af26
+	
+    
 
 //	@Override
 //	public boolean validateAdmin(String adminName, String adminPasswd) {

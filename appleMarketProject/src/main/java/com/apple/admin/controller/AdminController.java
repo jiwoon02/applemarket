@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.apple.product.service.ProductService;
 import com.apple.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ public class AdminController {
 	
 	@Setter(onMethod_ = @Autowired)
 	private AdminService adminService;
+	
+	private ProductServiceImpl productServiceImpl;
 
 	//카테고리 관리 페이지로 이동을 위한 매핑
 	@GetMapping("category")
@@ -40,7 +43,6 @@ public class AdminController {
 		List<Category> list = adminService.categoryList(category);
 		Map<String, Long> categoryCount = adminService.CategoryCounts();
 		
-        Map<String, Long> categoryCount = adminService.CategoryCounts();
 		model.addAttribute("categoryList", list);
         model.addAttribute("Count", categoryCount);
 		
@@ -76,8 +78,6 @@ public class AdminController {
 	}
 	
 		
-		return "/admin/product";
-	}
 	@GetMapping("/product/{productID}")
 	public String proudctDetail(@PathVariable Long productID,Product product,ProductReport productReport,Category category, Model model) {
 		product.setProductID(productID);
