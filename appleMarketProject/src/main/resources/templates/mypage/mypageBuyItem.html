@@ -103,6 +103,97 @@
                    <td colspan="5" class="empty">구매내역이 존재하지 않습니다.</td>
                </tr>
            </table>
+		<table class="tbl_mypage">
+		    <colgroup>
+		        <col style="width:25%;">
+		        <col style="width:25%;">
+		        <col style="width:25%;">
+		        <col style="width:25%;">
+		    </colgroup>
+		    <thead>
+		        <tr class="mainMenu">
+		            <th scope="row">판매 관리</th>
+		            <th scope="row">주문 내역</th>
+		            <th scope="row">정보 관리</th>
+		            <th scope="row">회원 관리</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr class="menuList">
+		            <td>
+		                <ul>
+		                    <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
+		                </ul>
+		            </td>
+		            <td>
+		                <ul>
+		                    <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
+		                </ul>
+		            </td>
+		            <td>
+		                <ul>
+		                    <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
+		                </ul>
+		            </td>
+		            <td>
+		                <ul>
+		                   	<li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+		                </ul>
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+		
+		<!-- 반복문시작 -->
+		<table class="tbl_col">
+		    <colgroup>
+		        <col style="width:20%;">
+		        <col>
+		        <col style="width:15%;">
+		        <col style="width:15%;">
+		        <col style="width:15%;">
+		    </colgroup>
+		    <thead>
+		        <tr class="trSellItem">
+		            <th colspan="4" class="title">
+		                구매 상품 (
+		                <span th:text="${items != null ? items.size() : 0}" class="itemCnt"></span>
+		                )
+		            </th>
+		            <th class="title">
+		                
+		            </th>
+		        </tr>
+		        <tr class="trSellItem">
+		            <th scope="col">주문번호</th>
+		            <th scope="col">상품명</th>
+		            <th scope="col">가격</th>
+		            <th scope="col">구매일</th>
+		            <th scope="col">리뷰 작성</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <!-- 반복구문시작 -->
+		        <tr th:each="item : ${items}" class="trSellItem">
+		            <td th:text="${item.orderId}" class="orderDetailLink"></td>
+		            <td th:text="${item.productName}" class="orderDetailLink"></td>
+		            <td th:text="${item.productPrice}" class="orderDetailLink"></td>
+		            <td th:text="${#temporals.format(item.orderRegDate, 'yyyy-MM-dd')}" class="orderDetailLink"></td>
+		            <td>
+		            	<button type="button" class="reviewBtn">작성하기</button>
+		            	<input type="hidden" th:value="${item.productId}" class="productId" />
+		         		<input type="hidden" th:value="${item.productName}" id="productName" />
+		            </td>
+		        </tr>
+		        <tr th:each="reviewProductId : ${productIds}" style="display: none;">
+		            <td th:text="${reviewProductId}" class="reviewProductIds"></td>
+		        </tr>
+		    </tbody>
+		    <!-- items의 크기가 0일 때 emptyTbl 표시 -->
+		    <tr class="emptyTbl" th:if="${#lists.isEmpty(items)}">
+		        <td colspan="5" class="empty">구매내역이 존재하지 않습니다.</td>
+		    </tr>
+		</table>
     </div>
 </th:block>
 

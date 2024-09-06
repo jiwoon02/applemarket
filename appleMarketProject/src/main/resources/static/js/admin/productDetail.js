@@ -33,6 +33,10 @@ $("#deleteBtn").on("click", function() {
 				alert('상품 삭제에 실패했습니다.');
 			}
 		})
+		
+		setTimeout(function() {
+			locationProcess("../product");
+		}, 100);
 	}
 	
 })

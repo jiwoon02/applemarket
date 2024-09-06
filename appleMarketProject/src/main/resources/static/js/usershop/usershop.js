@@ -115,6 +115,18 @@ $(function() {
         sortItems('highestPrice');
     });
 	
+	$('#sortNewest2').on('click', function() {
+        sortItems2('newest');
+    });
+
+    $('#sortLowestPrice2').on('click', function() {
+        sortItems2('lowestPrice');
+    });
+
+    $('#sortHighestPrice2').on('click', function() {
+        sortItems2('highestPrice');
+    });
+	
 	$(".divItems").on("click", ".divItem", function() {
 	    var productId = $(this).data("product-id");
 	    location.href = "/product/" + productId;
@@ -130,7 +142,7 @@ $(function() {
 		location.href = "/product/" + productId;
 	});
 	
-	$('.itemTitle').each(function() {
+	$('.productName').each(function() {
         var text = $(this).text();
         var textLength = text.length;
 
@@ -141,18 +153,45 @@ $(function() {
         }
     });
 	
+	$('.itemBtn').each(function() {
+        var text = $(this).text();
+        var textLength = text.length;
+
+        // 텍스트 길이가 10보다 크면 10글자만 추출하고 ...을 붙임
+        if (textLength > 10) {
+            var truncatedText = text.substring(0, 10) + '...';
+            $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
+        }
+    });
+	
+	$('.productName2').each(function() {
+        var text = $(this).text();
+        var textLength = text.length;
+
+        // 텍스트 길이가 5보다 크면 5글자만 추출하고 ...을 붙임
+        if (textLength > 5) {
+            var truncatedText = text.substring(0, 5) + '...';
+            $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
+        }
+    });
 });
 
 function showItems() {
     $('.divTab1').css('display', 'grid');  // 상품 목록을 표시
     $('.divTab2').css('display', 'none');  // 상점 후기를 숨김
+	$('.divTab3').css('display', 'none');  // 상점 후기를 숨김
 
-    $('.itemLink:first').css({
+    $('.itemLink').eq(0).css({
         'background-color': '#d3d3d3',  // 상품 버튼의 배경을 회색으로
         'color': 'black'  // 상품 버튼의 글자색을 검정으로
     });
+	
+	$('.itemLink').eq(1).css({
+		'background-color': '#ffffff',  // 상점후기 버튼의 배경을 흰색으로
+        'color': '#999999'  // 상점후기 버튼의 글자색을 회색으로
+    });
     
-    $('.itemLink:last').css({
+    $('.itemLink').eq(2).css({
         'background-color': '#ffffff',  // 상점후기 버튼의 배경을 흰색으로
         'color': '#999999'  // 상점후기 버튼의 글자색을 회색으로
     });
@@ -161,14 +200,41 @@ function showItems() {
 function showReviews() {
     $('.divTab1').css('display', 'none');  // 상품 목록을 숨김
     $('.divTab2').css('display', 'block');  // 상점 후기를 표시
+	$('.divTab3').css('display', 'none');  // 상점 후기를 숨김
 
-    $('.itemLink:first').css({
+    $('.itemLink').eq(0).css({
         'background-color': '#ffffff',  // 상품 버튼의 배경을 흰색으로
         'color': '#999999'  // 상품 버튼의 글자색을 회색으로
     });
-    
-    $('.itemLink:last').css({
+	
+	$('.itemLink').eq(1).css({
         'background-color': '#d3d3d3',  // 상점후기 버튼의 배경을 회색으로
+        'color': 'black'  // 상점후기 버튼의 글자색을 검정으로
+    });
+    
+    $('.itemLink').eq(2).css({
+		'background-color': '#ffffff',  // 상품 버튼의 배경을 흰색으로
+        'color': '#999999'  // 상품 버튼의 글자색을 회색으로
+    });
+}
+
+function showWishList() {
+	$('.divTab1').css('display', 'none');  // 상품 목록을 숨김
+    $('.divTab2').css('display', 'none');  // 상점 후기를 표시
+	$('.divTab3').css('display', 'block');  // 상점 후기를 숨김
+
+    $('.itemLink').eq(0).css({
+        'background-color': '#ffffff',  // 상품 버튼의 배경을 흰색으로
+        'color': '#999999'  // 상품 버튼의 글자색을 회색으로
+    });
+	
+	$('.itemLink').eq(1).css({
+		'background-color': '#ffffff',  // 상품 버튼의 배경을 흰색으로
+        'color': '#999999'  // 상품 버튼의 글자색을 회색으로
+    });
+    
+    $('.itemLink').eq(2).css({
+		'background-color': '#d3d3d3',  // 상점후기 버튼의 배경을 회색으로
         'color': 'black'  // 상점후기 버튼의 글자색을 검정으로
     });
 }
@@ -208,5 +274,36 @@ function sortItems(criteria) {
             return bValue - aValue;  // 고가순 (내림차순)
         }
     });
-	$('.divItems').html(items);
+
+    // 정렬된 아이템을 다시 DOM에 추가하여 재정렬된 상태로 표시
+    $.each(items, function(index, item) {
+        $('.divItems').append(item);  // 기존 순서를 무시하고 정렬된 순서로 추가
+    });
+}
+
+function sortItems2(criteria) {
+    let items = $('.divItem2').get();  // 모든 상품 아이템을 가져옴
+
+    items.sort(function(a, b) {
+        let aValue, bValue;
+
+        if (criteria === 'newest') {
+            aValue = new Date($(a).find('.itemTime2').text());
+            bValue = new Date($(b).find('.itemTime2').text());
+            return bValue - aValue;  // 최신순 (내림차순)
+        } else if (criteria === 'lowestPrice') {
+            aValue = parseInt($(a).find('.itemPrice2').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice2').text().replace(/[^0-9]/g, ''));
+            return aValue - bValue;  // 저가순 (오름차순)
+        } else if (criteria === 'highestPrice') {
+            aValue = parseInt($(a).find('.itemPrice2').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice2').text().replace(/[^0-9]/g, ''));
+            return bValue - aValue;  // 고가순 (내림차순)
+        }
+    });
+
+    // 정렬된 아이템을 다시 DOM에 추가하여 재정렬된 상태로 표시
+    $.each(items, function(index, item) {
+        $('.divItems2').append(item);  // 기존 순서를 무시하고 정렬된 순서로 추가
+    });
 }

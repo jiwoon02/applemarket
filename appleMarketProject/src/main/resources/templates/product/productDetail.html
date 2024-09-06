@@ -120,10 +120,18 @@
 						<span class="text-end reportBtn"><a href="#">신고하기</a></span>
 
 						<div class="actions">
-							<button id="WishBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">찜하기</button>
+							<button id="WishBtn" class="DetailBtn">찜하기</button>
 							<button id="ChatBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">채팅하기</button>
 							<button id="BuyBtn" class="DetailBtn" th:disabled="${detail.productStatus=='판매 완료'}">구매하기</button>
 						</div>
+						
+						<th:block th:if="${not #lists.isEmpty(wishList)}">
+							<input type="hidden" th:value="${wishList.wishListNo}" id="wishListNo" /> <!-- 찜 유무 구분을 위해 -->
+						</th:block>
+						
+						<form id="addWishList" name="addWishList">
+							<input type="hidden" th:value="${detail.productID}" id="productID" name="productID" /> <!-- 찜목록 추가를 위해 -->
+						</form>
 					</div>
 				</div>
 			</div>

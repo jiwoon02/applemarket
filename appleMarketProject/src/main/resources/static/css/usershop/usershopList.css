@@ -158,7 +158,7 @@ body {
 .itemLink {
     border: none;
     border-radius: 5px;
-    width: 33.3%;
+    width: 50%;
     height: 50px;
     font-size: 1.1em;
     /*position: relative;*/
@@ -229,7 +229,7 @@ body {
 }
 
 /* 상품 목록 스타일 */
-.divItems, .divItems2 {
+.divItems {
     display: grid;
     grid-template-columns: repeat(5, 160px);  /* 각 행에 5개의 컬럼을 고정 크기로 배치 */
     grid-auto-rows: 200px;  /* 각 아이템의 세로 길이 고정 */
@@ -238,7 +238,7 @@ body {
     justify-content: center;  /* 나머지 공간을 공백으로 유지 */
 }
 
-.divItem, .divItem2 {
+.divItem {
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -249,7 +249,7 @@ body {
     /* height: 90%; 부모 그리드 셀의 높이 전체를 차지하도록 설정 */
 }
 
-.divItemImg, .divItemImg2 {
+.divItemImg {
     position: relative;  /* 자식 요소가 위치를 부모 기준으로 설정할 수 있도록 함 */
     height: 120px;
     text-align: center;
@@ -263,7 +263,7 @@ body {
     object-fit: cover;
 }
 
-.sold-out-overlay, .sold-out-overlay2 {
+.sold-out-overlay {
     position: absolute;  /* 부모인 .divItemImg를 기준으로 위치 설정 */
     top: 0;
     left: 0;
@@ -283,7 +283,7 @@ body {
 
 
 
-.divItemName, .divItemName2 {
+.divItemName {
     height: 35%; /* 높이를 35%로 설정 */
     display: flex;
     flex-direction: column;
@@ -298,19 +298,19 @@ body {
     color: #333;
 }
 
-.divPrice, .divPrice2 {
+.divPrice {
     display: flex;
     justify-content: space-between;
     font-size: 0.9em;
     color: #666;
 }
 
-.itemPrice, .itemPrice2 {
+.itemPrice {
     font-weight: bold;
     color: #333;
 }
 
-.itemTime, .itemTime2 {
+.itemTime {
     color: #999;
     text-align: right; /* 오른쪽 정렬 */
     font-size: 12px;

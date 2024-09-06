@@ -3,7 +3,6 @@ package com.apple.usershop.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,10 @@ import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
 import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
+import com.apple.usershop.domain.WishList;
 import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
+import com.apple.usershop.repository.UsershopWishListRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.Setter;
@@ -34,6 +35,9 @@ public class UsershopServiceImpl implements UsershopService {
     
     @Setter(onMethod_ = @Autowired)
     private UserRepository userRepository;
+    
+    @Setter(onMethod_ = @Autowired)
+    private UsershopWishListRepository wishListRepository;
 
 	@Override
 	public List<Usershop> usershop(Usershop usershop) {
@@ -193,5 +197,10 @@ public class UsershopServiceImpl implements UsershopService {
         // Usershop 객체 저장
         return usershopRepository.save(usershop);
     }
+
+	@Override
+	public List<WishList> getWishListByUserNo(Long userNo) {
+		return wishListRepository.findByUser_UserNo(userNo);
+	}
 }
 
