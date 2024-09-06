@@ -247,4 +247,19 @@ public class ProductServiceImpl implements ProductService {
         fileUtil.deleteProductFolder(productID);
     }
 
+
+    //productID를 얻어와 userID(판매자 ID)를 구함
+	@Override
+	public String getUserIDByProductID(Long productID) {
+		Product product = getProduct(productID);
+		
+		if(!product.getUser().getUserID().isEmpty()) {
+			String userID = product.getUser().getUserID();
+			return userID;
+		}
+		else {
+			return null;
+		}
+	}
+
 }

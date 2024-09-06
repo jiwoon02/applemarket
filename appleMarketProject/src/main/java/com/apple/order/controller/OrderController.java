@@ -105,7 +105,6 @@ public class OrderController {
 	public ResponseEntity<String> createOrder(@RequestBody Order order, HttpServletResponse response) throws IOException {
 	    try {
 	        orderService.orderInsert(order);
-//	        response.sendRedirect("/order/orderList");
 	        return ResponseEntity.ok("Order created successfully");
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating order: " + e.getMessage());

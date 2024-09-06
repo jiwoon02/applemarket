@@ -1,0 +1,34 @@
+/* container 설정 변경
+#content-wrapper > main > div{
+  display: block;
+} */
+
+.app-container {
+    width: 80vw;
+    height: 100vh; 
+}
+
+/* will be duplicated */
+/* .sendbird-conversation__channel-header {
+  background-color: '#E53157';
+} */
+
+.sendbird-channel-preview__avatar .sendbird-chat-header__avatar {
+  width: 56px !important;
+  height: 56px !important;
+}
+.sendbird-channel-preview__avatar
+  .sendbird-chat-header__avatar
+  .sendbird-image-renderer.sendbird-avatar-img {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.sendbird-icon-create {
+  display: none;
+  pointer-events: none;
+}
+.sendbird-iconbutton {
+  display: none;
+  pointer-events: none;
+}

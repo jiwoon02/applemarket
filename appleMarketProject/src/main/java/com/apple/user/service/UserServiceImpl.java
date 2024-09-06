@@ -141,8 +141,9 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+	//userNo로 구매자 이름 찾기
 	@Override
-	public String getNameByUserNo(long userNo) {
+	public String getNameByUserNo(Long userNo) {
 		Optional<User> buyer = userRepository.findByUserNo(userNo);
 		String buyerName;
 		
@@ -155,8 +156,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	//userNo로 구매자 전화번호 찾기
 	@Override
-	public String getPhoneByUserNo(long userNo) {
+	public String getPhoneByUserNo(Long userNo) {
 		Optional<User> buyer = userRepository.findByUserNo(userNo);
 		String buyerPhone;
 		
@@ -169,23 +171,51 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+   //userNo로 구매자 ID 찾기
    @Override
-   public Long getUserNo(String token) {
-      String userID = jwtUtil.getUserID(token);
-      Optional<User> optionalUser = userRepository.findByUserID(userID);
-      
-      Long userNo;
-    
-       if(optionalUser.isPresent()) {
-          userNo = optionalUser.get().getUserNo();
-          return userNo;
-       }
-       else {
-          return null;
-       }
+   public String getUserIDByUserNo(Long userNo) {
+	   Optional<User> buyer = userRepository.findByUserNo(userNo);
+		String buyerID;
+		
+		if(!buyer.isEmpty()) {
+			buyerID = buyer.get().getUserID();
+			return buyerID;
+		}
+		else {
+			return null;
+		}
    }
-
+   
+   //userNo로 구매자 닉네임 찾기
+	@Override
+	public String getUserNicknameByUserNo(Long userNo) {
+		Optional<User> buyer = userRepository.findByUserNo(userNo);
+		String buyerNickname;
+		
+		if(!buyer.isEmpty()) {
+			buyerNickname = buyer.get().getUserNickname();
+			return buyerNickname;
+		}
+		return null;
+	}
+	
+	//쿠키에서 아이디 추출해서 해당 유저 번호 가져오기
+	@Override
+	public Long getUserNo(String token) {
+		String userID = jwtUtil.getUserID(token);
+		Optional<User> optionalUser = userRepository.findByUserID(userID);
+		
+		Long userNo;
+		
+		if(optionalUser.isPresent()) {
+			userNo = optionalUser.get().getUserNo();
+			return userNo;
+		}
+		else {
+			return null;
+		}
+	}
+   
 
 }
 
