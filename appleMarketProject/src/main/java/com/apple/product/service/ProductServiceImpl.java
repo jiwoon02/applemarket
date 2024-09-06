@@ -1,6 +1,7 @@
 package com.apple.product.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,8 @@ import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
+import com.apple.usershop.domain.WishList;
+import com.apple.usershop.repository.UsershopWishListRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private final UserRepository userRepository;
     private final JwtUtil jwtutil;
     private final ProductReportRepository productReportRepository;
+    private final UsershopWishListRepository wishListRepository;
 
     /*
         @Override
@@ -277,5 +281,34 @@ public class ProductServiceImpl implements ProductService {
         log.info("현재 신고 횟수 : {}", currentReportCount);
     }
 
+    @Override
+    // userNo와 productId로 WishList 조회
+    public Optional<WishList> getWishListByUserIDAndProductId(String userID, Long productID) {
+        return wishListRepository.findByUser_UserIDAndProduct_ProductID(userID, productID);
+    }
+    
+    @Override
+    public void addWishList(String userID, Long productID) {
+        // userNo로 User 엔티티 조회
+        Optional<User> optionalUser = userRepository.findByUserID(userID);
+        User user = optionalUser.get();
 
+        // productID로 Product 엔티티 조회
+        Product product = productRepository.findById(productID)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+
+        // WishList 엔티티 생성
+        WishList wishList = new WishList();
+        wishList.setUser(user);
+        wishList.setProduct(product);
+        wishList.setWishListRegDate(LocalDateTime.now());
+
+        // WishList 저장
+        wishListRepository.save(wishList);
+    }
+    
+    @Override
+    public void removeWishList(String userID, Long productID) {
+        wishListRepository.deleteByUserUserIDAndProductProductID(userID, productID);
+    }
 }

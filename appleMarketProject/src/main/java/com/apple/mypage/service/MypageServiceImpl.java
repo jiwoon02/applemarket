@@ -28,6 +28,7 @@ import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
 import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
+import com.apple.usershop.repository.UsershopWishListRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -77,6 +78,9 @@ public class MypageServiceImpl implements MypageService {
 	
 	@Setter(onMethod_ = @Autowired)
     private ProductImagesRepository productImagesRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+	private UsershopWishListRepository wishListRepository;
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -210,6 +214,9 @@ public class MypageServiceImpl implements MypageService {
         Long userNo = withdrawDTO.getUserNo();
 
         try {
+        	wishListRepository.deleteByUser_UserNo(userNo);
+        	entityManager.flush();
+        	
             // 1. mypage 데이터 삭제
             mypageRepository.deleteByUser_UserNo(userNo);
             entityManager.flush(); // 삭제 후 즉시 반영

@@ -102,6 +102,11 @@
 						th:text="${itemReviewList != null ? itemReviewList.size() : 0}"
 						class="cnt"></span>
 				</button>
+				<button class="itemLink" onclick="showWishList()">
+					찜 <span
+						th:text="${wishList != null ? wishList.size() : 0}"
+						class="cnt"></span>
+				</button>
 			</div>
 			<div class="divTab1">
 				<div>
@@ -258,6 +263,55 @@
 										<a href="">신고하기</a>
 									</div>
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="divTab3">
+				<div>
+					<div class="divItemTitle">
+						<div class="sangphum2">
+							<div class="divInfo1">
+								찜
+								<div th:text="${wishList.size()}" class="data"></div>
+
+							</div>
+
+						</div>
+						<!-- <div class="divSelect">
+							<select name="itemState" id="itemState">
+								<option value="selling">판매중</option>
+								<option value="selled">판매완료</option>
+							</select>
+						</div> -->
+					</div>
+				</div>
+				<div class="divItemInfo">
+					<div class="itemTitle">
+						<div class="itemSort">
+							<button id="sortNewest2" class="sortBtn">최신순</button>
+							<button id="sortLowestPrice2" class="sortBtn">저가순</button>
+							<button id="sortHighestPrice2" class="sortBtn">고가순</button>
+						</div>
+					</div>
+				</div>
+				<div class="divItems2">
+					<div th:each="wishList : ${wishList}" th:data-product-id="${wishList.product.productID}" class="divItem2">
+						<div class="divItemImg2">
+							<img th:src="@{'/product/view/' + ${wishList.product.productID} + '/' + ${wishList.product.productImages[0].filename}}"
+								class="itemImg" alt="상품이미지">
+							<div class="sold-out-overlay2" th:if="${wishList.product.productStatus == '판매 완료'}">
+							판매 완료
+							</div>
+						</div>
+						<div class="divItemName2">
+							<div class="itemTitle productName2" th:text="${wishList.product.productName}"></div>
+							<div class="divPrice2">
+								<div class="itemPrice2" th:text="${wishList.product.productPrice} + '원'"></div>
+								<div class="itemTime2"
+									th:text="${#temporals.format(wishList.wishListRegDate, 'yyyy-MM-dd')}"></div>
 							</div>
 						</div>
 					</div>
