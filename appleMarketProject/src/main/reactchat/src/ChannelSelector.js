@@ -1,9 +1,14 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSendbirdStateContext } from '@sendbird/uikit-react';
+import GroupChannel from '@sendbird/uikit-react/GroupChannel';
+import { TypingIndicatorType } from '@sendbird/uikit-react';
+import './ChannelSelector.css';
+import './App.css';
 
 const ChannelSelector = ({ setChannelData, onChannelSelected }) => {
   const globalStore = useSendbirdStateContext();
   const sdk = globalStore?.stores?.sdkStore?.sdk;
+  const [currentChannelUrl, setCurrentChannelUrl] = useState(''); // currentChannelUrl 상태 추가
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -41,13 +46,14 @@ const ChannelSelector = ({ setChannelData, onChannelSelected }) => {
 
             const params = {
               invitedUserIds: [data.buyerId, data.sellerId],  // 초대할 사용자 ID 배열
-              name: `${data.sellerId}`,  // 채널 이름
+              name: `${data.buyerId}, ${data.sellerId}`,  // 채널 이름
               isDistinct: true,  // 동일한 사용자들로 된 기존 채널이 있으면 재사용
               customType: 'buyer-seller-chat',  // 커스텀 타입 (선택)
             };
 
             const channel = await sdk.groupChannel.createChannel(params);  // 채널 생성 또는 기존 채널 반환
             console.log('New or existing channel:', channel.url);
+            setCurrentChannelUrl(channel.url);  // currentChannelUrl 업데이트
             onChannelSelected(channel.url);  // 채널 URL 전달
           } catch (error) {
             console.error('Error creating or fetching channel:', error);
@@ -62,7 +68,19 @@ const ChannelSelector = ({ setChannelData, onChannelSelected }) => {
       .catch((error) => console.error('Error fetching ChannelSelector data:', error));
   }, [sdk, setChannelData]);  // 의존성 배열에서 onChannelSelected 제거, 반복 실행 방지
 
-  return null;
+  return (
+    <>
+      {currentChannelUrl && (
+        <>
+          {console.log("currentChannelUrl:", currentChannelUrl)} 
+          <GroupChannel 
+            channelUrl={currentChannelUrl}
+            showSearchIcon="true"
+          />
+        </>
+      )}
+    </>
+  );
 };
 
 export default ChannelSelector;

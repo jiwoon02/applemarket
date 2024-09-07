@@ -1,0 +1,4 @@
+#root > div.app-container > div > div.sendbird-ui-header.sendbird-chat-header.sendbird-conversation__channel-header > div.sendbird-ui-header__right.sendbird-ui-header--is-desktop > button {
+    display: none;
+    pointer-events: none;
+}
