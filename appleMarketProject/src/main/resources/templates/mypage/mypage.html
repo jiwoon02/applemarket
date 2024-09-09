@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- 본문 코드가 위치하는 파일로서 상단에 layout:decorate="경로/공통페이아웃파일명"을 선언하여 기본 레이아웃 파일을 사용하겠다라는 의미이다. 
+참고 : thymeleaf 2.x 버전에서는 layout:decorator 이지만 thymeleaf 3.x 버전에서는 layout:decorate를 사용.-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/mypage/mypage.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="mypage">
+        <table class="tbl_mypage">
+            <colgroup>
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+            </colgroup>
+            <thead>
+                <tr class="mainMenu">
+                    <th scope="row">판매 관리</th>
+                    <th scope="row">주문 내역</th>
+                    <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
+                    <th scope="row">회원 관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="menuList">
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    	<div id="blank">
+    	</div>
+    	<!--
+        <table class="tbl_col">
+            <colgroup>
+                <col style="width:15%;">
+                <col>
+                <col style="width:12%;">
+                <col style="width:12%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th colspan="4" class="title" >최근 3개월 주문내역</th>
+                </tr>
+                <tr>
+                    <th scope="col">주문번호</th>
+                    <th scope="col">상품명</th>
+                    <th scope="col">결제금액</th>
+                    <th scope="col">상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}" class="order_date">주문일</td>
+                    <td th:text="${item.productName}" class="tal">상품명</td>
+                    <td th:text="${item.productPrice}+'원'">결제금액</td>
+                    <td>주문완료</td>
+                </tr>
+            </tbody>
+            <tr class="emptyTbl" th:if="${#lists.isEmpty(items)}">
+                <td colspan="4" class="empty">주문내역이 존재하지 않습니다.</td>
+            </tr>
+        </table>
+        -->
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="/js/jquery-3.7.1.min.js"></script>
+	<script src="/js/mypage/mypage.js"></script>
+</th:block>
+</html>

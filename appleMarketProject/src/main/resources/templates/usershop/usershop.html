@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<!-- 본문 코드가 위치하는 파일로서 상단에 layout:decorate="경로/공통페이아웃파일명"을 선언하여 기본 레이아웃 파일을 사용하겠다라는 의미이다. 
+참고 : thymeleaf 2.x 버전에서는 layout:decorator 이지만 thymeleaf 3.x 버전에서는 layout:decorate를 사용.-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/usershop/usershop.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+	<div class="divFull">
+		<div class="divShop">
+			<div class="divProfile">
+				<form name="shopImg" id="shopImg" method="post"
+					enctype="multipart/form-data"
+					th:action="@{/usershop/shopImgUpdate}">
+					<input type="hidden" name="shopId" th:value="${usershop.shopId}" />
+					
+					<th:block th:if="${#lists.isEmpty(usershop.shopImgName)}">
+						<img src="/images/shop-icon.png" class="profileImg"/>
+					</th:block>
+					
+					<th:block th:if="${not #lists.isEmpty(usershop.shopImgName)}">
+						<img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" class="profileImg"/>
+					</th:block>
+					
+					<input type="file" name="file" id="fileInput" style="display: none">
+				</form>
+				<div th:text="${usershop.user.userNickname}" class="divShopName"></div>
+				<div class="divStar">
+					<img class="star reviewStar1" src="../images/usershop/star.png" alt="별점">
+					<img class="star reviewStar2" src="../images/usershop/star.png" alt="별점">
+					<img class="star reviewStar3" src="../images/usershop/star.png" alt="별점">
+					<img class="star reviewStar4" src="../images/usershop/star.png" alt="별점">
+					<img class="star reviewStar5" src="../images/usershop/star.png" alt="별점">
+				</div>
+			</div>	
+			<div class="divShopInfo">
+				<form id="textUpdate" name="textUpdate">
+					<div th:text="${usershop.user.userNickname}" class="divShopName2"></div>
+
+					<div class="divShopName2" id="nickname">
+						<input type="text" class="shopNameMdy" name="newNickname"
+							th:value="${usershop.user.userNickname}" />
+					</div>
+
+					<div class="divInfo">
+						<div class="divInfo1">
+							<img class="img" src="../images/usershop/shop.png" alt="상점오픈일">
+							상점오픈일
+							<div
+								th:text="${formattedDate}"
+								class="data"></div>
+						</div>
+						<div class="divInfo1">
+							<img class="img" src="../images/usershop/visitCnt.png" alt="상점방문수">
+							상점방문수
+							<div th:text="${usershop.shopVisitCount}" class="data"></div>
+						</div>
+						<div class="divInfo1">
+							<img class="img" src="../images/usershop/sellCnt.png" alt="상품판매">
+							상점판매
+							<div th:text="${productCount}" class="data"></div>
+						</div>
+					</div>
+					<div class="divContent">
+
+						<input type="hidden" id="userNo" name="userNo"
+							th:value="${usershop.user.userNo}" />
+						<div class="divTextarea">
+							<textarea class="introText" name="introText" id="introText"
+								maxlength="1000" placeholder="상점 소개글을 입력하세요."></textarea>
+							<button class="confirmBtn">확인</button>
+						</div>
+
+					</div>
+
+					<div th:text="${usershop.shopIntroduce}" class="divModifyContent"></div>
+
+					<div class="divModifyBtn">
+						<button class="modifyBtn" type="button">프로필 수정</button>
+					</div>
+					<!-- 
+                <div class="divComplain">
+                    <img class="img" src="../images/usershop/complain.png" alt="신고하기">
+                    <a href="">신고하기</a>
+                </div>  -->
+				</form>
+			</div>
+		</div>
+
+		<div class="divShop2">
+
+			<div class="divItemLink">
+				<button class="itemLink" onclick="showItems()">
+					상품 <span th:text="${productCount}" class="cnt"></span>
+				</button>
+				<button class="itemLink" onclick="showReviews()">
+					상점후기 <span
+						th:text="${itemReviewList != null ? itemReviewList.size() : 0}"
+						class="cnt"></span>
+				</button>
+				<button class="itemLink" onclick="showWishList()">
+					찜 <span
+						th:text="${wishList != null ? wishList.size() : 0}"
+						class="cnt"></span>
+				</button>
+			</div>
+			<div class="divTab1">
+				<div>
+					<div class="divItemTitle">
+						<div class="sangphum2">
+							<div class="divInfo1">
+								상품
+								<div th:text="${productCount}" class="data"></div>
+
+							</div>
+
+						</div>
+						<!-- <div class="divSelect">
+							<select name="itemState" id="itemState">
+								<option value="selling">판매중</option>
+								<option value="selled">판매완료</option>
+							</select>
+						</div> -->
+					</div>
+				</div>
+				<div class="divItemInfo">
+					<div class="itemTitle">
+
+						<div class="itemSort">
+							<button id="sortNewest" class="sortBtn">최신순</button>
+							<button id="sortLowestPrice" class="sortBtn">저가순</button>
+							<button id="sortHighestPrice" class="sortBtn">고가순</button>
+						</div>
+					</div>
+				</div>
+				<div class="divItems">
+					<div th:each="item : ${usershopItemList}" th:data-product-id="${item.productID}" class="divItem">
+						<div class="divItemImg">
+							<img th:src="@{'/product/view/' + ${item.productID} + '/' + ${item.productImages[0].filename}}"
+								class="itemImg" alt="상품이미지">
+							<div class="sold-out-overlay" th:if="${item.productStatus == '판매 완료'}">
+							판매 완료
+							</div>
+						</div>
+						<div class="divItemName">
+							<div class="itemTitle productName" th:text="${item.productName}"></div>
+							<div class="divPrice">
+								<div class="itemPrice" th:text="${item.productPrice} + '원'"></div>
+								<div class="itemTime"
+									th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></div>
+							</div>
+							<!-- <input type="hidden" id="productId" th:value="${item.productID}" /> -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="divTab2">
+				<div class="divReviewCnt">
+					<div class="divInfo1">
+						상점후기 <span
+							th:text="${itemReviewList != null ? itemReviewList.size() : 0}"
+							class="data">개수</span>
+					</div>
+					<div class="divShopGrade">
+						<div class="divGradeBox">
+							<div class="shopStar">
+								<div class="starNum" th:text="${averageStarRating}">평균</div>
+								<div class="starImg">
+									<img class="reviewStar1" alt="별점"> <img
+										class="reviewStar2" alt="별점"> <img class="reviewStar3"
+										alt="별점"> <img class="reviewStar4" alt="별점"> <img
+										class="reviewStar5" alt="별점">
+								</div>
+							</div>
+							<div class="gubun"></div>
+							<div class="divShopPct">
+								<div class="shopPct" th:text="${satisfactionPercentage} + '%'">95%</div>
+								<div class="reviewGrade">만족후기</div>
+							</div>
+						</div>
+
+						<div class="divCommentSelect">
+							<div class="divComment">
+								<div class="comment">
+									<img src="../images/usershop/review1.png" alt="후기이미지"> 상품 설명과 실제
+									상품이 동일해요 <span th:text="${sumSelectReview1}" class="commentCnt">개수</span>
+								</div>
+							</div>
+							<div class="divComment">
+								<div class="comment">
+									<img src="../images/usershop/review2.png" alt="후기이미지"> 채팅 답변이 빨라요
+									<span th:text="${sumSelectReview2}" class="commentCnt">개수</span>
+								</div>
+							</div>
+							<div class="divComment">
+								<div class="comment">
+									<img src="../images/usershop/review3.png" alt="후기이미지"> 친절하고 배려가
+									넘쳐요 <span th:text="${sumSelectReview3}" class="commentCnt">개수</span>
+								</div>
+							</div>
+							<div class="divComment">
+								<div class="comment">
+									<img src="../images/usershop/review4.png" alt="후기이미지"> 포장이 깔끔해요 <span
+										th:text="${sumSelectReview4}" class="commentCnt">개수</span>
+								</div>
+							</div>
+							<div class="divComment">
+								<div class="comment">
+									<img src="../images/usershop/review5.png" alt="후기이미지"> 상품 정보가 자세히
+									적혀있어요 <span th:text="${sumSelectReview5}" class="commentCnt">개수</span>
+								</div>
+							</div>
+						</div>
+						<div class="divHeightBtn">
+							<img class="heightImg" src="../images/usershop/heightImg1.png" alt="접기">
+						</div>
+					</div>
+
+					<div class="divUserComment">
+						<div th:each="review : ${itemReviewList}" class="divUserOne">
+							<div class="divUserOne">
+							
+								<th:block th:if="${#lists.isEmpty(usershop.shopImgName)}">
+									<img src="/images/shop-icon.png" class="profileImg2 shopPage"/>
+								</th:block>
+								
+								<th:block th:if="${not #lists.isEmpty(usershop.shopImgName)}">
+									<img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" class="profileImg2 shopPage"/>
+								</th:block>
+								
+								<input type="hidden" th:value="${review.user.userNo}" class="userImg" />
+
+								<div class="DivUserInfo">
+									<div class="userInfo">
+										<div th:text="${review.user.userNickname}" class="shopName shopPage">사용자명</div>
+										<div class="starImg">
+											<img
+												th:src="${review.starRating >= 1 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
+												id="starRate1" alt="별점"> <img
+												th:src="${review.starRating >= 2 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
+												id="starRate2" alt="별점"> <img
+												th:src="${review.starRating >= 3 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
+												id="starRate3" alt="별점"> <img
+												th:src="${review.starRating >= 4 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
+												id="starRate4" alt="별점"> <img
+												th:src="${review.starRating >= 5 ? '../images/usershop/star.png' : '../images/usershop/star2.png'}"
+												id="starRate5" alt="별점">
+										</div>
+										<div class="divItemBtn">
+											<button th:text="${review.product.productName}" class="itemBtn">상품명</button>
+											<input type="hidden" th:value="${review.product.productID}" id="productId" />
+										</div>
+									</div>
+									<div class="divReview" th:text="${review.reviewContent}">
+										후기내용</div>
+									<div class="divComplain">
+										<img class="img" src="../images/usershop/complain.png" alt="신고하기">
+										<a href="">신고하기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="divTab3">
+				<div>
+					<div class="divItemTitle">
+						<div class="sangphum2">
+							<div class="divInfo1">
+								찜
+								<div th:text="${wishList.size()}" class="data"></div>
+
+							</div>
+
+						</div>
+						<!-- <div class="divSelect">
+							<select name="itemState" id="itemState">
+								<option value="selling">판매중</option>
+								<option value="selled">판매완료</option>
+							</select>
+						</div> -->
+					</div>
+				</div>
+				<div class="divItemInfo">
+					<div class="itemTitle">
+						<div class="itemSort">
+							<button id="sortNewest2" class="sortBtn">최신순</button>
+							<button id="sortLowestPrice2" class="sortBtn">저가순</button>
+							<button id="sortHighestPrice2" class="sortBtn">고가순</button>
+						</div>
+					</div>
+				</div>
+				<div class="divItems2">
+					<div th:each="wishList : ${wishList}" th:data-product-id="${wishList.product.productID}" class="divItem2">
+						<div class="divItemImg2">
+							<img th:src="@{'/product/view/' + ${wishList.product.productID} + '/' + ${wishList.product.productImages[0].filename}}"
+								class="itemImg" alt="상품이미지">
+							<div class="sold-out-overlay2" th:if="${wishList.product.productStatus == '판매 완료'}">
+							판매 완료
+							</div>
+						</div>
+						<div class="divItemName2">
+							<div class="itemTitle productName2" th:text="${wishList.product.productName}"></div>
+							<div class="divPrice2">
+								<div class="itemPrice2" th:text="${wishList.product.productPrice} + '원'"></div>
+								<div class="itemTime2"
+									th:text="${#temporals.format(wishList.wishListRegDate, 'yyyy-MM-dd')}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="/js/jquery-3.7.1.min.js"></script>
+	<script src="/js/usershop/usershop.js"></script>
+</th:block>
+</html>

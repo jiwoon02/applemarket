@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- 본문 코드가 위치하는 파일로서 상단에 layout:decorate="경로/공통페이아웃파일명"을 선언하여 기본 레이아웃 파일을 사용하겠다라는 의미이다. 
+참고 : thymeleaf 2.x 버전에서는 layout:decorator 이지만 thymeleaf 3.x 버전에서는 layout:decorate를 사용.-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{template/client/layout/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/mypage/mypage.css" />
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="mypage">
+                <table class="tbl_mypage">
+            <colgroup>
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+            </colgroup>
+            <thead>
+                <tr class="mainMenu">
+                    <th scope="row">판매 관리</th>
+                    <th scope="row">주문 내역</th>
+                    <th scope="row">정보 관리</th>
+                    <th scope="row">비밀번호</th>
+                    <th scope="row">회원 관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="menuList">
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/sellAll" class="underline">판매 상품</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/buy" class="underline">주문 내역</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordCheck" class="underline">나의 정보 수정</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/userPasswordUpdate" class="underline">비밀번호 변경</a></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><a href="/mypage/withdraw" class="underline">회원 탈퇴</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="divWithdraw">
+            <div class="divTitle">
+                회원 탈퇴
+            </div>
+            <table class="withdrawTbl">
+                <tr>
+                    <th class="noteLink">탈퇴 사유가 무엇인가요?</th>
+                </tr>
+                <tr>
+                    <td class="noteLink">찾는 물품이 없어요</td>
+                </tr>
+                <tr>
+                    <td class="noteLink">물품이 안팔려요</td>
+                </tr>
+                <tr>
+                    <td class="noteLink">비매너 사용자를 만났어요</td>
+                </tr>
+                <tr>
+                    <td class="noteLink">새 상점을 만들고 싶어요</td>
+                </tr>
+                <tr>
+                    <td class="noteLink">개인정보를 삭제하고 싶어요</td>
+                </tr>
+                <tr>
+                    <td id="commentLink">기타</td>
+                </tr>
+            </table>
+            <input type="hidden" id="selectedReason" name="reason" />
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+	<script src="/js/jquery-3.7.1.min.js"></script>
+	<script src="/js/mypage/mypageWithdraw.js"></script>
+</th:block>
+</html>

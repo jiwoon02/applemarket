@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="comment">
+    <body class="bg-100 p-6">
+        <div class="comment-container bg-white p-4 rounded-lg shadow-md">
+            <!-- 댓글 입력 섹션 -->
+            <div class="flex items-start space-x-4 mb-6">
+                <div class="w-15 h-15 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span class="text-gray-500">
+                        <!-- 로그인한 사용자 이름 표시, 비로그인 시 '사용자' 표시 -->
+                        <span id="userName" th:text="${userName}"></span>
+                    </span>
+                </div>
+                <div class="flex-1 relative">
+                    <form id="commentForm" name="commentForm" th:action="@{/comments/insert}" method="post">
+                        <div class="mb-4">
+                            <!-- 댓글 입력창 -->
+                            <textarea name="commentContent" id="commentContent" class="comment-textarea" placeholder="내용을 입력해 주세요"></textarea>
+                        </div>
+                        <!-- 버튼을 오른쪽 아래에 고정 -->
+                        <div class="fixedbuttons">
+                            <button type="submit" id="commentInsertBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">등록</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 댓글 리스트 섹션 -->
+		<div id="commentList" class="comment-list">
+		    <!-- 댓글 리스트는 JS로 처리되므로 HTML에서는 아무 내용도 필요 없음 -->
+		</div>
+    </body>
+</th:block>
+</html>
