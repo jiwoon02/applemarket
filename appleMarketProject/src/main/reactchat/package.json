@@ -2,7 +2,6 @@
   "name": "reactchat",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/build/static/js/",
   "type": "module",
   "dependencies": {
     "@sendbird/uikit-react": "^3.15.1",
