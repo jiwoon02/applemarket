@@ -26,9 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/order/' + orderId;
         });
     });
-	
-});
-	
 	// orderDetailLink 클릭 시 이벤트 처리
     $(".orderDetailLink").on("click", function() {
         // 클릭한 셀에 해당하는 행에서 orderId 값을 가져옴
@@ -49,3 +46,5 @@ document.addEventListener('DOMContentLoaded', function () {
 	    }
 	}
 });
+	
+	
