@@ -100,6 +100,19 @@ $(function() {
 		$(".reviewStar5").attr("src", "../images/usershop/star.png");
 	}
 	
+	// 정렬 기능 추가
+    $('#sortNewest').on('click', function() {
+        sortItems('newest');
+    });
+
+    $('#sortLowestPrice').on('click', function() {
+        sortItems('lowestPrice');
+    });
+
+    $('#sortHighestPrice').on('click', function() {
+        sortItems('highestPrice');
+    });
+	
 	$(".divItems").on("click", ".divItem", function() {
 	    var productId = $(this).data("product-id");
 	    location.href = "/product/" + productId;
@@ -115,7 +128,7 @@ $(function() {
 		location.href = "/product/" + productId;
 	});
 	
-	$('.itemTitle').each(function() {
+	$('.productName').each(function() {
         var text = $(this).text();
         var textLength = text.length;
 
@@ -125,7 +138,17 @@ $(function() {
             $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
         }
     });
+	
+	$('.itemBtn').each(function() {
+        var text = $(this).text();
+        var textLength = text.length;
 
+		// 텍스트 길이가 10보다 크면 10글자만 추출하고 ...을 붙임
+        if (textLength > 10) {
+            var truncatedText = text.substring(0, 10) + '...';
+            $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
+        }
+    });
 });
 
 function showItems() {
@@ -171,4 +194,27 @@ function chkFile(item) {
 	} else {
 		return true;
 	}
+}
+
+function sortItems(criteria) {
+    let items = $('.divItem').get();  // 모든 상품 아이템을 가져옴
+
+    items.sort(function(a, b) {
+        let aValue, bValue;
+
+        if (criteria === 'newest') {
+            aValue = new Date($(a).find('.itemTime').text());
+            bValue = new Date($(b).find('.itemTime').text());
+            return bValue - aValue;  // 최신순 (내림차순)
+        } else if (criteria === 'lowestPrice') {
+            aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            return aValue - bValue;  // 저가순 (오름차순)
+        } else if (criteria === 'highestPrice') {
+            aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            bValue = parseInt($(b).find('.itemPrice').text().replace(/[^0-9]/g, ''));
+            return bValue - aValue;  // 고가순 (내림차순)
+        }
+    });
+	$('.divItems').html(items);
 }

@@ -81,9 +81,16 @@ ul{
 }
 
 .header-right-link {
-    margin-left: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     color: #333;
     text-decoration: none;
+    width: 100px;
+    border-right: 2px solid #999999;
+}
+
+.header-right-link:last-child{
+    border: none;
 }
 .header-link{
     color: #333;

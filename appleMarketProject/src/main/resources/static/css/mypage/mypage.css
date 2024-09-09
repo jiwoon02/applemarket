@@ -285,8 +285,8 @@ td ul li a {
     margin: 20px 0px;
 }
 
-.cancelBtn, .submitBtn {
-    background-color: #e74c3c;
+.cancelBtn, .submitBtn, .deleteBtn {
+    background-color: rgb(140,140,140);
     color: #ffffff;
     border: none;
     padding: 8px 12px;
@@ -297,7 +297,7 @@ td ul li a {
 }
 
 .cancelBtn:hover, .submitBtn:hover {
-    background-color: #c0392b;
+    background-color: rgb(93,93,93);
 }
 
 .submitBtn {
@@ -306,6 +306,14 @@ td ul li a {
 
 .submitBtn:hover {
     background-color: #27ae60;
+}
+
+.deleteBtn {
+	background-color: #e74c3c;
+}
+
+.deleteBtn:hover {
+    background-color: #c0392b;
 }
 
 /* 회원 탈퇴 섹션 스타일 */
@@ -452,7 +460,7 @@ td ul li a {
     line-height: 40px; /* 텍스트 세로 가운데 정렬 */
 }
 
-.userName, .userNickname, .userPhoneNumber {
+.updateInput {
     width: 500px;
     height: 30px;
     float: right;
@@ -463,9 +471,9 @@ td ul li a {
     float: right;
 }
 
-.userEmail1, .userEmail2, .emailSelect {
+.userEmail1, .userEmail2 {
     height: 30px;
-    width: 157px;
+    width: 237px;
 }
 
 .userBirth{
@@ -476,7 +484,7 @@ td ul li a {
 }
 
 .readOnly {
-	width: 504px;
+	width: 503px;
     height: 34px;
     float: right;
     padding-left: 10px;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -57,6 +58,8 @@ public class MypageController {
     @Autowired
     private JwtUtil jwtUtil;  // JwtUtil을 주입
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     //마이페이지
 //    @GetMapping("{userNo}")
 //    public String getRecentBuyItemsByUserNo(@PathVariable Long userNo, Model model) {
@@ -78,7 +81,10 @@ public class MypageController {
 		
 	    List<OrderProductDTO> items = mypageService.getBuyItemsByUserNo(userNo);
 	    model.addAttribute("items", items);
-
+	    
+	    List<Long> productIds = mypageService.getProductIdsByUserNo(userNo);
+	    model.addAttribute("productIds", productIds);	//리뷰작성한 productID
+	    
 	    return "mypage/mypageBuyItem"; // 반환할 뷰의 이름
 	}
     
@@ -98,14 +104,20 @@ public class MypageController {
     
     
     // 리뷰 작성 페이지를 보여주는 메서드 추가
-    @GetMapping("/addReview/{productName}/{shopId}/{productID}/{userNo}")
+    // shopId = userId
+    @GetMapping("/addReview/{productName}/{productID}")
     public String showAddReviewForm(@PathVariable String productName, 
-                                    @PathVariable Long shopId, 
                                     @PathVariable Long productID, 
-                                    @PathVariable Long userNo,
+                                    @CookieValue(value="JWT", required=false) String token,
                                     Model model) {
-    	// shopId를 사용하여 userNickname을 가져옴
+    	Long userNo = mypageService.getUserNo(token);
+		model.addAttribute("userNo", userNo);
+		
+		Long shopId = mypageService.getUserNoByProductID(productID);
+		
+		// shopId를 사용하여 userNickname을 가져옴
         String userNickname = mypageService.getUserNicknameByShopId(shopId);
+        model.addAttribute("userNickname", userNickname);
         
         // 상점 평균평점 
         List<ItemReview> itemReviewList = usershopService.usershopReviewListByShopId(shopId);
@@ -115,17 +127,19 @@ public class MypageController {
         
         // Usershop 정보 설정
         Optional<Usershop> usershopOptional = usershopRepository.findById(shopId);
-
         if (usershopOptional.isPresent()) {
             Usershop usershop = usershopOptional.get();
             model.addAttribute("usershop", usershop);
         }
         
-        // 필요한 데이터 모델에 추가
-        model.addAttribute("userNickname", userNickname);
-        model.addAttribute("productName", productName);
+        Optional<ItemReview> reviewOptional = mypageService.getReviewByUserNoAndProductId(userNo, productID);
+        if (reviewOptional.isPresent()) {
+            ItemReview review= reviewOptional.get();
+            model.addAttribute("review", review);
+        }
+         
         model.addAttribute("shopId", shopId);
-        model.addAttribute("userNo", userNo);
+        model.addAttribute("productName", productName);
         model.addAttribute("productID", productID);
 
         return "mypage/mypageReview"; // 리뷰 작성 페이지로 이동
@@ -136,8 +150,25 @@ public class MypageController {
     public String addReview(@ModelAttribute MypageReviewDTO reviewDto) {
     	
         mypageService.addReview(reviewDto);
-        return "mypage/mypage"; // 수정 필요 !!!!!!!!
+        return "redirect:/mypage/buy";
     }
+    
+    // 리뷰 수정
+    @PostMapping("/updateReview")
+    public String updateReview(@ModelAttribute MypageReviewDTO reviewDto, @RequestParam("reviewNo") Long reviewNo) {
+        // 서비스 메서드를 호출하여 리뷰 수정 로직 실행
+        mypageService.updateReviewById(reviewNo, reviewDto);
+        return "redirect:/mypage/buy"; // 수정 완료 후 구매 내역 페이지로 리다이렉트
+    }
+    
+    // 리뷰 삭제
+    @PostMapping("/deleteReview")
+    public String deleteReview(@RequestParam("reviewNo") Long reviewNo) {
+        // 서비스 메서드를 호출하여 리뷰 삭제 로직 실행
+        mypageService.deleteReviewById(reviewNo);
+        return "redirect:/mypage/buy"; // 삭제 완료 후 구매 내역 페이지로 리다이렉트
+    }
+
     
     // 비밀번호 확인 페이지로 이동
     @GetMapping("/userPasswordCheck")
@@ -174,6 +205,41 @@ public class MypageController {
     	
     	mypageService.updateUserInfo(userNo, updatedUser);
         return "redirect:/mypage"; // 수정 완료 후 마이페이지로 리다이렉트
+    }
+    
+	//비밀번호 변경 페이지
+    @GetMapping("/userPasswordUpdate")
+    public String userPasswordUpdate(Model model){
+    	model.addAttribute("user", new User());
+        return "mypage/mypageUserPasswordUpdate";
+    }
+    
+    @PostMapping("/updatePassword")
+    public String updatePassword(@CookieValue(value="JWT", required=false) String token,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 Model model) {
+        Long userNo = mypageService.getUserNo(token);
+        Optional<User> optionalUser = userRepository.findByUserNo(userNo);
+        
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            
+            // 현재 비밀번호가 일치하는지 확인
+            if (!passwordEncoder.matches(currentPassword, user.getUserPwd())) {
+                model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+                return "mypage/mypageUserPasswordUpdate";  // 다시 비밀번호 변경 페이지로 이동
+            }
+            
+            // 새로운 비밀번호 설정
+            user.setUserPwd(passwordEncoder.encode(newPassword));
+            userRepository.save(user); // 비밀번호 변경 후 저장
+            
+            return "redirect:/mypage";  // 성공적으로 변경 후 마이페이지로 리다이렉트
+        }
+        
+        model.addAttribute("errorMessage", "사용자를 찾을 수 없습니다.");
+        return "mypage/mypageUserPasswordUpdate";
     }
     
     @GetMapping("/withdraw")

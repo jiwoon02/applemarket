@@ -1,10 +1,8 @@
 package com.apple.mypage.service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +17,6 @@ import com.apple.mypage.dto.MypageReviewDTO;
 import com.apple.mypage.dto.WithdrawDTO;
 import com.apple.mypage.repository.MypageRepository;
 import com.apple.mypage.repository.WithdrawRepository;
-import com.apple.order.domain.Order;
 import com.apple.order.repository.OrderRepository;
 import com.apple.product.domain.OrderProductDTO;
 import com.apple.product.domain.Product;
@@ -31,6 +28,7 @@ import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
 import com.apple.usershop.repository.UsershopRepository;
 import com.apple.usershop.repository.UsershopReviewRepository;
+import com.apple.usershop.repository.UsershopWishListRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -80,6 +78,9 @@ public class MypageServiceImpl implements MypageService {
 	
 	@Setter(onMethod_ = @Autowired)
     private ProductImagesRepository productImagesRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+	private UsershopWishListRepository wishListRepository;
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -186,8 +187,8 @@ public class MypageServiceImpl implements MypageService {
 		Optional<User> optionalUser = userRepository.findByUserNo(userNo);
 		User existingUser = optionalUser.get();
         if (existingUser != null) {
-        	String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPwd());
-        	existingUser.setUserPwd(encryptedPassword);  // 비밀번호 수정
+        	//String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPwd());
+        	//existingUser.setUserPwd(encryptedPassword);  // 비밀번호 수정
             existingUser.setUserName(updatedUser.getUserName());  // 이름 수정
             existingUser.setUserNickname(updatedUser.getUserNickname());  // 닉네임 수정
             existingUser.setUserPhone(updatedUser.getUserPhone());  // 전화번호 수정
@@ -213,6 +214,9 @@ public class MypageServiceImpl implements MypageService {
         Long userNo = withdrawDTO.getUserNo();
 
         try {
+        	wishListRepository.deleteByUser_UserNo(userNo);
+        	entityManager.flush();
+        	
             // 1. mypage 데이터 삭제
             mypageRepository.deleteByUser_UserNo(userNo);
             entityManager.flush(); // 삭제 후 즉시 반영
@@ -281,4 +285,52 @@ public class MypageServiceImpl implements MypageService {
     		return null;
     	}
 	}
+
+	@Override
+	public Long getUserNoByProductID(Long productID) {
+		return productRepository.findUserNoByProductID(productID);
+	}
+	
+	@Override
+	// userNo로 productId를 가져오는 서비스 메서드
+    public List<Long> getProductIdsByUserNo(Long userNo) {
+        return itemReviewRepository.findProductIdsByUserNo(userNo);
+    }
+	
+	// userNo와 productID로 review 조회
+    @Override
+	public Optional<ItemReview> getReviewByUserNoAndProductId(Long userNo, Long productID) {
+        return itemReviewRepository.findByUserNoAndProductId(userNo, productID);
+    }
+    
+    @Override
+    public void updateReviewById(Long reviewNo, MypageReviewDTO reviewDto) {
+        // 리뷰 ID로 기존 리뷰를 조회
+        Optional<ItemReview> reviewOptional = usershopReviewRepository.findById(reviewNo);
+        if (reviewOptional.isPresent()) {
+            ItemReview existingReview = reviewOptional.get();
+
+            // 기존 리뷰의 내용을 수정
+            existingReview.setReviewContent(reviewDto.getReviewContent());
+            existingReview.setStarRating(reviewDto.getStarRating());
+            existingReview.setSelectReview1(reviewDto.getSelectReview1());
+            existingReview.setSelectReview2(reviewDto.getSelectReview2());
+            existingReview.setSelectReview3(reviewDto.getSelectReview3());
+            existingReview.setSelectReview4(reviewDto.getSelectReview4());
+            existingReview.setSelectReview5(reviewDto.getSelectReview5());
+
+            // 수정된 리뷰 저장
+            usershopReviewRepository.save(existingReview);
+        } else {
+            throw new IllegalArgumentException("Invalid review ID: " + reviewNo);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void deleteReviewById(Long reviewNo) {
+        // 리뷰 ID로 해당 리뷰 삭제
+        usershopReviewRepository.deleteById(reviewNo);
+    }
+
 }

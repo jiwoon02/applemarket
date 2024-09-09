@@ -23,4 +23,5 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 	
 	// userNo를 기준으로 Usershop 삭제
     void deleteByUser_UserNo(Long userNo);
+    
 }
