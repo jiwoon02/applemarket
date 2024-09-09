@@ -1,0 +1,576 @@
+/* 기본적인 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.mypage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+/* 테이블 스타일 */
+.tbl_mypage, .tbl_col {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 1024px;
+}
+
+.mainMenu {
+    background-color: rgb(246, 246, 246);
+}
+
+.tbl_mypage th, .tbl_col th {
+    color: black;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.tbl_mypage td, .tbl_col td {
+    padding: 10px;
+    text-align: center;
+}
+
+/* 링크 스타일 */
+a.underline {
+    color: black;
+    text-decoration: none;
+}
+
+a.underline:hover {
+    text-decoration: underline;
+}
+
+/* 마지막 열 스타일 */
+td ul {
+    padding-left: 0;
+}
+
+td ul li {
+    list-style: none;
+}
+
+td ul li a {
+    display: block;
+    padding: 10px 0;
+}
+
+/* 주문내역 타이틀 스타일 */
+.tbl_col th.title {
+    background-color: rgb(246, 246, 246);
+    color: black;
+    text-align: left;
+    padding-left: 20px;
+}
+
+/* 테이블의 첫 번째 열 스타일 */
+.tbl_col .tal {
+    text-align: left;
+    padding-left: 20px;
+}
+
+/* 주문내역 없는 경우 메시지 스타일 */
+.empty {
+    text-align: center;
+    font-size: 1.2em;
+    color: #888;
+    margin-top: 30px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 900px) {
+    table, th, td {
+        display: block;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    th {
+        /* background-color: #4CAF50; */
+        color: white;
+        padding: 15px;
+    }
+
+    .tbl_col th.title {
+        text-align: center;
+    }
+
+    .tbl_col .tal {
+        padding-left: 10px;
+    }
+}
+
+.tbl_col {
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+.menuList {
+    background-color: white;
+}
+
+.tbl_mypage {
+    border-collapse: collapse;
+}
+
+.itemImg {
+    width: 80px;
+    height: 100px;
+}
+
+/* 부모 요소에 flexbox 적용 */
+.tdItemName {
+    display: flex;
+   	text-align: center;
+}
+
+/* 이미지와 텍스트 사이 간격 조정 */
+.itemName {
+    font-size: 1em; /* 텍스트 크기 설정 */
+    color: #333; /* 텍스트 색상 설정 */
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트에 말줄임 표시(...) 추가 */
+}
+
+/* 리뷰 작성 섹션 스타일 */
+.divReviewWrite {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.divTitle {
+    font-weight: bold;
+    color: black;
+    font-size: large;
+    padding: 13px 30px;
+    background-color: rgb(246, 246, 246);;
+}
+
+.divReviewInfo {
+    display: flex;
+    align-items: center; /* 수직으로 가운데 정렬 */
+    justify-content: center; /* 수평으로 가운데 정렬 */
+    
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.divUserImg, .userInfo2 {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: left; /* 가운데 정렬 */
+    justify-content: center; /* 세로축 기준 가운데 정렬 */
+}
+
+.divUserImg img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.shopName2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.divStarImg img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.starImg2 img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.divItemBtn2 {
+    margin-top: 10px;
+}
+
+.itemBtn2 {
+    background-color: rgb(255, 255, 255);
+    color: rgb(102, 102, 102);
+    border: 1px solid rgb(238, 238, 238);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.divStarRate {
+    text-align: center;
+    padding: 40px;
+    border-bottom: 1px solid #eee;
+}
+
+.starImg2 img {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.divSelectComment {
+    margin: 20px 0px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.divComment2 {
+    margin: 10px 20px;
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+}
+
+.comment2 img {
+    width: 14px;
+    height: 14px;
+}
+
+.comment2 {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: black;
+    padding: 15px;
+}
+
+.comment2:hover {
+	background-color: rgb(231, 231, 231);
+}
+
+
+.divCommentWrite {
+    margin-top: 20px;
+}
+
+.commentWrite {
+    width: 954px;
+    height: 100px;
+    padding: 10px;
+    margin-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #555;
+    resize: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.divReviewBtn {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px;
+}
+
+.cancelBtn, .submitBtn, .deleteBtn {
+    background-color: rgb(140,140,140);
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 1.0em;
+}
+
+.cancelBtn:hover, .submitBtn:hover {
+    background-color: rgb(93,93,93);
+}
+
+.submitBtn {
+    background-color: #2ecc71;
+}
+
+.submitBtn:hover {
+    background-color: #27ae60;
+}
+
+.deleteBtn {
+	background-color: #e74c3c;
+}
+
+.deleteBtn:hover {
+    background-color: #c0392b;
+}
+
+/* 회원 탈퇴 섹션 스타일 */
+.divWithdraw {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.withdrawTbl {
+	border-collapse: collapse;
+}
+
+.withdrawTbl td, .withdrawTbl th {
+    border: 1px solid #eee; /* 내부 선을 검정색으로 추가 */
+    padding: 16px; /* 테두리 안쪽 여백 */
+    width: 1024px;
+    text-align: center;
+}
+
+.withdrawTbl th {
+	font-size : 20px;
+}
+
+.withdrawTbl td:hover {
+	background-color: rgb(246,246,246);	
+}
+
+/* 회원 탈퇴 사유 작성 섹션 스타일 */
+.divWithdrawComment {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.divCommentTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.commentTitle {
+    padding: 20px 52px;
+}
+
+.divWithdrawText {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.withdrawText {
+    width: 900px;
+    height: 200px;
+    padding: 10px;
+    margin-left: 52px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #555;
+    resize: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: rgb(246, 246, 246);
+}
+
+.divWithdrawBtn {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px;
+}
+
+.wdCancelBtn, .wdSubmitBtn {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.wdCancelBtn:hover, .wdSubmitBtn:hover {
+    background-color: #c0392b;
+}
+
+.wdSubmitBtn {
+    background-color: #2ecc71;
+}
+
+.wdSubmitBtn:hover {
+    background-color: #27ae60;
+}
+
+/* 회원 탈퇴 유의사항 섹션 스타일 */
+.divWithdrawNote {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.withdrawNote {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 20px;
+    background-color: rgb(246, 246, 246);
+}
+
+.divNote {
+    width: 850px;
+    margin: 40px 62px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background-color: rgb(246, 246, 246);
+    color: #666666;
+}
+
+.withdraw {
+    color: #e74c3c;
+}
+
+/* 나의 정보수정 섹션 스타일 */
+.divUserInfoRetouch {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.divUserRetouch {
+    padding: 20px 150px;
+    height: 36px;
+    line-height: 40px; /* 텍스트 세로 가운데 정렬 */
+}
+
+.updateInput {
+    width: 500px;
+    height: 30px;
+    float: right;
+    padding-left: 10px;
+}
+
+.divEmail {
+    float: right;
+}
+
+.userEmail1, .userEmail2 {
+    height: 30px;
+    width: 237px;
+}
+
+.userBirth{
+    width: 503px;
+    padding-left: 10px;
+    height: 30px;
+    float: right;
+}
+
+.readOnly {
+	width: 503px;
+    height: 34px;
+    float: right;
+    padding-left: 10px;
+    background-color: #eee	;
+    border: none;
+}
+
+.divUserBtn {
+    text-align: right;
+    padding: 20px 150px;
+}
+
+.userBtn {
+    height: 40px;
+    width: 100px;
+    background-color: #2ecc71;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.userBtn:hover {
+    background-color: #27ae60;
+}
+
+/* 나의 정보수정 비밀번호 확인 섹션 스타일 */
+.divEditPwd {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 1024px;
+    margin: 20px 0;
+}
+
+.box {
+    width: 850px;
+    margin: 40px 62px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background-color: rgb(246, 246, 246);
+    color: #666666;
+    text-align: center;
+}
+
+.userPwd {
+    margin-bottom: 15px;
+    height: 25px;
+    width: 300px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.divPwdBtn {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.pwdCancelBtn, .pwdSubmitBtn {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+    width: 80px;
+}
+
+ .pwdCancelBtn:hover {
+    background-color: #c0392b;
+}
+
+.pwdSubmitBtn {
+    background-color: #2ecc71;
+}
+
+.pwdSubmitBtn:hover {
+    background-color: #27ae60;
+}
+
+#blank{
+	height:200px;
+}
+
+.trSellItem td{
+	text-align: center;
+}

@@ -1,0 +1,527 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.divFull {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 1024px;
+}
+
+.divShop, .divShop2 {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 984px;
+}
+
+.divShop {
+    display: flex;
+}
+
+.divProfile {
+    flex: 1;
+    text-align: center;
+    margin-right: 20px;
+}
+
+#shopImg {
+	width: 322px;
+	height: 108px;
+}
+
+.profileImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    object-fit: cover;
+    display: inline-block; /* 요소가 블록으로 표시되도록 설정 */
+    background-color: #f0f0f0; /* 이미지가 없을 때 표시될 배경색 지정 */
+}
+
+
+.divShopName {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.divStar img {
+    margin-top: 15px;
+    width: 20px;
+    height: 20px;
+}
+
+.divShopInfo {
+    flex: 2;
+}
+
+.divShopName2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.divInfo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.divInfo1 {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.divInfo1 img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.data {
+    margin-left: 10px;
+    font-size: 1.0em;
+    color: #999;
+    padding-top: 3px;
+}
+
+.divContent {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%; /* 부모 요소의 전체 너비 사용 */
+}
+
+.divTextarea {
+    display: flex;
+    flex-grow: 1; /* 텍스트 영역이 가능한 공간을 최대한 차지하도록 설정 */
+}
+
+.introText {
+    width: 100%; /* 텍스트 영역이 flex 컨테이너 내의 남은 공간을 차지하도록 설정 */
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    color: #555;
+    resize: none;
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+}
+
+.confirmBtn {
+    width: auto; /* 버튼의 고정 너비를 제거하여 내용에 맞게 조정 */
+    height: 100px; /* 텍스트 영역과 동일한 높이로 설정 */
+    padding: 0 20px; /* 버튼에 패딩 추가 */
+    cursor: pointer;
+    font-size: 1em;
+    color: rgb(136, 136, 136);
+    border: 1px solid rgb(238, 238, 238);
+}
+
+
+.divModifyContent {
+	width: 95%;
+    height: 80px;
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.divComplain a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.divShop2 .divItemLink {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.divShop2 {
+    font-size: 1.1em;
+    text-decoration: none;
+    position: relative;
+}
+
+.itemLink {
+    border: none;
+    border-radius: 5px;
+    width: 50%;
+    height: 50px;
+    font-size: 1.1em;
+    /*position: relative;*/
+}
+
+/*.cnt {
+    background-color: #3498db;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    position: absolute;
+    top: -10px;
+    right: -15px;
+}*/
+
+.divItemTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.sangphum {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.divSelect select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.divItemInfo .itemTitle {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.itemSort .sortBtn {
+    background-color: white;
+    color: #999;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sangphum2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+}
+
+.img {
+    width: 15px;
+    height: 15px;
+}
+
+/* 상품 목록 스타일 */
+.divItems {
+    display: grid;
+    grid-template-columns: repeat(5, 160px);  /* 각 행에 5개의 컬럼을 고정 크기로 배치 */
+    grid-auto-rows: 200px;  /* 각 아이템의 세로 길이 고정 */
+    gap: 20px;  /* 아이템 간의 간격 설정 */
+    margin-top: 20px;
+    justify-content: center;  /* 나머지 공간을 공백으로 유지 */
+}
+
+.divItem {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    /* height: 90%; 부모 그리드 셀의 높이 전체를 차지하도록 설정 */
+}
+
+.divItemImg {
+    position: relative;  /* 자식 요소가 위치를 부모 기준으로 설정할 수 있도록 함 */
+    height: 120px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.itemImg {
+    width: 110px;
+    height: 120px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.sold-out-overlay {
+    position: absolute;  /* 부모인 .divItemImg를 기준으로 위치 설정 */
+    top: 0;
+    left: 0;
+    width: 100%;  /* 부모 요소와 동일한 너비 */
+    height: 100%; /* 부모 요소와 동일한 높이 */
+    background-color: rgba(0, 0, 0, 0.5);  /* 반투명 검정색 배경 */
+    color: white;
+    display: flex;
+    justify-content: center;  /* 가로 방향 가운데 정렬 */
+    align-items: center;  /* 세로 방향 가운데 정렬 */
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;  /* itemImg와 동일하게 설정 */
+    z-index: 1;  /* 이미지 위에 표시되도록 함 */
+}
+
+
+
+.divItemName {
+    height: 35%; /* 높이를 35%로 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 상단 중앙 정렬을 위해 공간 분배 */
+    padding: 5px 0;
+}
+
+.itemTitle {
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center; /* 중앙 정렬 */
+    color: #333;
+}
+
+.divPrice {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.itemPrice {
+    font-weight: bold;
+    color: #333;
+}
+
+.itemTime {
+    color: #999;
+    text-align: right; /* 오른쪽 정렬 */
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+/* 상점 후기 및 별점 섹션 스타일 */
+.divTab2 {
+    margin-top: 30px;
+}
+
+.divReviewCnt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.divShopGrade {
+    margin-top: 10px;
+    width: 950px
+}
+
+.divGradeBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 943px;
+   
+}
+
+.shopStar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 425px;
+    padding: 15px;
+}
+
+.starNum {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.starImg {
+    display: flex;
+    justify-content: center;
+}
+
+.starImg img {
+    width: 15px;
+    height: 15px;
+}
+
+.gubun {
+    width: 1px;
+    height: 50px;
+    background-color: #ccc;
+    margin: 0 15px;
+}
+
+.divShopPct {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 425px;
+}
+
+.shopPct {
+    font-size: 1.2em;
+    font-weight: bold;
+    
+}
+
+.reviewGrade {
+    font-size: 0.9em;
+    color: #999;
+    padding-top: 8px;
+}
+
+.divCommentSelect {
+    margin: 40px 0px;
+    height: 200px; /* 초기 높이 설정 */
+    overflow-y: auto; /* 높이를 초과하는 컨텐츠를 스크롤 가능하게 설정 */
+}
+
+.divComment {
+    margin: 10px 0px;
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+}
+
+.comment img {
+    width: 14px;
+    height: 14px;
+}
+
+.comment {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: black;
+    padding: 15px;
+}
+
+.commentCnt {
+    float: right;
+}
+
+.divHeightBtn {
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin-top: 20px; /* 필요한 경우 여백 추가 */
+    margin-bottom: 20px;
+}
+
+.heightImg {
+    height: 16px;
+    width: 16px;
+}
+
+/* 사용자 후기 섹션 스타일 */
+.divUserComment {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.divUserOne {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start; /* 이미지와 텍스트가 위쪽에 정렬되도록 */
+}
+
+.divUserOne img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px; /* 이미지와 텍스트 간의 여백 */
+    background-color: #f0f0f0; /* 이미지가 없을 때 표시될 배경색 지정 */
+}
+
+.DivUserInfo {
+    flex: 1;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column; /* 세로로 배치되도록 설정 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    margin-bottom: 5px;
+}
+
+.shopName {
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px; /* 요소 간 간격 추가 */
+}
+
+.starImg {
+    display: flex;
+    margin-bottom: 5px; /* 요소 간 간격 추가 */
+}
+
+.starImg img {
+    width: 14px;
+    height: 14px;
+    margin-left: 1px; /* 별 아이콘 간의 간격을 조정 */
+}
+
+.divItemBtn {
+    margin-top: 5px; /* 요소 간 간격 추가 */
+}
+
+.itemBtn {
+    background-color: rgb(255,255,255);
+    color: rgb(102,102,102);
+    border: 1px solid rgb(238,238,238);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.divReview {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-right: 55px
+}
+
+.divComplain {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.divComplain a {
+    color: #e74c3c;
+    text-decoration: none;
+    margin-left: 5px;
+    font-size: 0.9em;
+}
+
+.divComplain img {
+    width: 14px;
+    height: 14px;
+}
