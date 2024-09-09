@@ -62,8 +62,12 @@ public class AdminController {
 	@GetMapping("community")
 	public String community(CommunityPost communityPost, Model model) {
 		List<CommunityPost> list = adminService.communityPostList(communityPost);
+		Map<Long, Long> reportCount = adminService.communityReportCount();
+		//디버그
+		System.out.println("id :" + reportCount.toString());
+		System.out.println("values : " + reportCount.values());
+		model.addAttribute("reportCount", reportCount);
 		model.addAttribute("posts", list);
-		
 		return "/admin/community";
 	}
 	
@@ -85,7 +89,8 @@ public class AdminController {
 //		System.out.println("list : " + list);
         Map<Long, Long> reportCount = adminService.productReportCount();
 		//디버그
-		System.out.println("id : " + reportCount.values());
+        System.out.println("id :" + reportCount.toString());
+		System.out.println("values : " + reportCount.values());
 		model.addAttribute("reportCount", reportCount);
 		model.addAttribute("productList", list);
 

@@ -214,6 +214,20 @@ public class AdminServiceImpl implements AdminService {
 		
 		return productReportCount;
 	}
+	
+	@Override
+	public Map<Long, Long> communityReportCount() {
+		List<Object[]> results = communityReportRepository.ReportCount();
+		
+		Map<Long, Long> communityReportCount = new HashMap<>();
+		for (Object[] result : results) {
+			Long communityPostId = ((Number) result[0]).longValue();
+			Long count = ((Number) result[1]).longValue();
+			communityReportCount.put(communityPostId, count);
+		}
+		
+		return communityReportCount;
+	}
 	//카테고리 등록 횟수 표시
 	public Map<String, Long> CategoryCounts() {
         List<Object[]> results = productRepository.countProductsByCategory();

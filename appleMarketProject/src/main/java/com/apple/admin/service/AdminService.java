@@ -31,6 +31,7 @@ public interface AdminService {
 	public List<ProductReport> productReportDetail();
 	public Map<Long, Long> productReportCount();
 	public Map<String, Long> CategoryCounts();
+	public Map<Long, Long> communityReportCount();
 	public void userUpdate(User user);
 	public void categoryInsert(Category category);
 	public void categoryDelete(Category category);

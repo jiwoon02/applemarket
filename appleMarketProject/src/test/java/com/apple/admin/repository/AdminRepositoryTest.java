@@ -68,35 +68,35 @@ public class AdminRepositoryTest {
 //		}
 //	}
 //	
-	//신고내용 입력
-//	@Test
-//	public void productReprotdtailInsert() {
-//		ProductReport productReport = new ProductReport();
-//		Product product = new Product();
-//		User user = new User();
-//		
-//		user.setUserNo(1L);
-//		product.setProductID(14L);
-//		productReport.setUser(user);
-//		productReport.setProduct(product);
-//		productReport.setReportContent("신고 내용");
-//		productReportRepository.save(productReport);
-//	}
-
-	//커뮤니티 신고 내용 입력
+//	신고내용 입력
 	@Test
-	public void communityReportDetailInsert() {
-		CommunityReport communityReport = new CommunityReport();
-		CommunityPost communityPost = new  CommunityPost();
+	public void productReprotdtailInsert() {
+		ProductReport productReport = new ProductReport();
+		Product product = new Product();
 		User user = new User();
 		
 		user.setUserNo(1L);
-		communityPost.setCommunityPostID(15L);
-		communityReport.setUser(user);
-		communityReport.setCommunityPost(communityPost);
-		communityReport.setReportContent("테스트 신고 내용");
-		communityReportRepository.save(communityReport);
+		product.setProductID(21L);
+		productReport.setUser(user);
+		productReport.setProduct(product);
+		productReport.setReportContent("신고 내용");
+		productReportRepository.save(productReport);
 	}
+
+//	//커뮤니티 신고 내용 입력
+//	@Test
+//	public void communityReportDetailInsert() {
+//		CommunityReport communityReport = new CommunityReport();
+//		CommunityPost communityPost = new  CommunityPost();
+//		User user = new User();
+//		
+//		user.setUserNo(1L);
+//		communityPost.setCommunityPostID(16L);
+//		communityReport.setUser(user);
+//		communityReport.setCommunityPost(communityPost);
+//		communityReport.setReportContent("테스트 신고 내용");
+//		communityReportRepository.save(communityReport);
+//	}
 
 //	@Test
 //	public void adminListTest() {
