@@ -1,5 +1,6 @@
 package com.apple.admin.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -70,12 +71,14 @@ public class AdminRepositoryTest {
 		User user = new User();
 		
 		user.setUserNo(1L);
-		product.setProductID(11L);
+		product.setProductID(14L);
 		productReport.setUser(user);
-		productReport.setProductID(product);
-		productReport.setReportContent("대충 신고하는 내용 중복");
+		productReport.setProduct(product);
+		productReport.setReportContent("신고 내용");
 		productReportRepository.save(productReport);
 	}
+
+
 //	@Test
 //	public void adminListTest() {
 //		List<Admin> adminList = (List<Admin>) adminRepository.findAll();
@@ -101,5 +104,5 @@ public class AdminRepositoryTest {
 //	}
 //	
 	
-	
+
 }

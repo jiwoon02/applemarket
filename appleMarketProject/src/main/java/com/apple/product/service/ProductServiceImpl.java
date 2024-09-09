@@ -1,10 +1,13 @@
 package com.apple.product.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.apple.admin.domain.ProductReport;
+import com.apple.admin.repository.ProductReportRepository;
 import com.apple.location.repository.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ import com.apple.product.repository.ProductImagesRepository;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
+import com.apple.usershop.domain.WishList;
+import com.apple.usershop.repository.UsershopWishListRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +43,8 @@ public class ProductServiceImpl implements ProductService {
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final JwtUtil jwtutil;
+    private final ProductReportRepository productReportRepository;
+    private final UsershopWishListRepository wishListRepository;
 
     /*
         @Override
@@ -82,31 +89,32 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO){
+    public PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO) {
+        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
+        Page<Product> result = productRepository.findByCategoryCategoryID(categoryID, pageRequest);
+        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
+    }
+
+    public boolean locationExists(Long locationID){
+        return locationRepository.existsById(locationID);
+    }
+    
+    //locationID 기준으로 검색
+    @Override
+    public PageResponseDTO<Product> getProductByLocationIDRange(Long locationID, PageRequestDTO pageRequestDTO){
         PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
 
-        long startID = locationID -3;
-        long endID = locationID + 3;
+        Long startID = locationID -3;
+        Long endID = locationID + 3;
 
-        if(!locationExists(startID)){
+        if (!locationExists(startID)) {
             startID = locationID;
         }
-        if(!locationExists(endID)){
+        if (!locationExists(endID)) {
             endID = locationID;
         }
 
         Page<Product> result = productRepository.findByUserLocationLocationIDRange(startID, endID, pageRequest);
-        return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
-    }
-
-    public boolean locationExists(long locationID){
-        return locationRepository.existsById(locationID);
-    }
-
-    @Override
-    public PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO) {
-        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
-        Page<Product> result = productRepository.findByCategoryCategoryID(categoryID, pageRequest);
         return new PageResponseDTO<>(result.getContent(), pageRequestDTO, result.getTotalElements());
     }
 
@@ -132,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
         
         Optional<User> optionalUser = userRepository.findByUserID(userID);
         
-        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("Invalid token or user not found."));
+        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException("해당 토큰의 유저를 찾을 수 없습니다."));
 
     	product.setUser(user);
     	
@@ -219,6 +227,7 @@ public class ProductServiceImpl implements ProductService {
         updateProduct.setPostPrice(product.getPostPrice());
         updateProduct.setCategory(product.getCategory());
         updateProduct.setProductDescription(product.getProductDescription());
+        updateProduct.setProductStatus(product.getProductStatus());
 
         productRepository.save(updateProduct);
     }
@@ -247,6 +256,62 @@ public class ProductServiceImpl implements ProductService {
         fileUtil.deleteProductFolder(productID);
     }
 
+    //신고횟수 증가처리 메소드
+    @Override
+    public Long getReportCountByProductID(Long productID) {
+        Product product = getProduct(productID);
+        return productReportRepository.countByProduct(product);
+    }
+
+    @Override
+    public void reportProduct(Long productID, String reportContent, User user) {
+        // 상품 조회
+        Product product = getProduct(productID);
+
+        // 신고 객체 생성 및 데이터 설정
+        ProductReport report = new ProductReport();
+        report.setProduct(product);
+        report.setReportContent(reportContent);
+        report.setUser(user);  // User 객체 설정
+
+        // 신고 저장
+        productReportRepository.save(report);
+
+        // 신고 횟수 조회 및 로그 출력
+        Long currentReportCount = getReportCountByProductID(productID);
+        log.info("현재 신고 횟수 : {}", currentReportCount);
+    }
+
+    @Override
+    // userNo와 productId로 WishList 조회
+    public Optional<WishList> getWishListByUserIDAndProductId(String userID, Long productID) {
+        return wishListRepository.findByUser_UserIDAndProduct_ProductID(userID, productID);
+    }
+    
+    @Override
+    public void addWishList(String userID, Long productID) {
+        // userNo로 User 엔티티 조회
+        Optional<User> optionalUser = userRepository.findByUserID(userID);
+        User user = optionalUser.get();
+
+        // productID로 Product 엔티티 조회
+        Product product = productRepository.findById(productID)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+
+        // WishList 엔티티 생성
+        WishList wishList = new WishList();
+        wishList.setUser(user);
+        wishList.setProduct(product);
+        wishList.setWishListRegDate(LocalDateTime.now());
+
+        // WishList 저장
+        wishListRepository.save(wishList);
+    }
+    
+    @Override
+    public void removeWishList(String userID, Long productID) {
+        wishListRepository.deleteByUserUserIDAndProductProductID(userID, productID);
+    }
 
     //productID를 얻어와 userID(판매자 ID)를 구함
 	@Override
@@ -261,5 +326,4 @@ public class ProductServiceImpl implements ProductService {
 			return null;
 		}
 	}
-
 }

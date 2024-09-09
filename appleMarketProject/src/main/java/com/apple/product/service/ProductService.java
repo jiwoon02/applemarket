@@ -3,6 +3,11 @@ package com.apple.product.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import com.apple.user.domain.User;
+import com.apple.usershop.domain.WishList;
+
 import org.springframework.web.multipart.MultipartFile;
 import com.apple.common.vo.PageRequestDTO;
 import com.apple.common.vo.PageResponseDTO;
@@ -31,7 +36,16 @@ public interface ProductService {
 
     PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO);
 
-    public PageResponseDTO<Product> getProductByLocationIDRange(long locationID, PageRequestDTO pageRequestDTO);
-
 	String getUserIDByProductID(Long productID);
+    public PageResponseDTO<Product> getProductByLocationIDRange(Long locationID, PageRequestDTO pageRequestDTO);
+
+    public Long getReportCountByProductID(Long productID);
+
+    public void reportProduct(Long productID, String reportContent, User user);
+    
+    public Optional<WishList> getWishListByUserIDAndProductId(String userID, Long productID);
+    
+    public void addWishList(String userID, Long productID);
+    
+    public void removeWishList(String userID, Long productID);
 }

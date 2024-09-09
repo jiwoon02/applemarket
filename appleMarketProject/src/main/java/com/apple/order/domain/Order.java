@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apple.product.domain.Product;
@@ -54,7 +55,6 @@ public class Order {
 	
 	@Column(name="request_text", length = 50)
 	private String requestText;				//요청사항
-	
 	
 	/*외래 키 생성*/
 	@ManyToOne								//Order(다)-User(일) 를 다대일 관계로 설정

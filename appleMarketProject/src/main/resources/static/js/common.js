@@ -95,7 +95,7 @@ function chkFile(item) {
 }
 
 $("#locationFormBtn").on("click", function(){
-	location.href="/locationForm";
+	location.href="/user/locationForm";
 })
 
 //검색버튼클릭
@@ -109,7 +109,7 @@ function performSearch(){
 	}
 
 	console.log('searchInput==>' + searchInput);
-	location.href=`/product/productList?keyword=${encodeURIComponent(searchInput)}&search=p${searchField}`;
+	location.href=`/?keyword=${encodeURIComponent(searchInput)}&search=p${searchField}`;
 }
 
 

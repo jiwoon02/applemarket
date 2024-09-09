@@ -17,8 +17,9 @@ public interface ProductImagesRepository extends JpaRepository<ProductImages, Lo
 	@Query("SELECT pi FROM ProductImages pi WHERE pi.product = :product")
 	List<ProductImages> findByFilenameAndProduct(@Param("product") Product product);
 
-
-	}
+	// Product에 해당하는 이미지 조회 (userNo로 user삭제를 위해)
+    List<ProductImages> findByProduct(Product product);
+}
     
     
 

@@ -3,15 +3,21 @@ package com.apple.user.service;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.apple.location.domain.Location;
+import com.apple.location.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import com.apple.jwt.JwtUtil;
 import com.apple.user.domain.User;
 import com.apple.user.repository.UserRepository;
+import com.apple.usershop.domain.Usershop;
+import com.apple.usershop.service.UsershopService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,9 +33,17 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private JavaMailSender mailSender;
-  
+
+    @Autowired
+    private LocationRepository locationRepository;
+
     
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtil jwtUtil;
+  
+    @Autowired
+    private UsershopService usershopService;
+    
     @Autowired
     public UserServiceImpl(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -60,9 +74,15 @@ public class UserServiceImpl implements UserService {
     
     //회원가입
     @Override
-    public void createUser(User user) {
+    public User createUser(User user) {
     	user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
-    	userRepository.save(user);
+    	User savedUser = userRepository.save(user);
+    	
+    	// Usershop 생성 및 연결
+        //Usershop usershop = usershopService.createUsershop(savedUser);
+        //savedUser.setUsershop(usershop);
+        
+        return savedUser;
     }
     
  // 주어진 ID가 사용 가능한지 확인하는 메서드
@@ -78,7 +98,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUserPhone(userPhone);
     }
 
-    
     // 주어진 이메일이 사용 가능한지 확인하는 메서드
     @Override
     public boolean isUserEmailAvailable(String userEmail) { 
@@ -89,6 +108,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserNicknameAvailable(String userNickname) {
         return userRepository.existsByUserNicknameIgnoreCase(userNickname);
+    }
+    
+    @Override
+    // 마이페이지에서 주어진 전화번호가 사용 가능한지 확인하는 메서드
+    public boolean isUserPhoneAvailableMyPage(String userPhone, String userID) {
+        return userRepository.existsByUserPhoneAndUserIDNot(userPhone, userID);
+    }
+    
+    // 마이페이지에서 주어진 닉네임이 사용 가능한지 확인하는 메서드
+    @Override
+    public boolean isUserNicknameAvailableMypage(String userNickname, String userId) {
+        return userRepository.existsByUserNicknameIgnoreCaseAndUserIDNot(userNickname, userId);
+    }
+    
+    @Override
+    // 마이페이지에서 주어진 이메일이 사용 가능한지 확인하는 메서드
+    public boolean isUserEmailAvailableMyPage(String userEmail, String userID) {
+        return userRepository.existsByUserEmailIgnoreCaseAndUserIDNot(userEmail, userID);
     }
 
 	@Override
@@ -132,8 +169,9 @@ public class UserServiceImpl implements UserService {
         return UUID.randomUUID().toString().substring(0, 8);
     }
 	
-	//메일 전송
-	private void sendEmail(String to, String tempPwd) {
+	//메일 전송, 비동기처리
+	@Async
+	public void sendEmail(String to, String tempPwd) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("사과마켓 임시 비밀번호 발급 안내");
@@ -171,7 +209,54 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-   //userNo로 구매자 ID 찾기
+
+    //동네 설정하기
+    @Override
+    public void userLocationUpdate(Long userID, Long locationID) {
+        Optional<User> userOptional = userRepository.findById(userID);
+        Optional<Location> locationOptional = locationRepository.findById(locationID);
+
+        if (userOptional.isPresent() && locationOptional.isPresent()) {
+            User locationUser = userOptional.get();
+            Location location = locationOptional.get();
+            locationUser.setLocation(location);
+            userRepository.save(locationUser);
+        } else {
+            throw new IllegalArgumentException("유효하지 않은 유저 아이디 / 위치 아이디 ==>" + userID + " / " + locationID);
+        }
+    }
+    
+    //위치 ID 를 가져오는 메서드
+    @Override
+    public Long getLocationIDByUserNo(Long userNo) {
+        Optional<User> optionalUser = userRepository.findById(userNo);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user.getLocation().getLocationID(); // Location 엔티티에서 LocationID를 가져옴
+        }
+        return null; // 사용자가 없거나 Location이 없을 경우
+    }
+
+	//쿠키에서 아이디 추출해서 해당 유저 정보 가져오기
+	public User getUser(@CookieValue(value="JWT", required=false) String token) {
+		String userID = jwtUtil.getUserID(token);
+		Optional<User> userOptional = userRepository.findByUserID(userID);
+		
+		if(userOptional.isPresent()) {
+			User user = userOptional.get();
+			return user;
+		}
+		
+		return null;
+	}
+	
+	//쿠키에서 아이디 추출
+	public String getUserID(String token) {
+		String userID = jwtUtil.getUserID(token);
+		return userID;
+	}
+
+	//userNo로 구매자 ID 찾기
    @Override
    public String getUserIDByUserNo(Long userNo) {
 	   Optional<User> buyer = userRepository.findByUserNo(userNo);
@@ -185,6 +270,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
    }
+
    
    //userNo로 구매자 닉네임 찾기
 	@Override
@@ -216,6 +302,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
    
+
 
 }
 

@@ -18,6 +18,7 @@ public class JwtUtil {
 	// JWT 서명을 위한 비밀 키를 저장할 변수
 	private SecretKey secretKey;
 	
+	//secretkey를 바탕으로 secretkeyspeec객체를 만들어 hs256서명에 사용되는 비밀키 생성
 	public JwtUtil(@Value("${spring.jwt.secret}")String secret) {
 		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), 
 				Jwts.SIG.HS256.key().build().getAlgorithm());
