@@ -1,0 +1,57 @@
+.app-container {
+  width: 70vw;
+  height: 100vh; 
+}
+
+/* will be duplicated */
+
+.sendbird-channel-preview__avatar .sendbird-chat-header__avatar {
+  width: 56px !important;
+  height: 56px !important;
+}
+.sendbird-channel-preview__avatar
+  .sendbird-chat-header__avatar
+  .sendbird-image-renderer.sendbird-avatar-img {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+/* 채널 생성 버튼 삭제 */
+#sendbird-app__layout > div.sendbird-app__channellist-wrap > div > div.sendbird-channel-list__header > div > div.sendbird-ui-header__right.sendbird-ui-header--is-desktop button {
+  display: none;
+  pointer-events: none;
+}
+
+/* 다른 유저 설정 삭제 */
+#sendbird-app__layout > div.sendbird-app__settingspanel-wrap > div > div.sendbird-channel-settings__scroll-area > div.sendbird-channel-settings__operator > div.sendbird-channel-settings-member-list > div:nth-child(1) > div.sendbird-user-list-item--small__action > div > button {
+  display: none;
+  pointer-events: none;
+}
+
+/*다른 유저 초대 삭제*/
+#sendbird-app__layout > div.sendbird-app__settingspanel-wrap > div > div.sendbird-channel-settings__scroll-area > div.sendbird-channel-settings__operator > div.sendbird-channel-settings-member-list > div.sendbird-channel-settings-accordion__footer > button {
+  display: none;
+  pointer-events: none;
+}
+
+/*채널 세팅 변경 삭제*/
+#sendbird-app__layout > div.sendbird-app__settingspanel-wrap > div > div.sendbird-channel-settings__scroll-area > div.sendbird-channel-profile > div > div.sendbird-channel-profile__edit.sendbird-color--onbackground-1.sendbird-textbutton--not-underline > span {
+  display: none;
+  pointer-events: none;
+}
+
+/*메시지, 수정,삭제 숨김*/
+ul > :nth-child(3), ul > :nth-child(4) {
+  display: none;
+  pointer-events: none;
+}
+
+
+/* .sendbird-icon-create {
+  display: none;
+  pointer-events: none;
+}
+.sendbird-iconbutton {
+  display: none;
+  pointer-events: none;
+} */

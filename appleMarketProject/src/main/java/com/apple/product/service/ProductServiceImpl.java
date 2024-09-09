@@ -98,6 +98,7 @@ public class ProductServiceImpl implements ProductService {
     public boolean locationExists(Long locationID){
         return locationRepository.existsById(locationID);
     }
+    
     //locationID 기준으로 검색
     @Override
     public PageResponseDTO<Product> getProductByLocationIDRange(Long locationID, PageRequestDTO pageRequestDTO){
@@ -311,4 +312,18 @@ public class ProductServiceImpl implements ProductService {
     public void removeWishList(String userID, Long productID) {
         wishListRepository.deleteByUserUserIDAndProductProductID(userID, productID);
     }
+
+    //productID를 얻어와 userID(판매자 ID)를 구함
+	@Override
+	public String getUserIDByProductID(Long productID) {
+		Product product = getProduct(productID);
+		
+		if(!product.getUser().getUserID().isEmpty()) {
+			String userID = product.getUser().getUserID();
+			return userID;
+		}
+		else {
+			return null;
+		}
+	}
 }

@@ -1,0 +1,4 @@
+.sendbird-chat-header .sendbird-conversation__channel-header button {
+    display: none;
+    pointer-events: none;
+}
