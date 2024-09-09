@@ -2,10 +2,13 @@ package com.apple.client.communityComment.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.apple.client.communityComment.domain.CommunityComment;
+import com.apple.client.communityComment.dto.CommunityCommentDto;
 import com.apple.client.communityComment.repository.CommunityCommentRepository;
 
 @Service
@@ -18,36 +21,68 @@ public class CommunityCommentServiceImpl implements CommunityCommentService {
     }
 
     @Override
-    public List<CommunityComment> findCommentsByPostId(Long postId) {
-        // 게시글 ID에 해당하는 댓글 목록을 반환합니다.
-        return communityCommentRepository.findByCommunityPost_CommunityPostID(postId);
+    public List<CommunityCommentDto> findCommentsByPostId(Long postId, Long loggedInUserNo) {
+    	// commentID를 기준으로 내림차순 정렬
+        List<CommunityComment> comments = communityCommentRepository.findByCommunityPost_CommunityPostID(postId, Sort.by(Sort.Direction.DESC, "commentID"));
+        return comments.stream()
+                .map(comment -> convertToDto(comment, loggedInUserNo)) // DTO 변환 메서드 호출
+                .collect(Collectors.toList());
     }
 
     @Override
     public CommunityComment createComment(CommunityComment comment) {
-        // 댓글을 생성하여 저장합니다.
         return communityCommentRepository.save(comment);
     }
 
     @Override
-    public CommunityComment updateComment(Long commentId, CommunityComment commentDetails) {
-        // 특정 ID의 댓글을 찾고, 업데이트합니다.
+    public CommunityComment updateComment(Long commentId, CommunityComment commentDetails, Long userNo) {
         Optional<CommunityComment> optionalComment = communityCommentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             CommunityComment existingComment = optionalComment.get();
-            existingComment.setCommentContent(commentDetails.getCommentContent());
-            // 필요한 경우 다른 필드도 업데이트 가능합니다.
-            return communityCommentRepository.save(existingComment);
+            if (existingComment.getUserNo().getUserNo().equals(userNo)) {
+                existingComment.setCommentContent(commentDetails.getCommentContent());
+                return communityCommentRepository.save(existingComment);
+            } else {
+                throw new SecurityException("댓글 작성자만 수정할 수 있습니다.");
+            }
         } else {
-            // 댓글을 찾지 못한 경우 예외를 발생시키거나 null을 반환할 수 있습니다.
-            return null;
+            throw new IllegalArgumentException("해당 댓글을 찾을 수 없습니다.");
         }
     }
 
     @Override
-    public void deleteComment(Long commentId) {
-        // 특정 ID의 댓글을 삭제합니다.
-        communityCommentRepository.deleteById(commentId);
+    public void deleteComment(Long commentId, Long userNo) {
+        Optional<CommunityComment> optionalComment = communityCommentRepository.findById(commentId);
+        if (optionalComment.isPresent()) {
+            CommunityComment existingComment = optionalComment.get();
+            if (existingComment.getUserNo().getUserNo().equals(userNo)) {
+                communityCommentRepository.deleteById(commentId);
+            } else {
+                throw new SecurityException("댓글 작성자만 삭제할 수 있습니다.");
+            }
+        } else {
+            throw new IllegalArgumentException("해당 댓글을 찾을 수 없습니다.");
+        }
     }
 
+    @Override
+    public Optional<CommunityComment> findCommentById(Long commentId) {
+        return communityCommentRepository.findById(commentId);
+    }
+
+    @Override
+    public CommunityCommentDto convertToDto(CommunityComment comment, Long loggedInUserNo) {
+        CommunityCommentDto dto = new CommunityCommentDto(
+            comment.getCommentID(),
+            comment.getCommentContent(),
+            comment.getCommentRegDate(),
+            comment.getUserNo().getUserName(),  // User 테이블에서 작성자의 이름을 가져옴
+            comment.getUserNo().getUserNo(),    // User 테이블에서 작성자의 번호를 가져옴
+            comment.getCommunityPost().getCommunityPostID()  // 게시글 ID
+        );
+
+        // 로그인한 사용자와 댓글 작성자가 동일한지 확인하여 DTO에 설정
+        dto.setCommentOwner(loggedInUserNo != null && comment.getUserNo().getUserNo().equals(loggedInUserNo));
+        return dto;
+    }
 }

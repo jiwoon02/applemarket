@@ -2,52 +2,34 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="comment">
     <body class="bg-100 p-6">
-        <div class="comment-container max-w-2xl mx-auto bg-white p-4 rounded-lg shadow-md">
+        <div class="comment-container bg-white p-4 rounded-lg shadow-md">
             <!-- 댓글 입력 섹션 -->
             <div class="flex items-start space-x-4 mb-6">
                 <div class="w-15 h-15 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span class="text-gray-500">사용자</span>
+                    <span class="text-gray-500">
+                        <!-- 로그인한 사용자 이름 표시, 비로그인 시 '사용자' 표시 -->
+                        <span id="userName" th:text="${userName}"></span>
+                    </span>
                 </div>
-                <div class="flex-1">
-                    <form id="commentForm" name="commentForm" th:action="@{/comments}" method="post">
+                <div class="flex-1 relative">
+                    <form id="commentForm" name="commentForm" th:action="@{/comments/insert}" method="post">
                         <div class="mb-4">
-                            <!-- 댓글 입력창의 가로 및 세로 크기 수정 -->
+                            <!-- 댓글 입력창 -->
                             <textarea name="commentContent" id="commentContent" class="comment-textarea" placeholder="내용을 입력해 주세요"></textarea>
                         </div>
                         <!-- 버튼을 오른쪽 아래에 고정 -->
-                        <div class="fixed-buttons flex justify-end">
+                        <div class="fixedbuttons">
                             <button type="submit" id="commentInsertBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">등록</button>
-                            <button type="reset" class="ml-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">취소</button>
                         </div>
                     </form>
                 </div>
             </div>
-
-            <!-- 댓글 리스트 섹션 -->
-            <div id="commentList" class="comment-list">
-                <!-- 댓글이 있을 경우 반복 처리 -->
-                <div th:each="comment : ${comments}" class="flex items-start space-x-4">
-                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                        <span class="text-gray-500" th:text="${comment.userNo.userName}"></span>
-                    </div>
-                    <div class="flex-1">
-                        <div class="bg-gray-100 p-4 rounded-lg">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <span class="text-gray-500 text-sm" th:text="${#temporals.format(comment.commentRegDate, 'yyyy-MM-dd HH:mm')}"></span>
-                                </div>
-                                <button class="p-2 rounded-full hover:bg-gray-200 delete-comment" th:data-id="${comment.commentID}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <p class="mt-2" th:text="${comment.commentContent}"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
+        <!-- 댓글 리스트 섹션 -->
+		<div id="commentList" class="comment-list">
+		    <!-- 댓글 리스트는 JS로 처리되므로 HTML에서는 아무 내용도 필요 없음 -->
+		</div>
     </body>
 </th:block>
 </html>

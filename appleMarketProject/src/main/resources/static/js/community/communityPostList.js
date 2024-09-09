@@ -32,13 +32,16 @@ document.addEventListener("DOMContentLoaded", function() {
         currentPage = 0; // 검색 시 첫 페이지로 설정
         currentQuery = query; // 현재 검색어 업데이트
         postList.innerHTML = ''; // 기존 게시글 목록 비우기
-        loadPosts(currentPage, pageSize, currentQuery);
+        loadPosts(currentPage, pageSize, currentQuery); // 검색된 게시글 로드
     }
 
     // 게시글 리스트 로드 함수
     function loadPosts(page, size, query = '') {
+        if (isLoading) return; // 이미 로딩 중이면 중복 로드를 방지
         isLoading = true;
-        fetch(`/community/api/communityPostList?offset=${page}&limit=${size}&query=${query}`)
+
+        // 서버로 검색 쿼리 포함하여 요청
+        fetch(`/community/api/communityPostList?offset=${page}&limit=${size}&query=${encodeURIComponent(query)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -47,8 +50,9 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 const posts = data.content;
-                if (posts.length === 0) {
-                    io.unobserve(sentinel); // 더 이상 로드할 데이터가 없으면 감시 중지
+                if (posts.length === 0 && page === 0) {
+                    postList.innerHTML = '<p>검색 결과가 없습니다.</p>'; // 검색 결과가 없는 경우 처리
+                    isLoading = false;
                     return;
                 }
 
@@ -58,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     row.innerHTML = `
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-700 font-bold">
-                                ${post.userNo.userName}
+                                ${post.userName}
                             </div>
                         </div>
                         <div class="ml-4 flex-grow">
@@ -72,10 +76,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     `;
                     postList.appendChild(row);
 
-                    // 새로 추가된 게시글에 클릭 이벤트 추가
+                    // 게시글 제목 클릭 이벤트 처리
                     row.querySelector(".goDetail").addEventListener("click", function() {
-                        var postId = this.getAttribute("data-post-id");
-                        window.location.href = "/community/communityPostDetail/" + postId;
+                        const postId = this.getAttribute("data-post-id");
+                        if (postId && !isNaN(postId)) {
+                            window.location.href = "/community/communityPostDetail/" + postId;
+                        } else {
+                            console.error("Invalid postId:", postId);
+                            alert("유효하지 않은 게시글 ID입니다.");
+                        }
                     });
                 });
 
@@ -90,9 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // IntersectionObserver 설정
     const io = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            if (isLoading) return;
-
+            if (!entry.isIntersecting || isLoading) return;
             loadPosts(currentPage, pageSize, currentQuery); // 게시글 로드 함수 호출
             currentPage++; // 페이지 번호 증가
         });

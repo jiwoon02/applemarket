@@ -1,13 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
     // 저장 버튼 클릭 이벤트 처리
-    document.getElementById("communityInsertBtn").addEventListener("click", function() {
-        document.getElementById("communityInsertForm").submit();
-    });
+    document.getElementById("communityInsertBtn").addEventListener("click", function(event) {
+        const title = document.querySelector("[name='communityTitle']").value;
+        const content = document.querySelector("[name='communityContent']").value;
 
-    // 취소 버튼 클릭 이벤트 처리
-    document.getElementById("communityCancelBtn").addEventListener("click", function() {
-        // 취소 시 동작 (예: 폼 초기화 또는 이전 페이지로 이동)
-        document.getElementById("communityInsertForm").reset();
+        if (!title && !content) {
+            console.log("제목과 내용을 입력해주세요.");
+            event.preventDefault();
+        } else if (!title) {
+            console.log("제목을 입력해주세요.");
+            event.preventDefault();
+        } else if (!content) {
+            console.log("내용을 입력해주세요.");
+            event.preventDefault();
+        } else {
+            document.getElementById("communityInsertForm").submit();
+        }
     });
 
     // 목록 버튼 클릭 이벤트 처리
