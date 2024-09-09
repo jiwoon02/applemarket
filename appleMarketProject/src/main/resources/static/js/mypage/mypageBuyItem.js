@@ -14,8 +14,10 @@ $(function() {
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function () {
 	//tr에 링크 추가
+	/*
 	var rows = document.querySelectorAll('.trSellItem');
     rows.forEach(function(row) {
         // 각 tr 요소에 클릭 이벤트 추가
@@ -27,8 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 	
-});
-	
 	// orderDetailLink 클릭 시 이벤트 처리
     $(".orderDetailLink").on("click", function() {
         // 클릭한 셀에 해당하는 행에서 orderId 값을 가져옴
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 페이지 이동
         location.href = '/order/' + orderId;
     });
-	
+	*/
 	var reviewProductIds = document.getElementsByClassName("reviewProductIds");
 	var productId = document.getElementsByClassName("productId");
 	for (var i = 0; i < productId.length; i++) {
@@ -49,3 +49,4 @@ document.addEventListener('DOMContentLoaded', function () {
 	    }
 	}
 });
+
