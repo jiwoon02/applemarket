@@ -26,10 +26,6 @@ $(function() {
 		$(".divContent").css("display", "block");
 		$(".divModifyContent").css("display", "none");
 		$(".divModifyBtn").css("display", "none");
-		
-		$(".divShopName2").css("display", "none");
-		$("#nickname").css("display", "block");
-		
 	});
 	
 	$(".profileImg").on("click", function() {
@@ -105,29 +101,52 @@ $(function() {
 	// 정렬 기능 추가
     $('#sortNewest').on('click', function() {
         sortItems('newest');
+		$("#sortNewest").css("color", "black");
+		$("#sortLowestPrice").css("color", "#999999");
+		$("#sortHighestPrice").css("color", "#999999");
     });
 
     $('#sortLowestPrice').on('click', function() {
         sortItems('lowestPrice');
+		$("#sortNewest").css("color", "#999999");
+		$("#sortLowestPrice").css("color", "black");
+		$("#sortHighestPrice").css("color", "#999999");
     });
 
     $('#sortHighestPrice').on('click', function() {
         sortItems('highestPrice');
+		$("#sortNewest").css("color", "#999999");
+		$("#sortLowestPrice").css("color", "#999999");
+		$("#sortHighestPrice").css("color", "black");
     });
 	
 	$('#sortNewest2').on('click', function() {
         sortItems2('newest');
+		$("#sortNewest2").css("color", "black");
+		$("#sortLowestPrice2").css("color", "#999999");
+		$("#sortHighestPrice2").css("color", "#999999");
     });
 
     $('#sortLowestPrice2').on('click', function() {
         sortItems2('lowestPrice');
+		$("#sortNewest2").css("color", "#999999");
+		$("#sortLowestPrice2").css("color", "black");
+		$("#sortHighestPrice2").css("color", "#999999");
     });
 
     $('#sortHighestPrice2').on('click', function() {
         sortItems2('highestPrice');
+		$("#sortNewest2").css("color", "#999999");
+		$("#sortLowestPrice2").css("color", "#999999");
+		$("#sortHighestPrice2").css("color", "black");
     });
 	
 	$(".divItems").on("click", ".divItem", function() {
+	    var productId = $(this).data("product-id");
+	    location.href = "/product/" + productId;
+	});
+	
+	$(".divItems2").on("click", ".divItem2", function() {
 	    var productId = $(this).data("product-id");
 	    location.href = "/product/" + productId;
 	});
@@ -174,6 +193,17 @@ $(function() {
             $(this).text(truncatedText);  // 조작한 텍스트를 다시 요소에 넣음
         }
     });
+	
+	// URL에서 쿼리 파라미터를 읽어옴
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');  // 'items', 'wishlist' 값을 가질 수 있음
+
+    // tab 파라미터에 따라 초기 탭 설정
+    if (tab === 'wishlist') {
+        showWishList();  // 찜 탭을 표시
+    } else {
+        showItems();  // 기본적으로 상품 탭을 표시
+    }
 });
 
 function showItems() {
@@ -261,8 +291,8 @@ function sortItems(criteria) {
         let aValue, bValue;
 
         if (criteria === 'newest') {
-            aValue = new Date($(a).find('.itemTime').text());
-            bValue = new Date($(b).find('.itemTime').text());
+            aValue = new Date($(a).find('.productRegDate').val());
+            bValue = new Date($(b).find('.productRegDate').val());
             return bValue - aValue;  // 최신순 (내림차순)
         } else if (criteria === 'lowestPrice') {
             aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
@@ -288,8 +318,8 @@ function sortItems2(criteria) {
         let aValue, bValue;
 
         if (criteria === 'newest') {
-            aValue = new Date($(a).find('.itemTime2').text());
-            bValue = new Date($(b).find('.itemTime2').text());
+            aValue = new Date($(a).find('.wishListRegDate').val());
+            bValue = new Date($(b).find('.wishListRegDate').val());
             return bValue - aValue;  // 최신순 (내림차순)
         } else if (criteria === 'lowestPrice') {
             aValue = parseInt($(a).find('.itemPrice2').text().replace(/[^0-9]/g, ''));
