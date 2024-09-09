@@ -44,6 +44,7 @@ const ChannelSelector = ({ setChannelData, onChannelSelected }) => {
             
             const params = {
               invitedUserIds: [data.buyerId, data.sellerId],  // 초대할 사용자 ID 배열
+              name: `${data.buyerId}, ${data.sellerId}`,  // 채널 이름
               isDistinct: true,  // 동일한 사용자들로 된 기존 채널이 있으면 재사용
               customType: 'buyer-seller-chat',  // 커스텀 타입 (선택)
             };
