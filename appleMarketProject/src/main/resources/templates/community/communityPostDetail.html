@@ -5,27 +5,27 @@
     <th:block layout:fragment="css">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-         <!-- CSS 파일 링크 추가 -->
-    	<link rel="stylesheet" href="/css/communitycomment/communitycomment.css" />
+        <!-- CSS 파일 링크 추가 -->
+        <link rel="stylesheet" href="/css/communitycomment/communitycomment.css" />
         <style>
             body {
                 font-family: 'Roboto', sans-serif;
             }
             .fixed-size-container {
-                width: 1000px; /* 가로 길이 고정 */
-                height: 800px; /* 세로 길이 고정 */
-                position: relative; /* 버튼 고정을 위한 부모 컨테이너 설정 */
+                width: 1000px;
+                height: 800px;
+                position: relative;
             }
             .content-area {
-                width: 950px;  /* 컨텐츠 가로 길이 고정 */
-                height: 500px; /* 컨텐츠 세로 길이 고정 */
-                overflow-y: auto; /* 내용이 길 경우 스크롤 생김 */
-                margin-bottom: 40px; /* 아래쪽 버튼과의 간격을 위해 여백 추가 */
+                width: 950px;
+                height: 500px;
+                overflow-y: auto;
+                margin-bottom: 40px;
             }
             .fixed-buttons {
                 position: absolute;
-                bottom: 20px; /* 하단에서 20px 위에 고정 */
-                right: 20px; /* 오른쪽에서 20px 안쪽에 고정 */
+                bottom: 20px;
+                right: 20px;
             }
         </style>
     </th:block>
@@ -68,11 +68,14 @@
             <img th:src="@{'/images/' + ${communityPost.communityImage}}" alt="첨부 이미지" class="rounded-lg shadow-lg max-w-full h-auto" />
         </div>
 
-        <!-- 버튼 섹션 -->
+        <!-- 버튼 섹션: 작성자인 경우에만 수정 및 삭제 버튼이 보임 -->
         <div class="fixed-buttons flex space-x-4">
-            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" id="updateFormBtn">수정</button>
-            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" id="boardDeleteBtn">삭제</button>
-            <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" id="reportBtn">신고</button>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    id="updateFormBtn" th:if="${isAuthor}">수정</button>
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                    id="boardDeleteBtn" th:if="${isAuthor}">삭제</button>
+            <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                    id="reportBtn">신고</button>
         </div>
     </div>
 

@@ -19,11 +19,11 @@ public class CommunityTest {
     public void insertTestPosts() {
         // 가상 User 객체 생성 (UserNo가 1인 사용자)
         User user = new User();
-        user.setUserNo(1L);
+        user.setUserNo(21L);
 
         // 가상 Location 객체 생성 (locationID가 1114015800인 위치)
         Location location = new Location();
-        location.setLocationID(1114015800L);
+        location.setLocationID(1174010900L);
 
         // 100개의 테스트 게시글 생성 및 저장
         for (int i = 1; i <= 100; i++) {

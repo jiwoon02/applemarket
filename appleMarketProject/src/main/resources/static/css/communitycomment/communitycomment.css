@@ -1,36 +1,100 @@
-/* 전체 컨테이너 가로 고정값 1000px */
 .comment-container {
-    width: 1000px !important; /* 가로 길이 */
+    width: 1000px;
     margin: 0 auto;
+    position: relative;
+    padding-bottom: 60px;
 }
 
-/* 댓글 입력 텍스트 영역 고정값 800px, 높이 고정값 100px */
 .comment-textarea {
-    width: 800px !important;
-    height: 100px !important; /* 적절한 높이로 조정 */
+    width: 100%;
+    height: 100px;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none; /* 사용자가 크기 조절 못하게 설정 */
+    border-radius: 6px;
+    resize: none;
+    box-sizing: border-box;
 }
 
-/* 버튼을 오른쪽 아래에 고정 */
-.fixed-buttons {
+.fixedbuttons {
+    position: absolute;
+    bottom: -20px;
+    right: -10px;
+    margin-top: 10px;
+}
+
+.comment-list .comment-item {
+    width: 1000px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.delete-comment, .update-comment {
+    cursor: pointer;
+    color: #ff0000;
+}
+
+.update-comment {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+.comment-buttons {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px; /* 입력칸과 버튼 간의 간격 */
-    margin-bottom: 10px;
+    align-items: center;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
-/* 댓글 리스트 영역도 1000px로 고정 */
-.comment-list {
-    width: 1000px;
-    margin-top: 20px;
-}
-
-/* 댓글 리스트의 텍스트 박스 스타일 */
-.comment-list .bg-gray-100 {
+.comment-textarea-edit {
     width: 100%;
-    padding: 15px;
-    border-radius: 8px;
+    height: 60px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none;
+    margin-top: 10px;
 }
+
+.w-10 {
+    width: 50px;
+}
+
+.h-10 {
+    height: 50px;
+}
+
+.text-gra-5 {
+    font-size: 12px;
+}
+
+.bg-gray-1 {
+    background-color: #f5f5f5
+}
+
+.bg-gray {
+    background-color: #e0e0e0;
+}
+
+.comment-content {
+    line-height: 1.5;
+}
+
+.user-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+}
+
+.user-name {
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+}
+

@@ -17,33 +17,49 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityServiceImpl(CommunityPostRepository communityPostRepository) {
         this.communityPostRepository = communityPostRepository;
     }
-
+    
+    //게시글특정 id 로 조회
     @Override
     public Optional<CommunityPost> findPostById(Long postId) {
         return communityPostRepository.findById(postId);
     }
 
+    //게시글 새성
     @Override
-    public CommunityPost createPost(CommunityPost post) {
-        return communityPostRepository.save(post);
+    public void createPost(CommunityPost post) { // 반환 타입을 void로 변경
+        communityPostRepository.save(post);
     }
-
+    
+    //게시글 업데이트
     @Override
-    public CommunityPost updatePost(Long postId, CommunityPost postDetails) {
+    public void updatePost(Long postId, CommunityPost postDetails) {
         Optional<CommunityPost> existingPost = communityPostRepository.findById(postId);
         if (existingPost.isPresent()) {
             CommunityPost postToUpdate = existingPost.get();
             postToUpdate.setCommunityTitle(postDetails.getCommunityTitle());
             postToUpdate.setCommunityContent(postDetails.getCommunityContent());
-            // 필요한 필드 추가
-            return communityPostRepository.save(postToUpdate);
-        }
-        return null;
-    }
 
+            // 이미지가 포함된 경우에 처리
+            if (postDetails.getCommunityImage() != null) {
+                postToUpdate.setCommunityImage(postDetails.getCommunityImage());
+            }
+
+            communityPostRepository.save(postToUpdate); // 업데이트 후 저장
+        }
+    }
+    
+    //게시글 상세 조회
     @Override
     public void deletePost(Long postId) {
         communityPostRepository.deleteById(postId);
+    }
+    
+    //게시글 신고
+    @Override
+    public void reportPost(Long postId, Long userNo, String reason) {
+        // 신고 로직 처리 (예: 신고 내용을 DB에 저장하거나 관리자가 확인할 수 있도록 처리)
+        System.out.println("Post ID: " + postId + ", User No: " + userNo + ", Reason: " + reason);
+        // 실제로는 DB에 저장하는 로직을 구현할 수 있습니다.
     }
 
     // 전체 게시글 조회 (Pageable 사용)
@@ -54,10 +70,11 @@ public class CommunityServiceImpl implements CommunityService {
 
     // 특정 locationID에 따른 게시글 조회 (Pageable 사용)
     @Override
-    public Page<CommunityPost> getPostsByLocationID(Long locationID, Pageable pageable) {
+    public Page<CommunityPost> findPostsByLocationID(Long locationID, Pageable pageable) { // 메서드명 수정
         return communityPostRepository.findByLocation_LocationID(locationID, pageable);
     }
-
+    
+    //게시글 검색
     @Override
     public Page<CommunityPost> searchPostsByUserNameOrTitle(String query, Pageable pageable) {
         // 사용자 이름이나 커뮤니티 제목에 따라 검색
