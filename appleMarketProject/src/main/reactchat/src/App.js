@@ -51,7 +51,6 @@ const App = () => {
               element={
                 <MyChannelList 
                   setChannelData={setChannelData} 
-                  onChannelSelected={handleChannelSelected} 
                 />
               } 
             />
