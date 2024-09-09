@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
 import com.apple.admin.repository.AdminRepository;
 import com.apple.admin.repository.CategoryRepository;
@@ -135,6 +136,14 @@ public class AdminServiceImpl implements AdminService {
 		//ProductReportList = (List<ProductReport>) productReportRepository.findByProduct();
 		return ProductReportList;
 	}
+	
+	@Override
+	public List<CommunityReport> communityReportDetail(CommunityReport communityReport) {
+		List <CommunityReport> communityReports = null;
+		communityReports = (List<CommunityReport>) communityReportRepository.findAll();
+		return communityReports;
+	}
+
 	@Override
 	public List<ProductReport> productReportDetail(){
 		List<ProductReport> productReportList = productReportRepository.findAll();
@@ -237,6 +246,7 @@ public class AdminServiceImpl implements AdminService {
 		communityCommentRepository.deleteByCommunitycommnet(communityPostids);
 		
 	}
+
 
 	
 

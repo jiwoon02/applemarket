@@ -29,7 +29,7 @@ public class CommunityReport {
 	@Id
 	@Column (name = "community_report_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_report_generator")
-	private Long productReportID;
+	private Long CommunityReportID;
 	
 	@ManyToOne
 	@JoinColumn(name = "communityPost_id")

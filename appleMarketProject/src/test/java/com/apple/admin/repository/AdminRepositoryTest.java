@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
+import com.apple.client.community.domain.CommunityPost;
 //import com.apple.admin.domain.Product;
 //import com.apple.admin.domain.User;
 import com.apple.product.domain.Product;
@@ -32,6 +34,9 @@ public class AdminRepositoryTest {
 
 	@Setter(onMethod_ = @Autowired)
 	private ProductReportRepository productReportRepository;
+	
+	@Setter(onMethod_ = @Autowired)
+	private CommunityReportRepository communityReportRepository;
 //	@Test
 //	public void adminInsertTest() {
 //		Admin admin = new Admin();
@@ -64,20 +69,34 @@ public class AdminRepositoryTest {
 //	}
 //	
 	//신고내용 입력
+//	@Test
+//	public void productReprotdtailInsert() {
+//		ProductReport productReport = new ProductReport();
+//		Product product = new Product();
+//		User user = new User();
+//		
+//		user.setUserNo(1L);
+//		product.setProductID(14L);
+//		productReport.setUser(user);
+//		productReport.setProduct(product);
+//		productReport.setReportContent("신고 내용");
+//		productReportRepository.save(productReport);
+//	}
+
+	//커뮤니티 신고 내용 입력
 	@Test
-	public void productReprotdtailInsert() {
-		ProductReport productReport = new ProductReport();
-		Product product = new Product();
+	public void communityReportDetailInsert() {
+		CommunityReport communityReport = new CommunityReport();
+		CommunityPost communityPost = new  CommunityPost();
 		User user = new User();
 		
 		user.setUserNo(1L);
-		product.setProductID(14L);
-		productReport.setUser(user);
-		productReport.setProduct(product);
-		productReport.setReportContent("신고 내용");
-		productReportRepository.save(productReport);
+		communityPost.setCommunityPostID(15L);
+		communityReport.setUser(user);
+		communityReport.setCommunityPost(communityPost);
+		communityReport.setReportContent("테스트 신고 내용");
+		communityReportRepository.save(communityReport);
 	}
-
 
 //	@Test
 //	public void adminListTest() {

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
 import com.apple.admin.service.AdminService;
 import com.apple.category.domain.Category;
@@ -67,10 +68,12 @@ public class AdminController {
 	}
 	
 	@GetMapping("/community/detail/{communityPostID}")
-	public String community(@PathVariable Long communityPostID, CommunityPost communityPost, Model model) {
+	public String community(@PathVariable Long communityPostID, CommunityReport communityReport,CommunityPost communityPost, Model model) {
 		communityPost.setCommunityPostID(communityPostID);
 		CommunityPost detail = adminService.communityPostDetail(communityPost);
+		List<CommunityReport> Reportdetail = adminService.communityReportDetail(communityReport);
 		model.addAttribute("communityPost", detail);
+		model.addAttribute("reportDetail", Reportdetail);
 		
 		return "/admin/communityDetail";
 	}

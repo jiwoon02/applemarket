@@ -8,6 +8,7 @@ import java.util.Map;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
 import com.apple.category.domain.Category;
 import com.apple.client.community.domain.CommunityPost;
@@ -26,6 +27,7 @@ public interface AdminService {
 	public List<Product> productList(Product product);
 	public List<CommunityPost> communityPostList(CommunityPost communityPost);
 	public List<ProductReport> productReportDetail(ProductReport product);
+	public List<CommunityReport> communityReportDetail(CommunityReport communityReport);
 	public List<ProductReport> productReportDetail();
 	public Map<Long, Long> productReportCount();
 	public Map<String, Long> CategoryCounts();
