@@ -16,19 +16,6 @@ $(function() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-	//tr에 링크 추가
-	/*
-	var rows = document.querySelectorAll('.trSellItem');
-    rows.forEach(function(row) {
-        // 각 tr 요소에 클릭 이벤트 추가
-        row.addEventListener('click', function() {
-            // 해당 row의 데이터에서 productID 값을 가져옴
-            var orderId = this.querySelector('td:first-child').innerText;
-            // 페이지 이동
-            window.location.href = '/order/' + orderId;
-        });
-    });
-	
 	// orderDetailLink 클릭 시 이벤트 처리
     $(".orderDetailLink").on("click", function() {
         // 클릭한 셀에 해당하는 행에서 orderId 값을 가져옴
@@ -36,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 페이지 이동
         location.href = '/order/' + orderId;
     });
-	*/
+	
 	var reviewProductIds = document.getElementsByClassName("reviewProductIds");
 	var productId = document.getElementsByClassName("productId");
 	for (var i = 0; i < productId.length; i++) {
