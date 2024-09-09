@@ -104,19 +104,6 @@ public class UsershopServiceImpl implements UsershopService {
 	}
 	
 	@Override
-    @Transactional
-    public void updateUserNickname(Long userNo, String newNickname) {
-		Optional<User> optionalUser = userRepository.findByUserNo(userNo);
-        if (optionalUser.isPresent()) {
-        	User user = optionalUser.get();
-            user.setUserNickname(newNickname);
-            userRepository.save(user);  // 변경 사항 저장
-        } else {
-            throw new RuntimeException("User not found for userNo: " + userNo);
-        }
-    }
-	
-	@Override
 	public long calculateSatisfactionPercentage(List<ItemReview> reviews) {
 	    if (reviews == null || reviews.isEmpty()) {
 	        return 0;

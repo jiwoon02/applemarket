@@ -103,14 +103,23 @@ $(function() {
 	// 정렬 기능 추가
     $('#sortNewest').on('click', function() {
         sortItems('newest');
+		$("#sortNewest").css("color", "black");
+		$("#sortLowestPrice").css("color", "#999999");
+		$("#sortHighestPrice").css("color", "#999999");
     });
 
     $('#sortLowestPrice').on('click', function() {
         sortItems('lowestPrice');
+		$("#sortNewest").css("color", "#999999");
+		$("#sortLowestPrice").css("color", "black");
+		$("#sortHighestPrice").css("color", "#999999");
     });
 
     $('#sortHighestPrice').on('click', function() {
         sortItems('highestPrice');
+		$("#sortNewest").css("color", "#999999");
+		$("#sortLowestPrice").css("color", "#999999");
+		$("#sortHighestPrice").css("color", "black");
     });
 	
 	$(".divItems").on("click", ".divItem", function() {
@@ -203,8 +212,8 @@ function sortItems(criteria) {
         let aValue, bValue;
 
         if (criteria === 'newest') {
-            aValue = new Date($(a).find('.itemTime').text());
-            bValue = new Date($(b).find('.itemTime').text());
+            aValue = new Date($(a).find('.productRegDate').val());
+            bValue = new Date($(b).find('.productRegDate').val());
             return bValue - aValue;  // 최신순 (내림차순)
         } else if (criteria === 'lowestPrice') {
             aValue = parseInt($(a).find('.itemPrice').text().replace(/[^0-9]/g, ''));
