@@ -70,12 +70,6 @@ const App = () => {
               }
             />
           </Routes>
-          {currentChannelUrl && (
-            <>
-              {console.log('currentChannelUrl:', currentChannelUrl)}
-              <GroupChannel channelUrl={currentChannelUrl} />
-            </>
-          )}
         </div>
       </Router>
     </SendBirdProvider>

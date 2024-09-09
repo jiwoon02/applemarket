@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSendbirdStateContext } from '@sendbird/uikit-react';
 import GroupChannel from '@sendbird/uikit-react/GroupChannel';
-import { TypingIndicatorType } from '@sendbird/uikit-react';
 import './ChannelSelector.css';
 import './App.css';
 
@@ -43,7 +42,7 @@ const ChannelSelector = ({ setChannelData, onChannelSelected }) => {
             if (!sdk?.currentUser) {
               throw new Error('SDK currentUser is not initialized');
             }
-
+            
             const params = {
               invitedUserIds: [data.buyerId, data.sellerId],  // 초대할 사용자 ID 배열
               name: `${data.buyerId}, ${data.sellerId}`,  // 채널 이름
