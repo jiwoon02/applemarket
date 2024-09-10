@@ -55,35 +55,35 @@ public class User{
 	@Column(name = "user_no", nullable = false, unique = true)
     private Long userNo; // 시퀀스로 생성되는 회원 일련번호 기본키X
 	
-	@Column(name="user_id", nullable=false, unique = true)
-	private String userID;
+	@Column(name = "user_id", nullable = false, unique = true, length = 12)
+    private String userID; // 회원 아이디 - VARCHAR2(12)
 	
-    @Column(name = "user_pwd", nullable = false)
-    private String userPwd; // 비밀번호
+    @Column(name = "user_pwd", nullable = false, length = 255)
+    private String userPwd; // 비밀번호 - VARCHAR2(25)
 
-    @Column(name = "user_name", nullable = false)
-    private String userName; // 이름
+    @Column(name = "user_name", nullable = false, length = 20)
+    private String userName; // 이름 - VARCHAR2(20)
     
-    @Column(name = "user_phone", nullable = false, unique = true)
-    private String userPhone; // 전화번호
+    @Column(name = "user_phone", nullable = false, unique = true, length = 14)
+    private String userPhone; // 전화번호 - VARCHAR2(14)
     
-    @Column(name = "user_email", nullable = false, unique = true)
-    private String userEmail; // 이메일
+    @Column(name = "user_email", nullable = false, unique = true, length = 100)
+    private String userEmail; // 이메일 - VARCHAR2(100)
     
-    @Column(name = "user_birth", nullable = false)
-    private String userBirth; // 생년월일
+    @Column(name = "user_birth", nullable = false, length = 12)
+    private String userBirth; // 생년월일 - VARCHAR2(12)
 
-    @Column(name = "user_nickname", nullable = false, unique = true)
-    private String userNickname; // 닉네임
+    @Column(name = "user_nickname", nullable = false, unique = true, length = 30)
+    private String userNickname; // 닉네임 - VARCHAR2(30)
     
-    @Column(name = "user_zonecode", nullable = false)
-    private String userZonecode; // 우편번호
+    @Column(name = "user_zonecode", nullable = false, length = 10)
+    private String userZonecode; // 우편번호 - VARCHAR2(10)
     
-    @Column(name = "user_address", nullable = false)
-    private String userAddress; // 주소
+    @Column(name = "user_address", nullable = false, length = 100)
+    private String userAddress; // 주소 - VARCHAR2(100)
     
-    @Column(name = "user_address_detail", nullable = false)
-    private String userAddressDetail; // 상세주소
+    @Column(name = "user_address_detail", nullable = false, length = 50)
+    private String userAddressDetail; // 상세주소 - VARCHAR2(50)
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "user_reg_date", nullable = false)
@@ -97,8 +97,8 @@ public class User{
     @JoinColumn(name = "location_id", nullable = true)
     private Location location; // Location 엔티티와의 관계, 외래키
     
-    @Column(name = "user_role", nullable = false)
-    private String userRole; // 사용자 권한 (예: ROLE_USER)
+    @Column(name = "user_role", nullable = false, length = 10)
+    private String userRole; // 권한 - VARCHAR2(10)
     
     @PrePersist
     protected void onCreate() {
