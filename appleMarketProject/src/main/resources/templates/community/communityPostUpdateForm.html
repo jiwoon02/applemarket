@@ -21,7 +21,7 @@
             <h3 class="text-center text-2xl font-bold mb-6">게시글 수정</h3>
             
             <div th:object="${communityPost}">
-                <form id="updateForm" name="updateForm" method="post" enctype="multipart/form-data">
+                <form id="updateForm" name="updateForm" method="post" enctype="multipart/form-data" action="/community/posts/${postId}/update">
                     <!-- Hidden field for Post ID -->
                     <input type="hidden" name="communityPostID" th:value="*{communityPostID}" />
 					
