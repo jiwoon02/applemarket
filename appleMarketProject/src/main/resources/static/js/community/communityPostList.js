@@ -14,26 +14,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 검색 버튼 클릭 이벤트 처리
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    searchBtn.addEventListener('click', function() {
-        searchPosts(searchInput.value);
-    });
+	const searchBtn = document.getElementById('searchBtn');
+	const searchInput = document.getElementById('searchInput');
+	searchBtn.addEventListener('click', function() {
+	    searchPosts(searchInput.value);
+	});
 
-    // 엔터 키 이벤트 처리
-    searchInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            searchPosts(searchInput.value);
-        }
-    });
+	// 엔터 키 이벤트 처리
+	searchInput.addEventListener('keydown', function(event) {
+	    if (event.key === 'Enter') {
+	        searchPosts(searchInput.value);
+	    }
+	});
 
-    // 검색 기능
-    function searchPosts(query) {
-        currentPage = 0; // 검색 시 첫 페이지로 설정
-        currentQuery = query; // 현재 검색어 업데이트
-        postList.innerHTML = ''; // 기존 게시글 목록 비우기
-        loadPosts(currentPage, pageSize, currentQuery); // 검색된 게시글 로드
-    }
+	// 검색 기능
+	function searchPosts(query) {
+	    currentPage = 0; // 검색 시 첫 페이지로 설정
+	    currentQuery = query; // 현재 검색어 업데이트
+	    postList.innerHTML = ''; // 기존 게시글 목록 비우기
+	    loadPosts(currentPage, pageSize, currentQuery); // 검색된 게시글 로드
+	}
 
     // 게시글 리스트 로드 함수
     function loadPosts(page, size, query = '') {
@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 ${new Date(post.communityRegDate).toLocaleDateString()} / 조회수: ${post.communityCount}
                             </div>
                         </div>
+                        <button class="delete-post-btn bg-red-500 text-white py-1 px-3 rounded-lg ml-auto" data-post-id="${post.communityPostID}">삭제</button>
                     `;
                     postList.appendChild(row);
 
@@ -86,6 +87,19 @@ document.addEventListener("DOMContentLoaded", function() {
                             alert("유효하지 않은 게시글 ID입니다.");
                         }
                     });
+
+                    // 게시글 삭제 버튼 이벤트 처리
+                    row.querySelector(".delete-post-btn").addEventListener("click", function() {
+                        const postId = this.getAttribute("data-post-id");
+                        if (postId && !isNaN(postId)) {
+                            if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+                                deletePostWithComments(postId);
+                            }
+                        } else {
+                            console.error("Invalid postId:", postId);
+                            alert("유효하지 않은 게시글 ID입니다.");
+                        }
+                    });
                 });
 
                 isLoading = false;
@@ -94,6 +108,29 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Error loading posts:', error);
                 isLoading = false;
             });
+    }
+
+    // 게시글 삭제 함수 (관련 댓글도 삭제)
+    function deletePostWithComments(postId) {
+        fetch(`/community/api/deletePostWithComments/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('게시글이 삭제되었습니다.');
+                postList.innerHTML = ''; // 게시글 목록 비우기
+                loadPosts(currentPage, pageSize, currentQuery); // 갱신된 게시글 목록 로드
+            } else {
+                alert('게시글 삭제 중 오류가 발생했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('게시글 삭제 중 오류가 발생했습니다.');
+        });
     }
 
     // IntersectionObserver 설정

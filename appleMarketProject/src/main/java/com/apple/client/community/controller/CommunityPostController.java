@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apple.client.communityComment.service.CommunityCommentService;
 import com.apple.location.domain.Location;
@@ -119,19 +121,26 @@ public class CommunityPostController {
     }
 
     // 검색 기능 추가
-    @GetMapping("/search")
+    @GetMapping("/communityPostList/search")
     public String searchPosts(@RequestParam("query") String query, 
-    		@RequestParam(defaultValue = "0") int page, 
-    		@RequestParam(defaultValue = "10") int size,
-    		Model model) {
-    	Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "communityRegDate"));
-    	Page<CommunityPost> posts = communityService.searchPostsByUserNameOrTitle(query, pageable);
-    	model.addAttribute("posts", posts.getContent());
-    	model.addAttribute("currentPage", posts.getNumber());
-    	model.addAttribute("totalPages", posts.getTotalPages());
-    	model.addAttribute("query", query);
-    	return "community/communityPostList";
+                              @RequestParam(defaultValue = "0") int page, 
+                              @RequestParam(defaultValue = "10") int size,
+                              Model model) {
+        // 페이징 및 정렬 설정 (최신순)
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "communityRegDate"));
+
+        // 제목으로 검색
+        Page<CommunityPost> posts = communityService.searchPostsByTitle(query, pageable);
+
+        // 검색 결과를 모델에 추가
+        model.addAttribute("posts", posts.getContent());
+        model.addAttribute("currentPage", posts.getNumber());
+        model.addAttribute("totalPages", posts.getTotalPages());
+        model.addAttribute("query", query);
+
+        return "community/communityPostList"; // 검색 결과를 보여줄 뷰 페이지
     }
+
 
     // 게시글 생성
     @PostMapping("/posts")
@@ -173,7 +182,7 @@ public class CommunityPostController {
         if (post.isPresent()) {
             CommunityPost existingPost = post.get();
             existingPost.setCommunityCount(existingPost.getCommunityCount() + 1); // 조회수 증가
-            communityService.updatePost(postId, existingPost);
+            communityService.updatePost(postId, existingPost, false);
 
             model.addAttribute("communityPost", existingPost);
 
@@ -211,7 +220,7 @@ public class CommunityPostController {
         return "community/communityPostInsertForm";
     }
 
-    // 게시글 수정/삭제 폼으로 이동
+    // 게시글 수정 폼으로 이동
     @GetMapping("/communityUpdateForm/{postId}")
     public String showCommunityPostUpdateForm(@PathVariable Long postId, Model model) {
         Optional<CommunityPost> post = communityService.findPostById(postId);
@@ -223,20 +232,42 @@ public class CommunityPostController {
         }
     }
 
+
     // 게시글 수정
     @PostMapping("/posts/{postId}/update")
-    public String updateCommunityPost(@PathVariable Long postId, @ModelAttribute CommunityPost postDetails) {
-        communityService.updatePost(postId, postDetails);
-        return "redirect:/community/communityPostDetail/" + postDetails.getCommunityPostID();
+    public String updateCommunityPost(@PathVariable Long postId,
+                                      @ModelAttribute CommunityPost postDetails,
+                                      @RequestParam(value = "communityImage", required = false) MultipartFile communityImage,
+                                      RedirectAttributes redirectAttributes) {
+        try {
+            // 이미지 업데이트가 필요한지 확인
+            boolean isImageUpdated = (communityImage != null && !communityImage.isEmpty());
+
+            if (isImageUpdated) {
+                byte[] imageBytes = communityImage.getBytes();
+                postDetails.setCommunityImage(imageBytes);  // 새 이미지가 있으면 설정
+            }
+
+            // 서비스 호출하여 게시글 업데이트 처리
+            communityService.updatePost(postId, postDetails, isImageUpdated); 
+
+            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 수정되었습니다.");
+            return "redirect:/community/communityPostDetail/" + postId;
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message", "파일 업로드 중 오류가 발생했습니다.");
+            return "redirect:/community/communityPostDetail/" + postId;
+        }
     }
 
-    // 게시글 삭제
-    @PostMapping("/posts/{postId}/delete")
+
+    //게시글 삭제 (GET 방식으로 처리)
+    @GetMapping("/posts/{postId}/delete")
     public String deleteCommunityPost(@PathVariable Long postId) {
         communityService.deletePost(postId);
         return "redirect:/community/communityPostList";
     }
-    
+
     //게시글 신고
     @PostMapping("/posts/{postId}/report")
     @ResponseBody

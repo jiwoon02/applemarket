@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.apple.client.community.domain.CommunityPost;
 import com.apple.location.domain.Location;
@@ -26,6 +28,8 @@ public interface CommunityPostRepository extends JpaRepository<CommunityPost, Lo
     
     // userNo를 기준으로 Usershop 삭제
     void deleteByUserNo_UserNo(Long userNo);
-    //userName이나 communityTitle을 검색 (Pageable을 사용하여 페이징 처리)
-    Page<CommunityPost> findByUserNo_UserNameContainingOrCommunityTitleContaining(String userName, String communityTitle, Pageable pageable);
+    
+    // 특정 검색어가 제목에 포함된 게시글을 페이징 처리하여 조회
+    @Query("SELECT p FROM CommunityPost p WHERE p.communityTitle LIKE %:query%")
+    Page<CommunityPost> searchPostsByTitle(@Param("query") String query, Pageable pageable);
 }

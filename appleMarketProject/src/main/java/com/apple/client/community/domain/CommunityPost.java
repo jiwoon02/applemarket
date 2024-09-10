@@ -1,12 +1,15 @@
 package com.apple.client.community.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.apple.client.communityComment.domain.CommunityComment;
 import com.apple.location.domain.Location;
 import com.apple.user.domain.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
@@ -67,11 +71,15 @@ public class CommunityPost {
 	@ColumnDefault("0")
 	private int communityCount;
 
-	// 엔티티가 처음 저장되기 전에 실행됨
-	@PrePersist
-	protected void onCreate() {
-		if (this.communityRegDate == null) {
-			this.communityRegDate = LocalDateTime.now();
-		}
-	}
+	// 댓글과의 관계 설정 (게시글 삭제 시 댓글도 함께 삭제되도록 설정)
+    @OneToMany(mappedBy = "communityPost", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<CommunityComment> comments;
+
+    // 게시글 작성일 자동 설정
+    @PrePersist
+    protected void onCreate() {
+        if (this.communityRegDate == null) {
+            this.communityRegDate = LocalDateTime.now();
+        }
+    }
 }
