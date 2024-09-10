@@ -42,12 +42,14 @@ public class ChatController {
 		String buyerNickname = userService.getUserNicknameByUserNo(buyerNo);	//userNo로 현재 로그인한 사용자(=구매자)ID 가져오기
 	
 		String sellerID = productService.getUserIDByProductID(productID);//productID로 판매자의 userID를 가져오기
-		
+		String sellerNickname = productService.getUserNicknameByProductID(productID);//productID로 판매자의 userNickname을 가져오기
+				
 		Map<String, String> chatMap = new HashMap<>();	//JSON 데이터 전달을 위한 MAP 생성
 		chatMap.put("appId", appId);
 		chatMap.put("buyerId", buyerID);	
 		chatMap.put("buyerNickname", buyerNickname);
 		chatMap.put("sellerId", sellerID);	
+		chatMap.put("sellerNickname", sellerNickname);
 		return chatMap;
 	}
 	
