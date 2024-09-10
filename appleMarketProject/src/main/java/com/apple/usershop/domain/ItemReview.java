@@ -8,6 +8,7 @@ import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 
 import groovy.transform.ToString;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,24 +35,26 @@ public class ItemReview {
 	private long reviewNo;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopId", referencedColumnName = "shopId")
+    @JoinColumn(name = "shopId", referencedColumnName = "shopId", nullable = false)
     private Usershop usershop;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", referencedColumnName = "user_no")
+    @JoinColumn(name = "user_no", referencedColumnName = "user_no", nullable = false)
     private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
     private Product product;
 	
 	@ColumnDefault(value = "0")
 	private long starRating;
 	
 	@Lob
+	@Column(nullable = false)
 	private String reviewContent;
 	
 	@ColumnDefault(value = "sysdate")
+	@Column(nullable = false)
 	private LocalDateTime reviewRegDate;
 	
 	@ColumnDefault(value = "0")

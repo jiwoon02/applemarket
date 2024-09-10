@@ -33,7 +33,7 @@ public class Withdraw {
     @Temporal(TemporalType.TIMESTAMP)
     private Date withdrawDate;
     
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
 
 }
