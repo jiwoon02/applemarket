@@ -7,7 +7,6 @@ import com.apple.admin.domain.ProductReport;
 import com.apple.client.community.domain.CommunityPost;
 import com.apple.client.communityComment.domain.CommunityComment;
 import com.apple.location.domain.Location;
-import com.apple.mypage.domain.Mypage;
 import com.apple.product.domain.Product;
 import com.apple.usershop.domain.ItemReview;
 import com.apple.usershop.domain.Usershop;
@@ -125,9 +124,6 @@ public class User{
 	
 	@OneToMany(mappedBy = "userNo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommunityPost> communityPost; 
-	
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private Mypage mypage;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<ItemReview> review;
