@@ -48,4 +48,6 @@ public interface ProductService {
     public void addWishList(String userID, Long productID);
     
     public void removeWishList(String userID, Long productID);
+    
+    String getUserNicknameByProductID(Long productID);
 }
