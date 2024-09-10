@@ -34,10 +34,11 @@ public class Usershop {
     private Long shopId;
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", referencedColumnName = "user_no")
+    @JoinColumn(name = "user_no", referencedColumnName = "user_no", nullable = false)
     private User user;
     
     @ColumnDefault(value = "0")
+    @Column(nullable = false)
     private Long shopVisitCount;
     
     @Lob
