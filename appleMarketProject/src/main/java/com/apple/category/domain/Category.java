@@ -26,4 +26,11 @@ public class Category {
 		@Column(name="category_name", nullable = false)
 		private String categoryName;
 
+		  @Override
+		    public String toString() {
+		        return "Category{" +
+		                "id=" + categoryID +
+		                ", name='" + categoryName + '\'' +
+		                '}';
+		    }
 }

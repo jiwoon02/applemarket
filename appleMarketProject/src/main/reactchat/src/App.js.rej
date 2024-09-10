@@ -1,0 +1,18 @@
+diff a/appleMarketProject/src/main/reactchat/src/App.js b/appleMarketProject/src/main/reactchat/src/App.js	(rejected hunks)
+@@ -57,6 +57,16 @@
+                } 
+              />
+            </Routes>
+++<<<<<<< HEAD
+++=======
++ 
++           {currentChannelUrl && (
++             <>
++               {console.log('currentChannelUrl:', currentChannelUrl)} 
++               <GroupChannel channelUrl={currentChannelUrl} />
++             </>
++           )}
+++>>>>>>> parent of 7b20c39 (채팅 기능 구현)
+          </div>
+        </Router>
+      </SendBirdProvider>

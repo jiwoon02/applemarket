@@ -23,9 +23,13 @@ public interface UserService{
 //	boolean authenticate(String userID, String password);
 
 	//userNo로 이름을 얻어옴
-	public String getNameByUserNo(long userNo);
+	public String getNameByUserNo(Long userNo);
 	//userNo로 전화번호를 얻어옴
-	public String getPhoneByUserNo(long userNo);
+	public String getPhoneByUserNo(Long userNo);
+	//userNo로 ID를 얻어옴
+	public String getUserIDByUserNo(Long userNo);
+	//userNo로 닉네임을 얻어옴
+	public String getUserNicknameByUserNo(Long userNo);
 
 	public void userLocationUpdate(Long userID, Long locationID);
 

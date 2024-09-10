@@ -36,6 +36,7 @@ public interface ProductService {
 
     PageResponseDTO<Product> getProductsByCategory(String categoryID, PageRequestDTO pageRequestDTO);
 
+	String getUserIDByProductID(Long productID);
     public PageResponseDTO<Product> getProductByLocationIDRange(Long locationID, PageRequestDTO pageRequestDTO);
 
     public Long getReportCountByProductID(Long productID);

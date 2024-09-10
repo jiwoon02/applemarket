@@ -41,11 +41,6 @@
 				<form id="textUpdate" name="textUpdate">
 					<div th:text="${usershop.user.userNickname}" class="divShopName2"></div>
 
-					<div class="divShopName2" id="nickname">
-						<input type="text" class="shopNameMdy" name="newNickname"
-							th:value="${usershop.user.userNickname}" />
-					</div>
-
 					<div class="divInfo">
 						<div class="divInfo1">
 							<img class="img" src="../images/usershop/shop.png" alt="상점오픈일">
@@ -153,7 +148,7 @@
 								<div class="itemTime"
 									th:text="${#temporals.format(item.productRegDate, 'yyyy-MM-dd')}"></div>
 							</div>
-							<!-- <input type="hidden" id="productId" th:value="${item.productID}" /> -->
+							<input type="hidden" class="productRegDate" th:value="${item.productRegDate}" /> <!-- 최신순 정렬을 위해 -->
 						</div>
 					</div>
 				</div>
@@ -225,12 +220,12 @@
 						<div th:each="review : ${itemReviewList}" class="divUserOne">
 							<div class="divUserOne">
 							
-								<th:block th:if="${#lists.isEmpty(usershop.shopImgName)}">
+								<th:block th:if="${#lists.isEmpty(review.user.usershop.shopImgName)}">
 									<img src="/images/shop-icon.png" class="profileImg2 shopPage"/>
 								</th:block>
 								
-								<th:block th:if="${not #lists.isEmpty(usershop.shopImgName)}">
-									<img th:src="@{/usershop/view/{fileName}(fileName=${usershop.shopImgName})}" class="profileImg2 shopPage"/>
+								<th:block th:if="${not #lists.isEmpty(review.user.usershop.shopImgName)}">
+									<img th:src="@{/usershop/view/{fileName}(fileName=${review.user.usershop.shopImgName})}" class="profileImg2 shopPage"/>
 								</th:block>
 								
 								<input type="hidden" th:value="${review.user.userNo}" class="userImg" />
@@ -313,6 +308,7 @@
 								<div class="itemTime2"
 									th:text="${#temporals.format(wishList.wishListRegDate, 'yyyy-MM-dd')}"></div>
 							</div>
+							<input type="hidden" class="wishListRegDate" th:value="${wishList.wishListRegDate}" /> <!-- 최신순 정렬을 위해 -->
 						</div>
 					</div>
 				</div>

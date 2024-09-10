@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
 import com.apple.admin.service.AdminService;
 import com.apple.category.domain.Category;
+import com.apple.client.community.domain.CommunityPost;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 
@@ -56,11 +58,28 @@ public class AdminController {
 		
 		return "/admin/administration";
 	}
-	//커뮤니티 관리 페이지로 이동을 위한 매핑
+//	커뮤니티 관리 페이지로 이동을 위한 매핑
 	@GetMapping("community")
-	public String community() {
-		
+	public String community(CommunityPost communityPost, Model model) {
+		List<CommunityPost> list = adminService.communityPostList(communityPost);
+		Map<Long, Long> reportCount = adminService.communityReportCount();
+		//디버그
+		System.out.println("id :" + reportCount.toString());
+		System.out.println("values : " + reportCount.values());
+		model.addAttribute("reportCount", reportCount);
+		model.addAttribute("posts", list);
 		return "/admin/community";
+	}
+	
+	@GetMapping("/community/detail/{communityPostID}")
+	public String community(@PathVariable Long communityPostID, CommunityReport communityReport,CommunityPost communityPost, Model model) {
+		communityPost.setCommunityPostID(communityPostID);
+		CommunityPost detail = adminService.communityPostDetail(communityPost);
+		List<CommunityReport> Reportdetail = adminService.communityReportDetail(communityReport);
+		model.addAttribute("communityPost", detail);
+		model.addAttribute("reportDetail", Reportdetail);
+		
+		return "/admin/communityDetail";
 	}
 	//상품 관리 페이지로 이동을 위한 매핑
 	@GetMapping("product")
@@ -70,7 +89,8 @@ public class AdminController {
 //		System.out.println("list : " + list);
         Map<Long, Long> reportCount = adminService.productReportCount();
 		//디버그
-		System.out.println("id : " + reportCount.values());
+        System.out.println("id :" + reportCount.toString());
+		System.out.println("values : " + reportCount.values());
 		model.addAttribute("reportCount", reportCount);
 		model.addAttribute("productList", list);
 
@@ -90,12 +110,16 @@ public class AdminController {
 		return "/admin/productDetail";
 	}
 	
+	
+	
 	@PostMapping("product/{productID}/category/change")
 	public String categoryChange(@PathVariable Long productID, @RequestBody Map<String, String> requestBody) {
 	    String categoryID = requestBody.get("categoryID");
 	    adminService.categoryChange(productID, categoryID);
 	    return "redirect:/admin/success/product/" + productID;
 	}
+	
+	
 	
 	@PostMapping("category/insert")
 	public String categoryInsert(Category category) {
@@ -122,6 +146,13 @@ public class AdminController {
 		adminService.productDelete(productID, productIds);
 		
 		return "redirect:/admin/success/product";
+	}
+	
+	@PostMapping("/community/{communityPostID}/detail/delete")
+	public String communityDelete(@PathVariable Long communityPostID, @RequestBody List<Long> communityPostids) {
+		adminService.commnuityDelete(communityPostID, communityPostids);
+		
+		return "redirect:/admin/success/community";
 	}
 	
     @Autowired

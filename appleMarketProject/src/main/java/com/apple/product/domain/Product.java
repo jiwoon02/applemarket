@@ -89,5 +89,18 @@ public class Product {
 
     @Transient
     private List<String> deletedImageFilenames; // 삭제할 파일 이름 리스트
+    
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + productID +
+                ", name='" + productName + '\'' +
+                // Avoid including collections or other objects that might cause infinite recursion
+                // ", images=" + images +
+                // ", category=" + category +
+                '}';
+    }
+
+    // getters and setters
 
 }

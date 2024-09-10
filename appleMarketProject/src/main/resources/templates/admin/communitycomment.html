@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="admincomment">
+    <body class="bg-100 p-6">
+            <!-- 댓글 입력 섹션 -->
+                            <input type="hidden" id="commentInsertBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+
+        <!-- 댓글 리스트 섹션 -->
+		<div id="commentList" class="comment-list">
+		    <!-- 댓글 리스트는 JS로 처리되므로 HTML에서는 아무 내용도 필요 없음 -->
+		</div>
+		
+		<div id="reportContainer" th:each ="report : ${reportDetail}" th:objcet = "${report}">
+			<div id="reportinfo">
+				<a th:text="'신고인 : ' + ${report.User.userID}"></a>
+				<a id="reportdate" th:text="'신고날짜 : ' + ${#temporals.format(report.communityReportRegDate, 'yy년MM월dd일')}"></a>
+			</div>
+			<div id="reportContent" th:text="${report.reportContent}"></div>
+		</div>
+    </body>
+</th:block>
+</html>

@@ -13,11 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apple.admin.domain.Admin;
+import com.apple.admin.domain.CommunityReport;
 import com.apple.admin.domain.ProductReport;
 import com.apple.admin.repository.AdminRepository;
 import com.apple.admin.repository.CategoryRepository;
+import com.apple.admin.repository.CommunityReportRepository;
 import com.apple.admin.repository.ProductReportRepository;
 import com.apple.category.domain.Category;
+import com.apple.client.community.domain.CommunityPost;
+import com.apple.client.community.repository.CommunityPostRepository;
+import com.apple.client.communityComment.repository.CommunityCommentRepository;
 import com.apple.product.domain.Product;
 import com.apple.product.repository.ProductRepository;
 import com.apple.user.domain.User;
@@ -44,6 +49,15 @@ public class AdminServiceImpl implements AdminService {
 	private ProductReportRepository productReportRepository;
 	private ProductServiceImpl productServiceImpl;
 
+	@Setter (onMethod_ = @Autowired)
+	private CommunityReportRepository communityReportRepository;
+	
+	@Setter (onMethod_ = @Autowired)
+	private CommunityPostRepository communityPostRepository;
+	
+	@Setter (onMethod_ = @Autowired)
+	private CommunityCommentRepository communityCommentRepository;
+	
 //	@Setter (onMethod_ = @Autowired)
 //	private BCryptPasswordEncoder passwordEncoder;
 
@@ -65,6 +79,25 @@ public class AdminServiceImpl implements AdminService {
 	public List<User> userList(User user) {
 		List<User> userList = null;
 		userList = (List<User>) userRepository.findAll();
+	
+		// 사용자 목록을 순회하면서 개인정보를 마스킹합니다.
+	    for (User userItem : userList) {
+	        // 이름 마스킹
+	        if (userItem.getUserName() != null && userItem.getUserName().length() >= 3) {
+	            userItem.setUserName(userItem.getUserName().charAt(0) + "****" + userItem.getUserName().charAt(userItem.getUserName().length() - 1));
+	        }
+	        
+	        // 전화번호 마스킹
+	        if (userItem.getUserPhone() != null && userItem.getUserPhone().length() >= 7) {
+	            userItem.setUserPhone(userItem.getUserPhone().substring(0, 4) + "****" + userItem.getUserPhone().substring(8));
+	        }
+	        
+	        // 이메일 마스킹
+	        if (userItem.getUserEmail() != null && userItem.getUserEmail().contains("@")) {
+	            int atIndex = userItem.getUserEmail().indexOf("@");
+	            userItem.setUserEmail(userItem.getUserEmail().substring(0, 2) + "****" + userItem.getUserEmail().substring(atIndex - 2) + userItem.getUserEmail().substring(atIndex));
+	        }
+	    }
 		
 		return userList;
 	}
@@ -76,6 +109,53 @@ public class AdminServiceImpl implements AdminService {
 		return productList;
 	}
 
+	@Override
+	public List<CommunityPost> communityPostList(CommunityPost communityPost) {
+		List<CommunityPost> list = null;
+		list = (List<CommunityPost>) communityPostRepository.findAll();
+		return list;
+	}
+	
+	@Override
+	public CommunityPost communityPostDetail(CommunityPost communityPost) {
+		Optional<CommunityPost> optional = communityPostRepository.findById(communityPost.getCommunityPostID());
+		CommunityPost detail = optional.get();
+		return detail;
+	}
+	
+	@Override
+	public Product productDetail(Product product) {
+		Optional<Product> productOptional = productRepository.findById(product.getProductID());
+		Product detail = productOptional.get();
+		return detail;
+	}
+	@Override
+	public List<ProductReport> productReportDetail(ProductReport productReport) {
+		List <ProductReport> ProductReportList = null;
+		ProductReportList = (List<ProductReport>) productReportRepository.findAll();
+		//ProductReportList = (List<ProductReport>) productReportRepository.findByProduct();
+		return ProductReportList;
+	}
+	
+	@Override
+	public List<CommunityReport> communityReportDetail(CommunityReport communityReport) {
+		List <CommunityReport> communityReports = null;
+		communityReports = (List<CommunityReport>) communityReportRepository.findAll();
+		return communityReports;
+	}
+
+	@Override
+	public List<ProductReport> productReportDetail(){
+		List<ProductReport> productReportList = productReportRepository.findAll();
+		
+		for(ProductReport productReport : productReportList){
+			Long productID = productReport.getProduct().getProductID();
+			Long reportCount = productServiceImpl.getReportCountByProductID(productID);
+		}
+		
+		return productReportList;
+	}
+	
 	@Override
 	public void categoryChange(Long productID, String newCategoryID) {
 		Optional<Product> productOptional = productRepository.findById(productID);
@@ -117,30 +197,6 @@ public class AdminServiceImpl implements AdminService {
 		userRepository.save(updateUser);
 	}
 
-	@Override
-	public Product productDetail(Product product) {
-		Optional<Product> productOptional = productRepository.findById(product.getProductID());
-		Product detail = productOptional.get();
-		return detail;
-	}
-	@Override
-	public List<ProductReport> productReportDetail(ProductReport productReport) {
-		 List <ProductReport> ProductReportList = null;
-		 ProductReportList = (List<ProductReport>) productReportRepository.findAll();
-		//ProductReportList = (List<ProductReport>) productReportRepository.findByProduct();
-		return ProductReportList;
-	}
-	@Override
-	public List<ProductReport> productReportDetail(){
-		List<ProductReport> productReportList = productReportRepository.findAll();
-
-		for(ProductReport productReport : productReportList){
-			Long productID = productReport.getProduct().getProductID();
-			Long reportCount = productServiceImpl.getReportCountByProductID(productID);
-		}
-
-		return productReportList;
-}
     @Autowired
     public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
 		this.productServiceImpl = productServiceImpl;
@@ -157,6 +213,20 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 		return productReportCount;
+	}
+	
+	@Override
+	public Map<Long, Long> communityReportCount() {
+		List<Object[]> results = communityReportRepository.ReportCount();
+		
+		Map<Long, Long> communityReportCount = new HashMap<>();
+		for (Object[] result : results) {
+			Long communityPostId = ((Number) result[0]).longValue();
+			Long count = ((Number) result[1]).longValue();
+			communityReportCount.put(communityPostId, count);
+		}
+		
+		return communityReportCount;
 	}
 	//카테고리 등록 횟수 표시
 	public Map<String, Long> CategoryCounts() {
@@ -180,6 +250,20 @@ public class AdminServiceImpl implements AdminService {
 		productRepository.deleteById(productID);
 		
 	}
+	
+	@Transactional
+	@Override
+	public void commnuityDelete(Long communityPostID , List<Long> communityPostids) {
+		//신고된 내용 삭제
+		communityReportRepository.deleteByCommunityPostids(communityPostids);
+		communityPostRepository.deleteById(communityPostID);
+		communityCommentRepository.deleteByCommunitycommnet(communityPostids);
+		
+	}
+
+
+	
+
 
 
 

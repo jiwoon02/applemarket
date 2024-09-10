@@ -120,8 +120,7 @@ public class UsershopController {
     // 상점 정보 업데이트
     @PostMapping("/usershopUpdate")
     public String userShopUpdate(@CookieValue(value="JWT", required=false) String token, 
-                                 @RequestParam("introText") String introText, 
-                                 @RequestParam("newNickname") String newNickname) {
+                                 @RequestParam("introText") String introText) {
 
         User user = getUser(token);
         if (user != null) {
@@ -130,7 +129,6 @@ public class UsershopController {
 
             if (usershop != null) {
                 usershopService.updateShopIntroduce(usershop.getShopId(), introText);
-                usershopService.updateUserNickname(userNo, newNickname);
                 return "redirect:/usershop/usershop";  // 업데이트 후 다시 페이지로 리다이렉트
             }
         }

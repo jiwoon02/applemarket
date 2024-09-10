@@ -17,8 +17,15 @@
             </div>
             <th:block th:each="product : ${productList}"  th:object="${product}">
 				<div  class="productList" th:data-no = "*{productID}" >
-					<div id="productImage" th:text="*{productImages}">
-						대표 상품 이미지
+					<div >
+						<div class="product-image">
+							<img th:if="${not #lists.isEmpty(product.productImages)}"
+								 th:src="@{'/product/view/' + ${product.productID} + '/' + ${product.productImages[0].filename}}"
+								 class="img-fluid productListImage"/>
+							<div class="sold-out-overlay" th:if="${product.productStatus == '판매 완료'}">
+								판매 완료
+							</div>
+						</div>
 					</div>
 					<ul >
 		          		<li class="productfont" id="productTitle" th:text="'제목 : ' + *{productName}">제목</li>

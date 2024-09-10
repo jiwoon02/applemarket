@@ -28,8 +28,6 @@ public interface UsershopService {
     
     public void updateShopIntroduce(Long shopId, String shopIntroduce);  // shopIntroduce 업데이트
     
-    public void updateUserNickname(Long userNo, String newNickname);  // userNo를 기준으로 userNickname 수정
-    
     public long calculateSatisfactionPercentage(List<ItemReview> reviews);
     
     public Usershop findByShopId(Long shopId);
