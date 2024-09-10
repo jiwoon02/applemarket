@@ -288,8 +288,9 @@ td ul li a {
 .reviewBtn {
 	background-color : #86E57F;
 	border: none;
-	padding: 8px 12px;
     border-radius: 5px;
+    padding: 5px;
+    color: white
 }
 
 .cancelBtn, .submitBtn, .deleteBtn {
