@@ -34,24 +34,21 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void updatePost(Long postId, CommunityPost postDetails, boolean isImageUpdated) {
         Optional<CommunityPost> existingPost = communityPostRepository.findById(postId);
+        
         if (existingPost.isPresent()) {
             CommunityPost postToUpdate = existingPost.get();
+
+            // 제목과 내용 업데이트
             postToUpdate.setCommunityTitle(postDetails.getCommunityTitle());
             postToUpdate.setCommunityContent(postDetails.getCommunityContent());
 
-            // 이미지 처리 로직
-            if (isImageUpdated) {
-                // 새 이미지가 있으면 업데이트
+            // 이미지가 null이 아닌 경우에만 업데이트
+            if (isImageUpdated && postDetails.getCommunityImage() != null) {
                 postToUpdate.setCommunityImage(postDetails.getCommunityImage());
-            } else if (postDetails.getCommunityImage() == null) {
-                // 이미지가 없으면 null로 설정
-                postToUpdate.setCommunityImage(null);
-            } else {
-                // 이미지 변경사항이 없으면 기존 이미지 유지
-                postToUpdate.setCommunityImage(postToUpdate.getCommunityImage());
             }
 
-            communityPostRepository.save(postToUpdate); // 변경사항 저장
+            // 변경된 내용을 저장
+            communityPostRepository.save(postToUpdate);
         } else {
             throw new RuntimeException("해당 게시글을 찾을 수 없습니다.");
         }

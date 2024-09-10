@@ -56,7 +56,7 @@ public class CommunityPostController {
     // 게시글 리스트 페이지를 반환
     @GetMapping("/communityPostList")
     public String showCommunityPostListPage(@CookieValue(value = "JWT", required = false) String token, Model model) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "communityRegDate"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "communityRegDate"));
         Page<CommunityPost> posts;
 
         if (token == null || token.isEmpty()) {
@@ -89,7 +89,7 @@ public class CommunityPostController {
     public Map<String, Object> getCommunityPosts(@RequestParam(defaultValue = "0") int offset,
                                                  @RequestParam(defaultValue = "10") int limit,
                                                  @CookieValue(value = "JWT", required = false) String token) {
-        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "communityRegDate"));
+        Pageable pageable = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "communityRegDate"));
         Page<CommunityPost> posts;
 
         if (token == null || token.isEmpty()) {
@@ -232,34 +232,55 @@ public class CommunityPostController {
         }
     }
 
-
-    // 게시글 수정
+    //게시글 수정
     @PostMapping("/posts/{postId}/update")
     public String updateCommunityPost(@PathVariable Long postId,
-                                      @ModelAttribute CommunityPost postDetails,
+                                      @RequestParam("communityTitle") String communityTitle,
+                                      @RequestParam("communityContent") String communityContent,
                                       @RequestParam(value = "communityImage", required = false) MultipartFile communityImage,
                                       RedirectAttributes redirectAttributes) {
         try {
-            // 이미지 업데이트가 필요한지 확인
-            boolean isImageUpdated = (communityImage != null && !communityImage.isEmpty());
+            // 기존 게시글을 DB에서 가져옴
+            Optional<CommunityPost> existingPostOptional = communityService.findPostById(postId);
 
-            if (isImageUpdated) {
-                byte[] imageBytes = communityImage.getBytes();
-                postDetails.setCommunityImage(imageBytes);  // 새 이미지가 있으면 설정
+            if (existingPostOptional.isPresent()) {
+                CommunityPost existingPost = existingPostOptional.get();
+
+                // 제목과 내용 업데이트
+                existingPost.setCommunityTitle(communityTitle);
+                existingPost.setCommunityContent(communityContent);
+
+                // 이미지 처리
+                if (communityImage != null && !communityImage.isEmpty()) {
+                    // 새 이미지가 있으면 이미지를 업데이트
+                    byte[] imageBytes = communityImage.getBytes();
+                    existingPost.setCommunityImage(imageBytes);
+                } else if (communityImage == null || communityImage.isEmpty()) {
+                    // 이미지를 변경하지 않을 경우 기존 이미지를 유지
+                    if (existingPost.getCommunityImage() != null) {
+                        // 이미지가 이미 있는 경우는 아무 작업을 하지 않음
+                        System.out.println("기존 이미지를 유지합니다.");
+                    } else {
+                        // 기존 이미지가 없을 경우 null로 설정
+                        existingPost.setCommunityImage(null);
+                    }
+                }
+
+                // 서비스 호출하여 게시글 업데이트 처리
+                communityService.updatePost(postId, existingPost, communityImage != null);
+
+                redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 수정되었습니다.");
+                return "redirect:/community/communityPostDetail/" + postId;
+            } else {
+                redirectAttributes.addFlashAttribute("message", "게시글을 찾을 수 없습니다.");
+                return "redirect:/community/communityPostList";
             }
-
-            // 서비스 호출하여 게시글 업데이트 처리
-            communityService.updatePost(postId, postDetails, isImageUpdated); 
-
-            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 수정되었습니다.");
-            return "redirect:/community/communityPostDetail/" + postId;
         } catch (IOException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", "파일 업로드 중 오류가 발생했습니다.");
             return "redirect:/community/communityPostDetail/" + postId;
         }
     }
-
 
     //게시글 삭제 (GET 방식으로 처리)
     @GetMapping("/posts/{postId}/delete")
