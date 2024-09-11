@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	        if (reviewProductIds[j].textContent.trim() == productId[i].value.trim()) {
 	            // 현재 productId에 해당하는 reviewBtn을 찾아서 "수정하기"로 변경
 	            $(productId[i]).closest(".trSellItem").find(".reviewBtn").html("수정하기");
+				$(productId[i]).closest(".trSellItem").find(".reviewBtn").css("background-color", "#6799FF");
 	        }
 	    }
 	}

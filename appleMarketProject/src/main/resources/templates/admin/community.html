@@ -9,11 +9,37 @@
             body {
                 font-family: 'Noto Sans KR', sans-serif;
             }
+            
+            #container {
+            	margin-bottom: 20px;
+            }
+            
+            .flex-shrink-0{
+            	float: left;
+            }
+            
+            .text-lg{
+            	margin-left: 60px;
+            }
+            
+            .text-gray-500{
+            	margin-left: 60px;
+            }
+            
+            .flex-grow {
+            	margin-bottom: 10px;
+            }
+            
+            .table-container{
+            	border: 1px solid, #e5e5e5; 
+            	border-radius: 30px;
+            }
+            
         </style>
     </th:block>
 </head>
 <th:block layout:fragment="content">
-    <div class="table-container bg-white p-6 rounded-lg shadow-lg" style="width: 1100px;">
+    <div class="table-container bg-white p-6 " style="width: 1100px;">
         <h1 class="text-2xl font-bold mb-4">우리동네 커뮤니티 게시판</h1>
 
         <div class="flex justify-between mb-4">
@@ -25,20 +51,23 @@
             </div>
         </div>
 
+		
+
         <div class="tableheight">
-                	<div th:each ="post : ${posts}" th:object = "${post}">
+                	<div id="container" th:each ="post : ${posts}" th:object = "${post}">
                     	 <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-700 font-bold" th:text = "${post.userNo.userName}">
                             </div>
-                        </div>
-                        <div class="ml-4 flex-grow">
+                          </div>
+                          <div class="ml-4 flex-grow">
                             <div class="text-lg font-semibold goDetail" th:data-post-id="${post.communityPostID}" th:text = "${post.communityTitle}">
                             </div>
-                            <div class="text-gray-500" th:text="${(post.communityRegDate)} + '조회수: ' + ${post.communityCount}">
+                            <div class="text-gray-500" th:text="*{#temporals.format(communityRegDate, 'yyyy년MM월dd일')} + ' 조회수: ' + ${post.communityCount}">
                             </div>
 							<div class="text-gray-500" th:text="${reportCount[post.communityPostID]} != null ? '신고 횟수: ' + ${reportCount[post.communityPostID]} : '신고 횟수: ' + 0 ">
 							</div>
                         </div>
+                        <hr/>
                 	</div>
  		 </div>
 

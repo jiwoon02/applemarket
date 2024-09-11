@@ -525,3 +525,11 @@ body {
     width: 14px;
     height: 14px;
 }
+
+.modifyBtn {
+	background-color : #e74c3c;
+	border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+}

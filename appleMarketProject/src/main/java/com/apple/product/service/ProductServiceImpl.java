@@ -326,4 +326,18 @@ public class ProductServiceImpl implements ProductService {
 			return null;
 		}
 	}
+
+	//productID를 얻어와 userNickname(판매자 닉네임)을 구함
+	@Override
+	public String getUserNicknameByProductID(Long productID) {
+		Product product = getProduct(productID);
+		
+		if(!product.getUser().getUserNickname().isEmpty()) {
+			String userNickname = product.getUser().getUserNickname();
+			return userNickname;
+		}
+		else {
+			return null;
+		}
+	}
 }

@@ -285,6 +285,14 @@ td ul li a {
     margin: 20px 0px;
 }
 
+.reviewBtn {
+	background-color : #86E57F;
+	border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white
+}
+
 .cancelBtn, .submitBtn, .deleteBtn {
     background-color: rgb(140,140,140);
     color: #ffffff;

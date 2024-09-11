@@ -2,3 +2,6 @@
     display: none;
     pointer-events: none;
 }
+#root > div.app-container > div > div.sendbird-conversation__footer > div.sendbird-conversation__footer__typing-indicator > div {
+    display: none;
+}
