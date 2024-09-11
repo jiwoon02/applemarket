@@ -1,13 +1,16 @@
 package com.apple.admin.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.apple.product.service.ProductService;
 import com.apple.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import com.apple.admin.domain.ProductReport;
 import com.apple.admin.service.AdminService;
 import com.apple.category.domain.Category;
 import com.apple.client.community.domain.CommunityPost;
+import com.apple.client.community.repository.CommunityPostRepository;
 import com.apple.product.domain.Product;
 import com.apple.user.domain.User;
 
@@ -36,6 +40,9 @@ public class AdminController {
 	
 	@Setter(onMethod_ = @Autowired)
 	private AdminService adminService;
+	
+	@Setter(onMethod_ = @Autowired)
+	private CommunityPostRepository communityPostRepository;
 	
 	private ProductServiceImpl productServiceImpl;
 
@@ -159,6 +166,28 @@ public class AdminController {
     public void setProductServiceImpl(ProductServiceImpl productServiceImpl) {
 		this.productServiceImpl = productServiceImpl;
 	}
+    
+    @GetMapping("/image/base64/{postId}")
+    public ResponseEntity<String> getBase64Image(@PathVariable Long postId) {
+        Optional<CommunityPost> postOptional = communityPostRepository.findById(postId);
+
+        if (postOptional.isPresent()) {
+            byte[] imageBytes = postOptional.get().getCommunityImage();
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                String mimeType = "image/jpeg";  // 기본적으로 JPEG 형식으로 가정
+
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                String imageDataUrl = "data:" + mimeType + ";base64," + base64Image;
+
+                return ResponseEntity.ok(imageDataUrl);
+            } else {
+                return ResponseEntity.ok(null);  // 이미지가 없을 때 null 반환
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 //	테스트용 매핑 
 //	@GetMapping("product/1")
 //	public String proudctDetail(Model modle) {
