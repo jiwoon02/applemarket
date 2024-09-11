@@ -54,7 +54,6 @@ public class ItemReview {
 	private String reviewContent;
 	
 	@ColumnDefault(value = "sysdate")
-	@Column(nullable = false)
 	private LocalDateTime reviewRegDate;
 	
 	@ColumnDefault(value = "0")
