@@ -50,7 +50,7 @@
 
                         <!-- Image preview if exists -->
                         <div th:if="*{communityImage != null}" class="mt-4">
-                            <img th:src="@{'/images/' + *{communityImage}}" class="max-w-full h-auto rounded-lg shadow-lg" alt="첨부 이미지" />
+                            <img th:src="@{'/images/' + *{communityImage}}" class="max-w-full h-auto rounded-lg" alt="첨부 이미지" />
                         </div>
                     </div>
                 </form>

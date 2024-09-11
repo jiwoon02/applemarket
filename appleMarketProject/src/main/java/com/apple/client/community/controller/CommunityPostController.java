@@ -141,7 +141,14 @@ public class CommunityPostController {
 
         return "community/communityPostList";
     }
-
+    
+    // 게시글 작성 폼으로 이동
+    @GetMapping("/communityInsertForm")
+    public String showCommunityPostInsertForm(Model model) {
+        model.addAttribute("communityPost", new CommunityPost());
+        return "community/communityPostInsertForm";
+    }
+    
     // 게시글 생성
     @PostMapping("/posts")
     public String createCommunityPost(@CookieValue(value = "JWT") String token, 
