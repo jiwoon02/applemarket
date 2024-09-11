@@ -289,6 +289,13 @@ public class CommunityPostController {
         }
     }
     
+    //게시글 삭제 (GET 방식으로 처리)
+    @GetMapping("/posts/{postId}/delete")
+    public String deleteCommunityPost(@PathVariable Long postId) {
+        communityService.deletePost(postId);
+        return "redirect:/community/communityPostList";
+    }
+    
     // Base64 이미지 값을 반환하는 메서드 
     @GetMapping("/image/base64/{postId}")
     public ResponseEntity<String> getBase64Image(@PathVariable Long postId) {
