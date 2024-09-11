@@ -63,14 +63,14 @@
         <!-- 게시글 내용 출력 -->
         <div class="content-area">
             <p class="text-gray-700 mb-4" th:utext="${communityPost.communityContent}"></p>
+	        <!-- 첨부 이미지가 있을 경우에만 출력 -->
+	        <div th:if="${communityPost.communityImage != null}">
+	            <img id="communityImage" alt="첨부 이미지" class="rounded-lg shadow-lg max-w-full h-auto" />
+	        </div>
         </div>
 
         <hr class="my-4">
 
-        <!-- 첨부 이미지가 있을 경우에만 출력 -->
-        <div th:if="${communityPost.communityImage != null}">
-            <img th:src="@{'/images/' + ${communityPost.communityImage}}" alt="첨부 이미지" class="rounded-lg shadow-lg max-w-full h-auto" />
-        </div>
 
         <!-- 버튼 섹션: 작성자인 경우에만 수정 및 삭제 버튼이 보임 -->
         <div class="fixed-buttons flex space-x-4">
