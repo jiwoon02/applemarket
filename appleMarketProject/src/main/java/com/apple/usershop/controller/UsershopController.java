@@ -65,7 +65,7 @@ public class UsershopController {
         if (user != null) {
             Long userNo = user.getUserNo();
             
-            // Usershop 정보 설정
+            // Usershop 정보 가져오기
             Usershop usershop = usershopService.findByUserNo(userNo);
             model.addAttribute("usershop", usershop);
             
@@ -91,21 +91,6 @@ public class UsershopController {
             
             // 가입일 가져오기
             model.addAttribute("formattedDate", new SimpleDateFormat("yyyy-MM-dd").format(usershop.getUser().getUserRegDate()));
-
-            // 상점 방문 카운트 증가
-            usershopService.shopVisitCount(usershop.getShopId());
-            
-            long sumSelectReview1 = usershopService.sumSelectReview1ByShopId(usershop.getShopId());
-            long sumSelectReview2 = usershopService.sumSelectReview2ByShopId(usershop.getShopId());
-            long sumSelectReview3 = usershopService.sumSelectReview3ByShopId(usershop.getShopId());
-            long sumSelectReview4 = usershopService.sumSelectReview4ByShopId(usershop.getShopId());
-            long sumSelectReview5 = usershopService.sumSelectReview5ByShopId(usershop.getShopId());
-
-            model.addAttribute("sumSelectReview1", sumSelectReview1);
-            model.addAttribute("sumSelectReview2", sumSelectReview2);
-            model.addAttribute("sumSelectReview3", sumSelectReview3);
-            model.addAttribute("sumSelectReview4", sumSelectReview4);
-            model.addAttribute("sumSelectReview5", sumSelectReview5);
             
             // userNo로 위시리스트를 가져오기
             List<WishList> wishList =  usershopService.getWishListByUserNo(userNo);
