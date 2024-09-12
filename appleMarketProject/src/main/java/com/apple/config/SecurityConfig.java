@@ -49,20 +49,17 @@ public class SecurityConfig{
 		
 		http
 			.csrf((auth) -> auth.disable());
-		
 		//Form 로그인 방식 disable
 		http
         	.formLogin((auth) -> auth.disable());
-
 		//http basic 인증 방식 disable
 		http
         	.httpBasic((auth) -> auth.disable());
-		
 		//경로별 인가 작업
 		http
         	.authorizeHttpRequests((auth) -> auth
 
-        			.requestMatchers("/product/insertForm","/product/updateForm", "/user/locationForm", "/community/communityInserForm","/mypage/**","/chatroom/**","community/communityInsertForm").hasAuthority("USER")
+        			.requestMatchers("/product/insertForm","/product/updateForm", "/user/locationForm", "/community/communityInserForm","/mypage/**","/chatroom/**","community/communityInsertForm","/product/productReportInsert").hasAuthority("USER")
         			.requestMatchers("/user/loginForm").not().hasAuthority("USER")
         			.anyRequest().permitAll());
 		//JWTFilter 등록
@@ -81,7 +78,6 @@ public class SecurityConfig{
 		// 인증되지 않은 사용자가 접근할 때 리디렉션 처리
 		 http.exceptionHandling(exception -> exception
 		            .authenticationEntryPoint(authenticationEntryPoint()));  // 인증 실패 시 처리
-
 		return http.build();
 	}
 	

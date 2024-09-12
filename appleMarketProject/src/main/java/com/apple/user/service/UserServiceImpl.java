@@ -77,11 +77,6 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
     	user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
     	User savedUser = userRepository.save(user);
-    	
-    	// Usershop 생성 및 연결
-        //Usershop usershop = usershopService.createUsershop(savedUser);
-        //savedUser.setUsershop(usershop);
-        
         return savedUser;
     }
     
