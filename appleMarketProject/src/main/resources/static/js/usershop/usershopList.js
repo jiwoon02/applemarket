@@ -10,7 +10,7 @@ $(function() {
     $('.heightImg').click(function() {
         var commentSelect = $('.divCommentSelect');
         if (commentSelect.css('height') == '200px') {
-            commentSelect.css('height', '315px');  // 높이를 100%로 늘림
+            commentSelect.css('height', '330px');  // 높이를 100%로 늘림
             $(this).attr('src', '../images/usershop/heightImg2.png');  // 이미지 변경
         } else {
             commentSelect.css('height', '200px');  // 높이를 40%로 줄임
